@@ -1,0 +1,36 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         String       @id @unique @default(cuid())
+  email      String       @unique
+  password   String?
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+  permission Permission[]
+}
+
+model Permission {
+  id         String   @id @default(cuid())
+  userId     String
+  permission String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  user       User     @relation(fields: [userId], references: [id])
+}
+
+model Destination {
+  id          String   @id @default(cuid())
+  network     String   @unique
+  name        String   @unique
+  engine      String
+  isProxyUsed Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
