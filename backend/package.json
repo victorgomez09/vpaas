@@ -8,6 +8,7 @@
   "scripts": {
     "build": "nest build",
     "db:pull": "npx prisma db pull",
+    "db:push": "npx prisma db push",
     "db:generate": "npx prisma generate",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",

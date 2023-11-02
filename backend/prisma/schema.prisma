@@ -27,7 +27,7 @@ model Permission {
 
 model Destination {
   id          String   @id @default(cuid())
-  network     String   @unique
+  network     String
   name        String   @unique
   engine      String
   isProxyUsed Boolean  @default(false)

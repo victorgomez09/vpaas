@@ -6,7 +6,7 @@ import { Public } from 'src/decorator/public.decorator';
 
 @Controller('auth')
 export class AuthenticationController {
-  constructor(private service: AuthenticationService) {}
+  constructor(private service: AuthenticationService) { }
 
   @Public()
   @Post('signin')
@@ -14,6 +14,7 @@ export class AuthenticationController {
     @Body() data: { email: string; password: string },
     @Res({ passthrough: true }) res: Response,
   ) {
+    console.log('data', data);
     const result = await this.service.signin(data.email, data.password);
 
     res.cookie('access_token', result.token, {
