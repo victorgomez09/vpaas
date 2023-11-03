@@ -1,22 +1,47 @@
-import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Observable } from 'rxjs';
-import { DestinationService } from 'src/app/core/services/destination.service';
+import { Component, Injector, OnInit, WritableSignal, signal } from '@angular/core';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
+import { PaginatorComponent } from 'src/app/components/paginator/paginator.component';
 import { Destination } from 'src/app/core/models/destination.model';
+import { DestinationService } from 'src/app/core/services/destination.service';
 
 @Component({
   selector: 'app-destination',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule, ReactiveFormsModule, PaginatorComponent],
   templateUrl: './destination.component.html',
   styleUrls: ['./destination.component.css']
 })
-export class DestinationComponent {
-  public destinations: Observable<Destination[]>
+export class DestinationComponent implements OnInit {
+  public destinations!: WritableSignal<Destination[]>;
+  public search: FormControl;
+  public currentPage: number = 1;
+  public itemsPerPage: number = 10;
+  public totalItems!: number;
 
-  private service: DestinationService = inject(DestinationService);
+  private searchData: Destination[];
 
-  constructor() {
-    this.destinations = this.service.getAllDestinations();
+  constructor(private service: DestinationService, private injector: Injector) {
+    this.destinations = signal([]);
+    this.searchData = [];
+    this.search = new FormControl('');
+  }
+  ngOnInit(): void {
+    this.service.getAllDestinations().subscribe(data => {
+      this.destinations.set(data.slice(0, 10));
+
+      this.searchData = data;
+      this.totalItems = data.length;
+    })
+
+    this.search.valueChanges.subscribe((text: string) => {
+      this.destinations.set(this.searchData.filter(dest => dest.name.toLowerCase().includes(text.toLowerCase())));
+    });
+  }
+
+  onPageChange(page: number): void {
+    this.currentPage = page;
+    this.destinations.set(this.searchData.slice((this.currentPage - 1) * this.itemsPerPage, this.currentPage * this.itemsPerPage));
   }
 }

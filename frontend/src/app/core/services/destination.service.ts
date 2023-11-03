@@ -1,5 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
+import { Observable } from 'rxjs';
+
 import { environment } from 'src/environments/environment';
 import { Destination } from '../models/destination.model';
 
@@ -10,7 +12,7 @@ export class DestinationService {
 
   private http: HttpClient = inject(HttpClient)
 
-  getAllDestinations() {
+  getAllDestinations(): Observable<Destination[]> {
     return this.http.get<Destination[]>(`${environment.apiUrl}/destinations`, {
       headers: {
         'Authorization': `Bearer ${sessionStorage.getItem(environment.accessToken)}`

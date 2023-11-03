@@ -11,13 +11,18 @@ export const routes: Routes = [
         loadComponent: () => import('./views/sign-up/sign-up.component').then(mod => mod.SignUpComponent)
     },
     {
-        path: 'app',
+        path: '',
         loadComponent: () => import('./views/dashboard/dashboard.component').then(mod => mod.DashboardComponent),
         canActivate: [authGuard]
     },
     {
         path: 'destinations',
         loadComponent: () => import('./views/destination/destination.component').then(mod => mod.DestinationComponent),
+        canActivate: [authGuard]
+    },
+    {
+        path: 'destinations/:id',
+        loadComponent: () => import('./views/destination/id/id.component').then(mod => mod.IdComponent),
         canActivate: [authGuard]
     }
 ];

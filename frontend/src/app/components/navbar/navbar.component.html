@@ -1,53 +1,31 @@
-<div class="navbar bg-base-100 shadow w-full">
-    <div class="navbar-start">
-        <!-- RESPONSIVE DROPDOWN -->
-        <div class="dropdown">
-            <label tabindex="0" class="btn btn-ghost md:hidden">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16" />
-                </svg>
-            </label>
-            <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
-                <li><a>Item 1</a></li>
-                <li>
-                    <a>Parent</a>
-                    <ul class="p-2">
-                        <li><a>Submenu 1</a></li>
-                        <li><a>Submenu 2</a></li>
-                    </ul>
-                </li>
-                <li><a>Item 3</a></li>
-            </ul>
-        </div>
-        <!-- BRAND -->
-        <a class="btn btn-ghost normal-case text-xl">vPAAS</a>
+<nav class="shadow-sm bg-white border-gray-200 dark:bg-gray-900">
+    <div class="flex flex-wrap items-center justify-between mx-auto p-4">
+        <a routerLink="/app" class="flex items-center">
+            <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">vPAAS</span>
+        </a>
+        <div class="flex items-center md:order-2">
+            <button type="button" id="user-menu-button" aria-expanded="false" data-dropdown-toggle="user-dropdown"
+                data-dropdown-placement="bottom"
+                class="relative inline-flex items-center justify-center w-10 h-10 overflow-hidden focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600 bg-gray-100 rounded-full dark:bg-gray-600">
+                <span class="font-medium text-gray-600 dark:text-gray-300">{{user()?.email?.slice(0,
+                    2)?.toUpperCase()}}</span>
+            </button>
 
-        <!-- NAVBAR CONTENT -->
-        <!-- <ul class="menu menu-horizontal px-1 hidden md:flex">
-            <li><a>Applications</a></li>
-            <li><a>Services</a></li>
-            <li><a>Databases</a></li>
-            <li><a>Destinations</a></li>
-        </ul> -->
-    </div>
-    <div class="navbar-end">
-        <div class="dropdown dropdown-end">
-            <label tabindex="0" class="btn btn-ghost btn-circle avatar placeholder">
-                <div class="bg-neutral-focus text-neutral-content rounded-full w-10">
-                    <span>{{(user | async)?.email?.slice(0, 2)?.toUpperCase()}}</span>
+            <!-- Dropdown menu -->
+            <div class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600"
+                id="user-dropdown">
+                <div class="px-4 py-3">
+                    <!-- <span class="block text-sm text-gray-900 dark:text-white">name</span> -->
+                    <span class="block text-sm  text-gray-500 truncate dark:text-gray-400">{{user()?.email}}</span>
                 </div>
-            </label>
-            <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
-                <li>
-                    <a class="justify-between">
-                        Profile
-                        <span class="badge">New</span>
-                    </a>
-                </li>
-                <li><a>Settings</a></li>
-                <li><a>Logout</a></li>
-            </ul>
+                <ul class="py-2" aria-labelledby="user-menu-button">
+                    <li>
+                        <a href="#"
+                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Sign
+                            out</a>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
-</div>
+</nav>

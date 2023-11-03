@@ -1,6 +1,7 @@
-<div class="flex flex-1 w-full h-full bg-base-200">
-    <app-sidebar></app-sidebar>
+<div class="flex flex-1 flex-col w-full h-full overflow-hidden bg-slate-100">
     <app-navbar></app-navbar>
 
-    <router-outlet></router-outlet>
+    <div class="flex flex-1 w-full h-full p-2 overflow-auto">
+        <router-outlet></router-outlet>
+    </div>
 </div>

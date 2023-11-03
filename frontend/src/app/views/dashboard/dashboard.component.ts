@@ -1,21 +1,31 @@
-import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { User } from 'src/app/core/models/user.model';
-import { userStore } from 'src/app/core/stores/user.store';
-import { Observable } from 'rxjs';
+import { Component, OnInit, Signal, signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop'
+import { RouterModule } from '@angular/router';
+
+import { Destination } from 'src/app/core/models/destination.model';
+import { DestinationService } from 'src/app/core/services/destination.service';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit {
 
-  public user: Observable<User | null>;
+  public destinations: Signal<Destination[]>;
 
-  constructor() {
-    this.user = userStore.user;
+  constructor(private destinationService: DestinationService) {
+    this.destinations = signal([]);
   }
+
+  ngOnInit(): void {
+    this.destinations = toSignal(this.destinationService.getAllDestinations(), {
+      initialValue: []
+    });
+  }
+
+
 }
