@@ -1,6 +1,11 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 
 import { environment } from 'src/environments/environment';
@@ -12,7 +17,7 @@ import { AuthService } from 'src/app/core/services/auth.service';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, RouterModule],
   templateUrl: './sign-in.component.html',
-  styleUrls: ['./sign-in.component.css']
+  styleUrls: ['./sign-in.component.css'],
 })
 export class SignInComponent {
   public form: FormGroup;
@@ -24,16 +29,16 @@ export class SignInComponent {
   constructor() {
     this.form = this.fb.group({
       email: ['', [Validators.email, Validators.required]],
-      password: ['', [Validators.required]]
+      password: ['', [Validators.required]],
     });
   }
 
   handleSubmit() {
-    this.service.signIn(this.form.value).subscribe(data => {
+    this.service.signIn(this.form.value).subscribe((data) => {
       sessionStorage.setItem(environment.accessToken, data.token);
       userStore.setUser(data.user);
-      this.router.navigate(["/app"]);
-    })
+      this.router.navigate(['/']);
+    });
   }
 
   get f() {
