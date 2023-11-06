@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Destination } from '@prisma/client';
 
-import { DatabaseService } from 'src/database/database.service';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { executeCommand } from 'src/utils/command.util';
 import { startTraefikProxy, stopTraefikProxy } from 'src/utils/traefik.util';
 import { networkName } from './destination.constant';
@@ -9,7 +9,7 @@ import { generateName } from 'src/utils/string.utils';
 
 @Injectable()
 export class DestinationService {
-  constructor(private prisma: DatabaseService) { }
+  constructor(private prisma: PrismaService) {}
 
   async getAll(): Promise<Destination[]> {
     return await this.prisma.destination.findMany();
@@ -46,12 +46,14 @@ export class DestinationService {
       data.network = `ntw-${data.name.replace(/\s/g, '_').toLowerCase()}`;
 
     const { stdout } = await executeCommand(
-      `docker network ls --filter 'name=^${data.network ? data.network : networkName
+      `docker network ls --filter 'name=^${
+        data.network ? data.network : networkName
       }$' --format '{{json .}}'`,
     );
     if (stdout || stdout === '') {
       await executeCommand(
-        `docker network create --attachable ${data.network ? data.network : networkName
+        `docker network create --attachable ${
+          data.network ? data.network : networkName
         }`,
       );
     }

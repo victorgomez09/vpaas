@@ -1,7 +1,8 @@
-export { };
+export {};
 
 declare global {
-    interface Window {
-        HSOverlay: any;
-    }
+  interface Window {
+    HSOverlay: any;
+    HSTabs: any;
+  }
 }

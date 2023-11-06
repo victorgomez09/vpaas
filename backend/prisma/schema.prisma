@@ -26,11 +26,53 @@ model Permission {
 }
 
 model Destination {
-  id          String   @id @default(cuid())
+  id          String     @id @default(cuid())
   network     String
-  name        String   @unique
+  name        String     @unique
   engine      String
-  isProxyUsed Boolean  @default(false)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  isProxyUsed Boolean    @default(false)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  Database    Database[]
+}
+
+model Database {
+  id                  String            @id @default(cuid())
+  name                String
+  publicPort          Int?
+  defaultDatabase     String?
+  type                String?
+  version             String?
+  dbUser              String?
+  dbUserPassword      String?
+  rootUser            String?
+  rootUserPassword    String?
+  destinationDockerId String?
+  createdAt           DateTime          @default(now())
+  updatedAt           DateTime          @updatedAt
+  destinationDocker   Destination?      @relation(fields: [destinationDockerId], references: [id])
+  settings            DatabaseSettings?
+  databaseSecret      DatabaseSecret[]
+}
+
+model DatabaseSecret {
+  id         String   @id @default(cuid())
+  name       String
+  value      String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  databaseId String
+  database   Database @relation(fields: [databaseId], references: [id])
+
+  @@unique([name, databaseId])
+}
+
+model DatabaseSettings {
+  id         String   @id @default(cuid())
+  databaseId String   @unique
+  isPublic   Boolean  @default(false)
+  appendOnly Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  database   Database @relation(fields: [databaseId], references: [id])
 }

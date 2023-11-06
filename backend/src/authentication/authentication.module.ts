@@ -6,12 +6,12 @@ import { AuthenticationController } from './authentication.controller';
 import { AuthenticationService } from './authentication.service';
 import { jwtConstants } from './constants';
 import { AuthenticationGuard } from 'src/guard/authentication.guard';
-import { DatabaseModule } from 'src/database/database.module';
+import { PrismaModule } from 'src/prisma/prisma.module';
 
 @Module({
   controllers: [AuthenticationController],
   imports: [
-    DatabaseModule,
+    PrismaModule,
     JwtModule.register({
       secret: jwtConstants.secret,
       signOptions: { expiresIn: '1d' },
@@ -25,4 +25,4 @@ import { DatabaseModule } from 'src/database/database.module';
     },
   ],
 })
-export class AuthenticationModule { }
+export class AuthenticationModule {}

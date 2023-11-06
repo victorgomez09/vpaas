@@ -1,3 +1,11 @@
+import {
+  createCipheriv,
+  randomBytes,
+  randomBytes as randomBytesCrypto,
+  scryptSync,
+} from 'crypto';
+import { getSecretKey } from './env.util';
+
 const capFirst = (str: string) => {
   return str.charAt(0).toUpperCase() + str.slice(1);
 };
@@ -2868,4 +2876,215 @@ export const generateName = () => {
     capFirst(name2[getRandomInt(0, name2.length + 1)]);
 
   return name;
+};
+
+/** PASSWORD GENERATOR */
+export interface GenerateOptions {
+  /**
+   * Length of the generated password.
+   * @default 10
+   */
+  length?: number;
+  /**
+   * Should the password include numbers
+   * @default false
+   */
+  numbers?: boolean;
+  /**
+   * Should the password include symbols, or symbols to include
+   * @default false
+   */
+  symbols?: boolean | string;
+  /**
+   * Should the password include lowercase characters
+   * @default true
+   */
+  lowercase?: boolean;
+  /**
+   * Should the password include uppercase characters
+   * @default true
+   */
+  uppercase?: boolean;
+  /**
+   * Should exclude visually similar characters like 'i' and 'I'
+   * @default false
+   */
+  excludeSimilarCharacters?: boolean;
+  /**
+   * List of characters to be excluded from the password
+   * @default ""
+   */
+  exclude?: string;
+  /**
+   * Password should include at least one character from each pool
+   * @default false
+   */
+  strict?: boolean;
+}
+const getNextRandomValue = () => {
+  let randomIndex: number;
+  let randomBytes: Buffer;
+
+  if (randomIndex === undefined || randomIndex >= randomBytes.length) {
+    randomIndex = 0;
+    randomBytes = randomBytesCrypto(256);
+  }
+
+  const result = randomBytes[randomIndex];
+  randomIndex += 1;
+
+  return result;
+};
+
+const randomNumber = (max: number) => {
+  // gives a number between 0 (inclusive) and max (exclusive)
+  let rand = getNextRandomValue();
+  while (rand >= 256 - (256 % max)) {
+    rand = getNextRandomValue();
+  }
+
+  return rand % max;
+};
+
+const lowercase = 'abcdefghijklmnopqrstuvwxyz';
+const uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+const numbers = '0123456789';
+const symbols = '!@#$%^&*()+_-=}{[]|:;"/?.><,`~';
+const similarCharacters = /[ilLI|`oO0]/g;
+const strictRules = [
+  { name: 'lowercase', rule: /[a-z]/ },
+  { name: 'uppercase', rule: /[A-Z]/ },
+  { name: 'numbers', rule: /[0-9]/ },
+  { name: 'symbols', rule: /[!@#$%^&*()+_\-=}{[\]|:;"/?.><,`~]/ },
+];
+
+const generate = (options: GenerateOptions, pool: string) => {
+  let password = '';
+  const optionsLength = options.length;
+  const poolLength = pool.length;
+
+  for (let i = 0; i < optionsLength; i++) {
+    password += pool[randomNumber(poolLength)];
+  }
+
+  if (options.strict) {
+    // Iterate over each rule, checking to see if the password works.
+    const fitsRules = strictRules.every(function (rule) {
+      // If the option is not checked, ignore it.
+      if (options[rule.name] == false) return true;
+
+      // Treat symbol differently if explicit string is provided
+      if (rule.name === 'symbols' && typeof options[rule.name] === 'string') {
+        // Create a regular expression from the provided symbols
+        const re = new RegExp('[' + options[rule.name] + ']');
+        return re.test(password);
+      }
+
+      // Run the regex on the password and return whether
+      // or not it matches.
+      return rule.rule.test(password);
+    });
+
+    // If it doesn't fit the rules, generate a new one (recursion).
+    if (!fitsRules) return generate(options, pool);
+  }
+
+  return password;
+};
+
+// Generate a random password.
+export function generatePassword(options: GenerateOptions) {
+  // Set defaults.
+  options = options || {};
+  if (!Object.prototype.hasOwnProperty.call(options, 'length'))
+    options.length = 10;
+  if (!Object.prototype.hasOwnProperty.call(options, 'numbers'))
+    options.numbers = false;
+  if (!Object.prototype.hasOwnProperty.call(options, 'symbols'))
+    options.symbols = false;
+  if (!Object.prototype.hasOwnProperty.call(options, 'exclude'))
+    options.exclude = '';
+  if (!Object.prototype.hasOwnProperty.call(options, 'uppercase'))
+    options.uppercase = true;
+  if (!Object.prototype.hasOwnProperty.call(options, 'lowercase'))
+    options.lowercase = true;
+  if (
+    !Object.prototype.hasOwnProperty.call(options, 'excludeSimilarCharacters')
+  )
+    options.excludeSimilarCharacters = false;
+  if (!Object.prototype.hasOwnProperty.call(options, 'strict'))
+    options.strict = false;
+
+  if (options.strict) {
+    const minStrictLength =
+      1 +
+      (options.numbers ? 1 : 0) +
+      (options.symbols ? 1 : 0) +
+      (options.uppercase ? 1 : 0);
+    if (minStrictLength > options.length) {
+      throw new TypeError('Length must correlate with strict guidelines');
+    }
+  }
+
+  // Generate character pool
+  let pool = '';
+
+  // lowercase
+  if (options.lowercase) {
+    pool += lowercase;
+  }
+
+  // uppercase
+  if (options.uppercase) {
+    pool += uppercase;
+  }
+  // numbers
+  if (options.numbers) {
+    pool += numbers;
+  }
+  // symbols
+  if (options.symbols) {
+    if (typeof options.symbols === 'string') {
+      pool += options.symbols;
+    } else {
+      pool += symbols;
+    }
+  }
+
+  // Throw error if pool is empty.
+  if (!pool) {
+    throw new TypeError('At least one rule for pools must be true');
+  }
+
+  // similar characters
+  if (options.excludeSimilarCharacters) {
+    pool = pool.replace(similarCharacters, '');
+  }
+
+  // excludes characters from the pool
+  let i = options.exclude.length;
+  while (i--) {
+    pool = pool.replace(options.exclude[i], '');
+  }
+
+  const password = generate(options, pool);
+
+  return password;
+}
+
+export const encrypt = (text: string) => {
+  if (text) {
+    const iv = randomBytes(16);
+    const key = scryptSync(getSecretKey(), 'salt', 32);
+    const cipher = createCipheriv('aes-256-ctr', key, iv);
+    const encrypted = Buffer.concat([
+      cipher.update(text.trim()),
+      cipher.final(),
+    ]);
+
+    return JSON.stringify({
+      iv: iv.toString('hex'),
+      content: encrypted.toString('hex'),
+    });
+  }
 };
