@@ -13,7 +13,7 @@ import { DestinationService } from './destination.service';
 
 @Controller('destinations')
 export class DestinationController {
-  constructor(private service: DestinationService) {}
+  constructor(private service: DestinationService) { }
 
   @Get()
   async getAll() {
@@ -33,6 +33,16 @@ export class DestinationController {
   @Put(':id')
   async update(@Param('id') id: string, @Body() data: Destination) {
     return this.service.update(id, data);
+  }
+
+  @Put('proxy/:id')
+  async updateProxy(@Param('id') id: string, @Body() data: { proxy: boolean }) {
+    return this.service.updateProxy(id, data.proxy);
+  }
+
+  @Put('proxy/force/:id')
+  async updateProxyForce(@Param('id') id: string) {
+    return this.service.updateProxyForce(id);
   }
 
   @Delete(':id')

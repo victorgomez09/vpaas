@@ -7,7 +7,10 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.use(cookieParser());
   app.enableCors({
-    origin: ['http://localhost:4200'],
+    origin: [
+      'http://localhost:4200',
+      'https://4200-victorgomez09-vpaas-azdjnc9ya1a.ws-eu105.gitpod.io',
+    ],
   });
 
   await app.listen(3000);

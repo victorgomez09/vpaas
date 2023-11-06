@@ -40,7 +40,6 @@ export async function startTraefikProxy(
     const { stdout: vpaasNetwork } = await executeCommand(
       `docker network ls --filter 'name=vpaas-infra' --no-trunc --format "{{json .}}"`,
     );
-    console.log('test', vpaasNetwork);
 
     if (!vpaasNetwork) {
       await executeCommand(`docker network create --attachable vpaas-infra`);
@@ -49,7 +48,6 @@ export async function startTraefikProxy(
     const { stdout: Config } = await executeCommand(
       `docker network inspect ${network} --format '{{json .IPAM.Config }}'`,
     );
-    console.log('stdout', Config);
     const ip = JSON.parse(Config)[0].Gateway;
     const traefikUrl = mainTraefikEndpoint;
     await executeCommand(`docker run --restart always \
@@ -80,6 +78,25 @@ export async function startTraefikProxy(
   // Configure networks for local docker engine
   if (engine) {
     await configureNetworkTraefikProxy(destination);
+  }
+}
+
+export async function stopTraefikProxy(
+  destination: Destination,
+): Promise<{ stdout: string; stderr: string } | Error> {
+  const { found } = await checkContainer({
+    dockerId: destination.id,
+    container: 'vpaas-proxy',
+  });
+
+  try {
+    if (found) {
+      await executeCommand(
+        `docker stop -t 0 vpaas-proxy && docker rm vpaas-proxy`,
+      );
+    }
+  } catch (error) {
+    return error;
   }
 }
 

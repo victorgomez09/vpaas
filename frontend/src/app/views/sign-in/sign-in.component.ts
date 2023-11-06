@@ -37,7 +37,7 @@ export class SignInComponent {
     this.service.signIn(this.form.value).subscribe((data) => {
       sessionStorage.setItem(environment.accessToken, data.token);
       userStore.setUser(data.user);
-      this.router.navigate(['/']);
+      this.router.navigate(['/dashboard']);
     });
   }
 

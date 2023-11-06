@@ -33,7 +33,7 @@ export const executeCommand = async (command: string) => {
     });
   }
 
-  return execaCommand(command);
+  return execaCommand(command, { shell: true });
 
   // return new promise
   // const promise = new Promise<{ stdout: string; stderr: string }>(

@@ -3,13 +3,13 @@ import { Destination } from '@prisma/client';
 
 import { DatabaseService } from 'src/database/database.service';
 import { executeCommand } from 'src/utils/command.util';
-import { startTraefikProxy } from 'src/utils/traefik.util';
+import { startTraefikProxy, stopTraefikProxy } from 'src/utils/traefik.util';
 import { networkName } from './destination.constant';
 import { generateName } from 'src/utils/string.utils';
 
 @Injectable()
 export class DestinationService {
-  constructor(private prisma: DatabaseService) {}
+  constructor(private prisma: DatabaseService) { }
 
   async getAll(): Promise<Destination[]> {
     return await this.prisma.destination.findMany();
@@ -46,14 +46,12 @@ export class DestinationService {
       data.network = `ntw-${data.name.replace(/\s/g, '_').toLowerCase()}`;
 
     const { stdout } = await executeCommand(
-      `docker network ls --filter 'name=^${
-        data.network ? data.network : networkName
+      `docker network ls --filter 'name=^${data.network ? data.network : networkName
       }$' --format '{{json .}}'`,
     );
     if (stdout || stdout === '') {
       await executeCommand(
-        `docker network create --attachable ${
-          data.network ? data.network : networkName
+        `docker network create --attachable ${data.network ? data.network : networkName
         }`,
       );
     }
@@ -70,7 +68,65 @@ export class DestinationService {
     return this.prisma.destination.update({ where: { id }, data });
   }
 
+  async updateProxy(id: string, proxyUsed: boolean): Promise<Destination> {
+    const destination = await this.prisma.destination.findFirst({
+      where: { id },
+    });
+
+    if (proxyUsed) {
+      await startTraefikProxy(destination);
+    } else {
+      await stopTraefikProxy(destination);
+    }
+
+    return await this.prisma.destination.update({
+      where: { id },
+      data: { isProxyUsed: proxyUsed },
+    });
+  }
+
+  async updateProxyForce(id: string): Promise<Destination> {
+    const destination = await this.prisma.destination.findFirst({
+      where: { id },
+    });
+
+    await startTraefikProxy(destination);
+    await stopTraefikProxy(destination);
+
+    return await this.prisma.destination.update({
+      where: { id },
+      data: { isProxyUsed: true },
+    });
+  }
+
   async delete(id: string) {
-    return this.prisma.destination.delete({ where: { id } });
+    // Remove services
+    // const services = await this.prisma.service.findMany({ where: { destinationDockerId: id } });
+    // for (const service of services) {
+    //   await removeService({ id: service.id });
+    // }
+
+    // Remove applications
+    // const applications = await prisma.application.findMany({ where: { destinationDockerId: id } });
+    // for (const application of applications) {
+    //   await prisma.applicationSettings.deleteMany({ where: { application: { id: application.id } } });
+    //   await prisma.buildLog.deleteMany({ where: { applicationId: application.id } });
+    //   await prisma.build.deleteMany({ where: { applicationId: application.id } });
+    //   await prisma.secret.deleteMany({ where: { applicationId: application.id } });
+    //   await prisma.applicationPersistentStorage.deleteMany({ where: { applicationId: application.id } });
+    //   await prisma.applicationConnectedDatabase.deleteMany({ where: { applicationId: application.id } });
+    //   await prisma.previewApplication.deleteMany({ where: { applicationId: application.id } });
+    // }
+
+    // remove databases
+    // const databases = await prisma.database.findMany({ where: { destinationDockerId: id } });
+    // for (const database of databases) {
+    //   await prisma.databaseSettings.deleteMany({ where: { databaseId: database.id } });
+    //   await prisma.databaseSecret.deleteMany({ where: { databaseId: database.id } });
+    //   await prisma.database.delete({ where: { id: database.id } });
+    // }
+    await this.prisma.destination.delete({ where: { id } });
+
+    return {};
   }
 }
