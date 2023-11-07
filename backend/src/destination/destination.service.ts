@@ -5,7 +5,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { executeCommand } from 'src/utils/command.util';
 import { startTraefikProxy, stopTraefikProxy } from 'src/utils/traefik.util';
 import { networkName } from './destination.constant';
-import { generateName } from 'src/utils/string.utils';
+import { generateName } from 'src/utils/string.util';
 
 @Injectable()
 export class DestinationService {

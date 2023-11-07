@@ -1,0 +1,396 @@
+<div class="p-2 w-full h-full mx-auto">
+  <!-- Card Section -->
+  <div class="flex flex-1 w-full h-full mx-auto">
+    <div
+      class="w-full h-full bg-white rounded-xl shadow overflow-auto dark:bg-slate-900"
+    >
+      <!-- Card Section -->
+      <div class="px-6 py-4 mx-auto">
+        <div class="sticky top-0 bg-white">
+          <!-- Card -->
+          <div class="flex flex-1 justify-between items-center mb-8">
+            <div>
+              <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200">
+                Database
+              </h2>
+              <p class="text-sm text-gray-600 dark:text-gray-400">
+                Manage databse settings.
+              </p>
+            </div>
+
+            <div class="gap-2">
+              <button
+                *ngIf="!isRunning(); else running"
+                (click)="startDatabase()"
+                type="button"
+                class="py-2 px-3 inline-flex justify-center items-center gap-2 rounded-md border border-transparent font-semibold bg-green-500 text-white hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-all text-sm dark:focus:ring-offset-gray-800"
+              >
+                <span
+                  *ngIf="databaseStatusLoader()"
+                  class="animate-spin inline-block w-4 h-4 border-[3px] border-current border-t-transparent text-white-600 rounded-full dark:text-white-500"
+                  role="status"
+                  aria-label="loading"
+                >
+                  <span class="sr-only">Loading...</span>
+                </span>
+                Start
+              </button>
+              <ng-template #running>
+                <button
+                  (click)="stopDatabase()"
+                  type="button"
+                  class="py-2 px-3 inline-flex justify-center items-center gap-2 rounded-md border border-transparent font-semibold bg-yellow-500 text-white hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 transition-all text-sm dark:focus:ring-offset-gray-800"
+                >
+                  <span
+                    *ngIf="databaseStatusLoader()"
+                    class="animate-spin inline-block w-4 h-4 border-[3px] border-current border-t-transparent text-white-600 rounded-full dark:text-white-500"
+                    role="status"
+                    aria-label="loading"
+                  >
+                    <span class="sr-only">Loading...</span>
+                  </span>
+                  Stop
+                </button>
+              </ng-template>
+            </div>
+          </div>
+
+          <div class="border-b border-gray-200 dark:border-gray-700">
+            <nav class="flex space-x-2" aria-label="Tabs" role="tablist">
+              <button
+                type="button"
+                class="hs-tab-active:font-semibold hs-tab-active:border-purple-600 hs-tab-active:text-purple-600 py-4 px-1 inline-flex items-center gap-x-2 border-b-2 border-transparent text-sm whitespace-nowrap text-gray-500 hover:text-purple-600 focus:outline-none focus:text-purple-600 disabled:opacity-50 disabled:pointer-events-none dark:text-gray-400 dark:hover:text-purple-500 active"
+                id="tabs-with-icons-item-1"
+                data-hs-tab="#tabs-with-icons-1"
+                aria-controls="tabs-with-icons-1"
+                role="tab"
+              >
+                <svg
+                  class="flex-shrink-0 w-4 h-4"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                  <polyline points="9 22 9 12 15 12 15 22" />
+                </svg>
+                Configuration
+              </button>
+              <button
+                (click)="openLogs()"
+                type="button"
+                class="hs-tab-active:font-semibold hs-tab-active:border-purple-600 hs-tab-active:text-purple-600 py-4 px-1 inline-flex items-center gap-x-2 border-b-2 border-transparent text-sm whitespace-nowrap text-gray-500 hover:text-purple-600 focus:outline-none focus:text-purple-600 disabled:opacity-50 disabled:pointer-events-none dark:text-gray-400 dark:hover:text-purple-500"
+                id="tabs-with-icons-item-2"
+                data-hs-tab="#tabs-with-icons-2"
+                aria-controls="tabs-with-icons-2"
+                role="tab"
+              >
+                <svg
+                  class="flex-shrink-0 w-4 h-4"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <circle cx="12" cy="12" r="10" />
+                  <circle cx="12" cy="10" r="3" />
+                  <path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662" />
+                </svg>
+                Logs
+              </button>
+            </nav>
+          </div>
+        </div>
+
+        <div class="mt-3">
+          <div
+            id="tabs-with-icons-1"
+            role="tabpanel"
+            aria-labelledby="tabs-with-icons-item-1"
+          >
+            <form [formGroup]="form">
+              <!-- Grid -->
+              <div class="grid sm:grid-cols-12 gap-2 sm:gap-6">
+                <div class="sm:col-span-3">
+                  <label
+                    for="af-account-full-name"
+                    class="inline-block text-sm text-gray-800 mt-2.5 dark:text-gray-200"
+                  >
+                    Name
+                  </label>
+                </div>
+                <!-- End Col -->
+
+                <div class="sm:col-span-9">
+                  <div class="sm:flex">
+                    <input
+                      id="af-account-email"
+                      type="text"
+                      class="py-2 px-3 pr-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-purple-500 focus:ring-purple-500 dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400"
+                      formControlName="name"
+                    />
+                  </div>
+                </div>
+                <!-- End Col -->
+
+                <div class="sm:col-span-3">
+                  <label
+                    for="af-account-email"
+                    class="inline-block text-sm text-gray-800 mt-2.5 dark:text-gray-200"
+                  >
+                    Type
+                  </label>
+                </div>
+                <!-- End Col -->
+
+                <div class="sm:col-span-9">
+                  <input
+                    id="af-account-email"
+                    type="email"
+                    class="py-2 px-3 pr-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-purple-500 focus:ring-purple-500 dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400"
+                    formControlName="type"
+                    readonly
+                  />
+                </div>
+                <!-- End Col -->
+
+                <div class="sm:col-span-3">
+                  <label
+                    for="af-account-password"
+                    class="inline-block text-sm text-gray-800 mt-2.5 dark:text-gray-200"
+                  >
+                    Version
+                  </label>
+                </div>
+                <!-- End Col -->
+
+                <div class="sm:col-span-9">
+                  <div class="space-y-2">
+                    <input
+                      id="af-account-password"
+                      type="text"
+                      class="py-2 px-3 pr-11 block w-full border-gray-200 shadow-sm rounded-lg text-sm focus:border-purple-500 focus:ring-purple-500 dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400"
+                      formControlName="version"
+                      readonly
+                    />
+                  </div>
+                </div>
+                <!-- End Col -->
+              </div>
+              <!-- End Grid -->
+
+              <div
+                class="grid sm:grid-cols-12 gap-2 sm:gap-6 border-t border-gray-200 mt-4"
+              >
+                <div class="sm:col-span-12 mt-2">
+                  <h2
+                    class="text-lg font-semibold text-gray-800 dark:text-gray-200"
+                  >
+                    Credentials
+                  </h2>
+                </div>
+                <div class="sm:col-span-3">
+                  <label
+                    for="af-account-full-name"
+                    class="inline-block text-sm text-gray-800 mt-2.5 dark:text-gray-200"
+                  >
+                    Default database
+                  </label>
+                </div>
+                <!-- End Col -->
+
+                <div class="sm:col-span-9">
+                  <div class="sm:flex">
+                    <input
+                      id="af-account-email"
+                      type="text"
+                      class="py-2 px-3 pr-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-purple-500 focus:ring-purple-500 dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400"
+                      formControlName="defaultDatabase"
+                    />
+                  </div>
+                </div>
+                <!-- End Col -->
+
+                <div class="sm:col-span-3">
+                  <label
+                    for="af-account-email"
+                    class="inline-block text-sm text-gray-800 mt-2.5 dark:text-gray-200"
+                  >
+                    Database user
+                  </label>
+                </div>
+                <!-- End Col -->
+
+                <div class="sm:col-span-9">
+                  <input
+                    id="af-account-email"
+                    type="email"
+                    class="py-2 px-3 pr-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-purple-500 focus:ring-purple-500 dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400"
+                    formControlName="dbUser"
+                  />
+                </div>
+                <!-- End Col -->
+
+                <div class="sm:col-span-3">
+                  <label
+                    for="af-account-password"
+                    class="inline-block text-sm text-gray-800 mt-2.5 dark:text-gray-200"
+                  >
+                    Database user password
+                  </label>
+                </div>
+                <div class="sm:col-span-9">
+                  <div class="space-y-2">
+                    <input
+                      id="af-account-password"
+                      type="text"
+                      class="py-2 px-3 pr-11 block w-full border-gray-200 shadow-sm rounded-lg text-sm focus:border-purple-500 focus:ring-purple-500 dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400"
+                      formControlName="dbUserPassword"
+                    />
+                  </div>
+                </div>
+                <!-- End Col -->
+
+                <div class="sm:col-span-3">
+                  <label
+                    for="af-account-password"
+                    class="inline-block text-sm text-gray-800 mt-2.5 dark:text-gray-200"
+                  >
+                    Database root
+                  </label>
+                </div>
+                <div class="sm:col-span-9">
+                  <div class="space-y-2">
+                    <input
+                      id="af-account-password"
+                      type="text"
+                      class="py-2 px-3 pr-11 block w-full border-gray-200 shadow-sm rounded-lg text-sm focus:border-purple-500 focus:ring-purple-500 dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400"
+                      formControlName="rootUser"
+                    />
+                  </div>
+                </div>
+                <!-- End Col -->
+
+                <div class="sm:col-span-3">
+                  <label
+                    for="af-account-password"
+                    class="inline-block text-sm text-gray-800 mt-2.5 dark:text-gray-200"
+                  >
+                    Database root password
+                  </label>
+                </div>
+                <div class="sm:col-span-9">
+                  <div class="space-y-2">
+                    <input
+                      id="af-account-password"
+                      type="text"
+                      class="py-2 px-3 pr-11 block w-full border-gray-200 shadow-sm rounded-lg text-sm focus:border-purple-500 focus:ring-purple-500 dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400"
+                      formControlName="rootUserPassword"
+                    />
+                  </div>
+                </div>
+                <!-- End Col -->
+              </div>
+              <!-- End Grid -->
+
+              <div
+                class="grid sm:grid-cols-12 gap-2 sm:gap-6 border-t border-gray-200 mt-4"
+              >
+                <div class="sm:col-span-12 mt-2">
+                  <h2
+                    class="text-lg font-semibold text-gray-800 dark:text-gray-200"
+                  >
+                    Access
+                  </h2>
+                </div>
+                <div class="sm:col-span-3">
+                  <label
+                    for="af-account-full-name"
+                    class="inline-block text-sm text-gray-800 mt-2.5 dark:text-gray-200"
+                  >
+                    Public access
+                  </label>
+
+                  <div class="hs-tooltip inline-block">
+                    <button type="button" class="hs-tooltip-toggle ml-1">
+                      <svg
+                        class="inline-block w-3 h-3 text-gray-400 dark:text-gray-600"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        fill="currentColor"
+                        viewBox="0 0 16 16"
+                      >
+                        <path
+                          d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"
+                        />
+                        <path
+                          d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"
+                        />
+                      </svg>
+                    </button>
+                    <span
+                      class="hs-tooltip-content hs-tooltip-shown:opacity-100 hs-tooltip-shown:visible opacity-0 transition-opacity inline-block absolute invisible w-40 text-center z-10 py-1 px-2 bg-gray-900 text-xs font-medium text-white rounded-md shadow-sm dark:bg-slate-700"
+                      role="tooltip"
+                    >
+                      Provide database access through internet.
+                    </span>
+                  </div>
+                </div>
+                <!-- End Col -->
+
+                <div class="sm:col-span-9">
+                  <div class="sm:flex">
+                    <input
+                      type="checkbox"
+                      id="hs-valid-toggle-switch"
+                      class="relative shrink-0 w-[3.25rem] h-7 p-px bg-gray-100 border-transparent text-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:ring-purple-600 disabled:opacity-50 disabled:pointer-events-none checked:bg-none checked:text-purple-600 checked:border-purple-600 focus:checked:border-purple-600 dark:bg-gray-800 dark:border-gray-700 dark:checked:bg-purple-500 dark:checked:border-purple-500 dark:focus:ring-offset-gray-600 before:inline-block before:w-6 before:h-6 before:bg-white checked:before:bg-purple-200 before:translate-x-0 checked:before:translate-x-full before:rounded-full before:shadow before:transform before:ring-0 before:transition before:ease-in-out before:duration-200 dark:before:bg-gray-400 dark:checked:before:bg-purple-200"
+                      formControlName="publicAccess"
+                    />
+                  </div>
+                </div>
+                <!-- End Col -->
+                <!-- End Col -->
+              </div>
+              <!-- End Grid -->
+
+              <div class="mt-5 flex justify-end gap-x-2">
+                <button
+                  type="button"
+                  class="py-2 px-3 inline-flex justify-center items-center gap-2 rounded-md border border-transparent font-semibold bg-purple-500 text-white hover:bg-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transition-all text-sm dark:focus:ring-offset-gray-800"
+                >
+                  Save changes
+                </button>
+              </div>
+            </form>
+          </div>
+          <div
+            id="tabs-with-icons-2"
+            class="hidden"
+            role="tabpanel"
+            aria-labelledby="tabs-with-icons-item-2"
+          >
+            <div
+              class="flex flex-1 flex-col p-2 bg-gray-200 border border-gray-200 rounded h-full w-full overflow-auto"
+            >
+              <span *ngFor="let log of logs()">{{ log }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- End Card -->
+    </div>
+    <!-- End Card Section -->
+  </div>
+</div>

@@ -14,6 +14,15 @@ export interface Database {
   updatedAt?: Date;
 }
 
+export interface DatabaseSecrets {
+  id: string;
+  name: string;
+  value: string;
+  databaseId: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 export interface AvailableDatabase {
   name: string;
   fancyName: string;

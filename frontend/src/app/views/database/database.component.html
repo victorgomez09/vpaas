@@ -97,44 +97,36 @@
             </thead>
 
             <tbody class="overflow-y-scroll">
-              <!-- <tr *ngFor="let destination of destinations()">
+              <tr *ngFor="let database of databases()">
                 <td class="h-px w-px whitespace-nowrap">
                   <div class="px-6 py-3">
                     <a
-                      routerLink="/destinations/{{ destination.id }}"
+                      routerLink="/databases/{{ database.id }}"
                       class="inline-flex justify-center items-center gap-2 rounded-md border border-transparent font-semibold text-purple-500 hover:text-purple-700 focus:outline-none focus:underline focus:underline-purple-500 transition-all text-sm"
-                      >{{ destination.name }}</a
+                      >{{ database.name }}</a
                     >
                   </div>
                 </td>
                 <td class="h-px w-px whitespace-nowrap">
                   <div class="px-6 py-3">
-                    <span class="text-sm text-gray-600 dark:text-gray-400">{{
-                      destination.network
-                    }}</span>
-                  </div>
-                </td>
-                <td class="h-px w-px whitespace-nowrap">
-                  <div class="px-6 py-3">
-                    <span
-                      class="inline-flex items-center gap-1.5 py-0.5 px-2 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
+                    <span class="text-sm text-gray-600 dark:text-gray-400">
+                      {{ database.type }}</span
                     >
-                      {{
-                        destination.engine === "/var/run/docker.sock"
-                          ? "Local"
-                          : "Remote"
-                      }}
-                    </span>
+                  </div>
+                </td>
+                <td class="h-px w-px whitespace-nowrap">
+                  <div class="px-6 py-3">
+                    {{ database.version }}
                   </div>
                 </td>
                 <td class="h-px w-px whitespace-nowrap">
                   <div class="px-6 py-3">
                     <span class="text-sm text-gray-600 dark:text-gray-400">{{
-                      destination.createdAt | date
+                      database.createdAt | date
                     }}</span>
                   </div>
                 </td>
-              </tr> -->
+              </tr>
             </tbody>
           </table>
           <!-- End Table -->

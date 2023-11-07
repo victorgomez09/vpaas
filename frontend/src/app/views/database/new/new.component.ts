@@ -16,6 +16,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { DatabaseService } from 'src/app/core/services/database.service';
 import { DestinationService } from 'src/app/core/services/destination.service';
 import { Destination } from 'src/app/core/models/destination.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-new',
@@ -41,7 +42,8 @@ export class NewComponent implements OnInit {
     private service: DatabaseService,
     private destinationService: DestinationService,
     private fb: FormBuilder,
-    private injector: Injector
+    private injector: Injector,
+    private router: Router
   ) {
     this.pullingDatabaseImage = signal(false);
     this.createDatabase = signal(false);
@@ -88,7 +90,7 @@ export class NewComponent implements OnInit {
       .subscribe((data) => {
         this.createdDatabase = data;
         this.createDatabase.set(false);
-        window.HSTabs.open(document.getElementById('basic-tabs-item-4'));
+        this.router.navigate(['/databases', data.id]);
       });
   }
 

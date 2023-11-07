@@ -1,5 +1,6 @@
 import {
   createCipheriv,
+  createDecipheriv,
   randomBytes,
   randomBytes as randomBytesCrypto,
   scryptSync,
@@ -3088,3 +3089,34 @@ export const encrypt = (text: string) => {
     });
   }
 };
+
+export const decrypt = (hashString: string) => {
+  if (hashString) {
+    try {
+      const hash = JSON.parse(hashString);
+      const key = scryptSync(getSecretKey(), 'salt', 32);
+      const decipher = createDecipheriv(
+        'aes-256-ctr',
+        key,
+        Buffer.from(hash.iv, 'hex'),
+      );
+      const decrpyted = Buffer.concat([
+        decipher.update(Buffer.from(hash.content, 'hex')),
+        decipher.final(),
+      ]);
+      return decrpyted.toString();
+    } catch (error) {
+      console.log({ decryptionError: error.message });
+      return hashString;
+    }
+  }
+};
+
+export function ansiRegex(text: string, { onlyFirst = false } = {}): string {
+  const pattern = [
+    '[\\u001B\\u009B][[\\]()#;?]*(?:(?:(?:(?:;[-a-zA-Z\\d\\/#&.:=?%@~_]+)*|[a-zA-Z\\d]+(?:;[-a-zA-Z\\d\\/#&.:=?%@~_]*)*)?\\u0007)',
+    '(?:(?:\\d{1,4}(?:;\\d{0,4})*)?[\\dA-PR-TZcf-nq-uy=><~]))',
+  ].join('|');
+
+  return text.replace(new RegExp(pattern, onlyFirst ? undefined : 'g'), '');
+}
