@@ -1,23 +1,19 @@
-import {
-  Component,
-  Injector,
-  OnInit,
-  WritableSignal,
-  signal,
-} from '@angular/core';
+import { Component, OnInit, WritableSignal, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+
 import { DatabaseService } from 'src/app/core/services/database.service';
 import {
   AvailableDatabase,
   Database,
+  DatabaseUsage,
 } from 'src/app/core/models/database.model';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-id',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [ReactiveFormsModule],
   templateUrl: './id.component.html',
   styleUrls: ['./id.component.css'],
 })
@@ -26,21 +22,26 @@ export class IdComponent implements OnInit {
   public databaseTemplate!: AvailableDatabase;
   public isRunning: WritableSignal<boolean>;
   public logs: WritableSignal<string[]>;
+  public usage: WritableSignal<DatabaseUsage>;
   public form: FormGroup;
 
   public databaseStatusLoader: WritableSignal<boolean>;
+  public databaseBackupLoader: WritableSignal<boolean>;
 
   private id!: string;
 
   constructor(
     private service: DatabaseService,
     private route: ActivatedRoute,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private router: Router
   ) {
     this.database = signal<Database>({} as Database);
     this.isRunning = signal(false);
     this.logs = signal([]);
+    this.usage = signal({} as DatabaseUsage);
     this.databaseStatusLoader = signal(false);
+    this.databaseBackupLoader = signal(false);
 
     this.form = this.fb.group({
       name: [''],
@@ -110,6 +111,25 @@ export class IdComponent implements OnInit {
   openLogs() {
     this.service.getDatabaseLogs(this.id).subscribe((data) => {
       this.logs.set(data.logs);
+    });
+  }
+
+  openUsage() {
+    this.service.getDatabaseUsage(this.id).subscribe((data) => {
+      console.log(data);
+      this.usage.set(data.usage);
+    });
+  }
+
+  createBackup() {
+    this.databaseBackupLoader.set(true);
+    this.service.getDatabaseBackup(this.id);
+    this.databaseBackupLoader.set(false);
+  }
+
+  delete() {
+    this.service.deleteDatabase(this.id).subscribe(() => {
+      this.router.navigate(['/databases']);
     });
   }
 }

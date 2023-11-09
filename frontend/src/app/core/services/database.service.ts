@@ -1,18 +1,18 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
+import { Injectable, inject } from '@angular/core';
+import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
 import {
   AvailableDatabase,
   Database,
   DatabaseSecrets,
 } from '../models/database.model';
-import { Observable } from 'rxjs';
-import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DatabaseService {
-  constructor(private http: HttpClient) {}
+  private http = inject(HttpClient);
 
   getAllDatabases(): Observable<Database[]> {
     return this.http.get<Database[]>(`${environment.apiUrl}/databases`, {
@@ -112,6 +112,43 @@ export class DatabaseService {
     );
   }
 
+  getDatabaseBackup(id: string): void {
+    this.http
+      .get<{ fileName: string; stream: Blob }>(
+        `${environment.apiUrl}/databases/${id}/backup`,
+        {
+          headers: {
+            Authorization: `Bearer ${sessionStorage.getItem(
+              environment.accessToken
+            )}`,
+            'Content-Type': 'application/octet-stream',
+            responseType: 'blob',
+          },
+        }
+      )
+      .subscribe((response: { fileName: string; stream: Blob }) => {
+        let binaryData = [];
+        binaryData.push(response.stream);
+        let downloadLink = document.createElement('a');
+        downloadLink.href = window.URL.createObjectURL(
+          new Blob(binaryData, { type: 'blob' })
+        );
+        downloadLink.setAttribute('download', response.fileName);
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+      });
+  }
+
+  getDatabaseUsage(id: string): Observable<any> {
+    return this.http.get<any>(`${environment.apiUrl}/databases/${id}/usage`, {
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem(
+          environment.accessToken
+        )}`,
+      },
+    });
+  }
+
   create(data: Database): Observable<Database> {
     return this.http.post<Database>(`${environment.apiUrl}/databases`, data, {
       headers: {
@@ -148,5 +185,15 @@ export class DatabaseService {
         },
       }
     );
+  }
+
+  deleteDatabase(id: string): Observable<Database> {
+    return this.http.delete<Database>(`${environment.apiUrl}/databases/${id}`, {
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem(
+          environment.accessToken
+        )}`,
+      },
+    });
   }
 }

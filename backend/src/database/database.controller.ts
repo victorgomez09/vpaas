@@ -1,6 +1,15 @@
-import { Controller, Get, Param, Post, Body } from '@nestjs/common';
-import { DatabaseService } from './database.service';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Res,
+} from '@nestjs/common';
 import { Database } from '@prisma/client';
+import { Response } from 'express';
+import { DatabaseService } from './database.service';
 
 @Controller('databases')
 export class DatabaseController {
@@ -29,6 +38,22 @@ export class DatabaseController {
   @Get(':id/status')
   getDatabaseStatusById(@Param('id') id: string) {
     return this.service.getDatabaseStatusById(id);
+  }
+
+  @Get(':id/backup')
+  async buffer(@Param('id') id: string, @Res() response: Response) {
+    const file = await this.service.createDatabaseBackup(id, 'buffer');
+    response.header('Content-Type', 'application/octet-stream');
+    response.header(
+      'Content-Disposition',
+      `attachment; filename=${file.fileName}`,
+    );
+    response.send(file);
+  }
+
+  @Get(':id/usage')
+  getDatabaseUsageById(@Param('id') id: string) {
+    return this.service.getDatabaseUsageById(id);
   }
 
   @Get('available/list')
@@ -62,5 +87,10 @@ export class DatabaseController {
   @Post(':id/stop')
   stopDatabase(@Param('id') id: string) {
     return this.service.stopDatabase(id);
+  }
+
+  @Delete(':id')
+  delete(@Param('id') id: string) {
+    return this.service.deleteDatabase(id);
   }
 }

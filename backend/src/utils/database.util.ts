@@ -1,3 +1,7 @@
+import { Database } from '@prisma/client';
+import { createReadStream, existsSync, readFileSync } from 'fs';
+import * as os from 'os';
+
 import { executeCommand } from './command.util';
 import { removeContainer } from './docker.util';
 
@@ -376,4 +380,68 @@ export async function stopDatabaseContainer(database: any): Promise<boolean> {
   }
 
   return everStarted;
+}
+
+export async function backupDatabaseNow(database: Database, option: string) {
+  const platform = os.platform();
+  const backupFolder = '/tmp';
+  const fileName = `${database.id}-${new Date().getTime()}.gz`;
+  const backupFileName = `${backupFolder}/${fileName}`;
+  // const backupStorageFilename = `/app/backups/${fileName}`;
+  let command = null;
+  switch (database.type) {
+    case 'postgresql':
+      command = `docker exec ${database.id} sh -c "PGPASSWORD=${database.rootUserPassword} pg_dumpall -U postgres | gzip > ${backupFileName}"`;
+      break;
+    case 'mongodb':
+      command = `docker exec ${database.id} sh -c "mongodump --archive=${backupFileName} --gzip --username=${database.rootUser} --password=${database.rootUserPassword}"`;
+      break;
+    case 'mysql':
+      command = `docker exec ${database.id} sh -c "mysqldump --all-databases --single-transaction --quick --lock-tables=false --user=${database.rootUser} --password=${database.rootUserPassword} | gzip > ${backupFileName}"`;
+      break;
+    case 'mariadb':
+      command = `docker exec ${database.id} sh -c "mysqldump --all-databases --single-transaction --quick --lock-tables=false --user=${database.rootUser} --password=${database.rootUserPassword} | gzip > ${backupFileName}"`;
+      break;
+    case 'couchdb':
+      command = `docker exec ${database.id} sh -c "tar -czvf ${backupFileName} /bitnami/couchdb/data"`;
+      break;
+    default:
+      return;
+  }
+  if (platform === 'win32') {
+    if (!existsSync(`c:${backupFolder}`)) {
+      await executeCommand(`mkdir ${backupFolder}`);
+    }
+  }
+
+  await executeCommand(command);
+  const copyCommand = `docker cp ${database.id}:${backupFileName} ${backupFileName}`;
+  await executeCommand(copyCommand);
+
+  if (platform === 'win32') {
+    if (!existsSync('c:/app/backups/')) {
+      await executeCommand(`mkdir c:/app/backups/`);
+    }
+    await executeCommand(
+      `docker cp ${database.id}:${backupFileName} c:/app/backups/`,
+    );
+  } else {
+    await executeCommand(
+      `docker cp ${database.id}:${backupFileName} /app/backups/`,
+    );
+  }
+
+  let stream = null;
+  if (option === 'buffer') {
+    stream = readFileSync(backupFileName);
+  } else if (option === 'stream') {
+    stream = createReadStream(backupFileName);
+  } else {
+  }
+  // const stream = createReadStream(backupFileName);
+
+  return {
+    stream,
+    fileName,
+  };
 }

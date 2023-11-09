@@ -31,3 +31,11 @@ export interface AvailableDatabase {
   versions: string[];
   versionsARM?: string[];
 }
+
+export interface DatabaseUsage {
+  BlockIO: string;
+  CPUPerc: string;
+  MemPerc: string;
+  MemUsage: string;
+  NetIO: string;
+}

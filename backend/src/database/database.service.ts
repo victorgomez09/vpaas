@@ -9,6 +9,7 @@ import { executeCommand } from 'src/utils/command.util';
 import {
   AvailableDatabase,
   availableDatabasesAndVersions,
+  backupDatabaseNow as backupDatabase,
   generateDatabaseConfiguration,
   getDatabaseImage,
   stopDatabaseContainer,
@@ -16,6 +17,7 @@ import {
 import {
   ComposeFile,
   defaultComposeConfiguration,
+  getContainerUsage,
   makeStandaloneLabel,
 } from 'src/utils/docker.util';
 import { createDirectories } from 'src/utils/file.util';
@@ -154,6 +156,53 @@ export class DatabaseService {
       return {
         isRunning: false,
       };
+    }
+  }
+
+  async createDatabaseBackup(id: string, option: string) {
+    try {
+      const database = await this.prisma.database.findFirst({
+        where: {
+          id,
+        },
+        include: { destinationDocker: true, settings: true },
+      });
+
+      if (database.dbUserPassword)
+        database.dbUserPassword = decrypt(database.dbUserPassword);
+      if (database.rootUserPassword)
+        database.rootUserPassword = decrypt(database.rootUserPassword);
+
+      return await backupDatabase(database, option);
+    } catch (error) {
+      console.log('error', error);
+    }
+  }
+
+  async getDatabaseUsageById(id: string) {
+    try {
+      let usage = {};
+
+      const database = await this.prisma.database.findFirst({
+        where: {
+          id,
+        },
+        include: { destinationDocker: true, settings: true },
+      });
+      if (database.dbUserPassword)
+        database.dbUserPassword = decrypt(database.dbUserPassword);
+      if (database.rootUserPassword)
+        database.rootUserPassword = decrypt(database.rootUserPassword);
+      if (database.destinationDockerId) {
+        [usage] = await Promise.all([getContainerUsage(id)]);
+      }
+
+      return {
+        usage,
+      };
+    } catch ({ status, message }) {
+      console.log('status', status);
+      console.log('message', message);
     }
   }
 
@@ -320,6 +369,42 @@ export class DatabaseService {
         where: { id },
         data: { publicPort: null },
       });
+
+      return {};
+    } catch ({ status, message }) {
+      console.error({ status, message });
+    }
+  }
+
+  async deleteDatabase(id: string) {
+    try {
+      const database = await this.prisma.database.findFirst({
+        where: {
+          id,
+        },
+        include: { destinationDocker: true, settings: true },
+      });
+      if (database.dbUserPassword)
+        database.dbUserPassword = decrypt(database.dbUserPassword);
+      if (database.rootUserPassword)
+        database.rootUserPassword = decrypt(database.rootUserPassword);
+      if (database.destinationDockerId) {
+        const severStarted = await stopDatabaseContainer(database);
+        if (severStarted)
+          await stopTcpHttpProxy(
+            id,
+            database.destinationDocker,
+            database.publicPort,
+          );
+      }
+
+      await this.prisma.databaseSettings.deleteMany({
+        where: { databaseId: id },
+      });
+      await this.prisma.databaseSecret.deleteMany({
+        where: { databaseId: id },
+      });
+      await this.prisma.database.delete({ where: { id } });
 
       return {};
     } catch ({ status, message }) {

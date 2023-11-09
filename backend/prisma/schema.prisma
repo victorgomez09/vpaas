@@ -7,6 +7,32 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Setting {
+  id                                      String   @id @default(cuid())
+  fqdn                                    String?  @unique
+  dualCerts                               Boolean  @default(false)
+  minPort                                 Int      @default(9000)
+  maxPort                                 Int      @default(9100)
+  DNSServers                              String   @default("1.1.1.1,8.8.8.8")
+  ipv4                                    String?
+  ipv6                                    String?
+  arch                                    String?
+  concurrentBuilds                        Int      @default(1)
+  applicationStoragePathMigrationFinished Boolean  @default(false)
+  numberOfDockerImagesKeptLocally         Int      @default(3)
+  proxyDefaultRedirect                    String?
+  doNotTrack                              Boolean  @default(false)
+  sentryDSN                               String?
+  previewSeparator                        String   @default(".")
+  isAPIDebuggingEnabled                   Boolean  @default(false)
+  isRegistrationEnabled                   Boolean  @default(true)
+  isAutoUpdateEnabled                     Boolean  @default(false)
+  isDNSCheckEnabled                       Boolean  @default(true)
+  isTraefikUsed                           Boolean  @default(true)
+  createdAt                               DateTime @default(now())
+  updatedAt                               DateTime @updatedAt
+}
+
 model User {
   id         String       @id @unique @default(cuid())
   email      String       @unique

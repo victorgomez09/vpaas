@@ -24,7 +24,7 @@ export function getAPIUrl() {
 const mainTraefikEndpoint =
   process.env.NODE_ENV === 'production'
     ? `${getAPIUrl()}/webhooks/traefik/main.json`
-    : 'http://coolify:3000/webhooks/traefik/main.json';
+    : 'http://localhost:3000/webhooks/traefik/main.json';
 
 export const isDev = process.env.NODE_ENV === 'development';
 export const proxyPort = process.env.COOLIFY_PROXY_PORT;
@@ -123,7 +123,7 @@ export async function configureNetworkTraefikProxy(
 
 const otherTraefikEndpoint = isDev
   ? `${getAPIUrl()}/webhooks/traefik/other.json`
-  : 'http://coolify:3000/webhooks/traefik/other.json';
+  : 'http://localhost:3000/webhooks/traefik/other.json';
 
 export async function startTraefikTCPProxy(
   destinationDocker: any,

@@ -18,40 +18,98 @@
               </p>
             </div>
 
-            <div class="gap-2">
+            <div class="flex items-center gap-2">
+              @if (!isRunning()) {
               <button
-                *ngIf="!isRunning(); else running"
                 (click)="startDatabase()"
                 type="button"
                 class="py-2 px-3 inline-flex justify-center items-center gap-2 rounded-md border border-transparent font-semibold bg-green-500 text-white hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-all text-sm dark:focus:ring-offset-gray-800"
               >
+                @if (databaseStatusLoader()) {
                 <span
-                  *ngIf="databaseStatusLoader()"
                   class="animate-spin inline-block w-4 h-4 border-[3px] border-current border-t-transparent text-white-600 rounded-full dark:text-white-500"
                   role="status"
                   aria-label="loading"
                 >
                   <span class="sr-only">Loading...</span>
                 </span>
-                Start
+                } Start
               </button>
-              <ng-template #running>
-                <button
-                  (click)="stopDatabase()"
-                  type="button"
-                  class="py-2 px-3 inline-flex justify-center items-center gap-2 rounded-md border border-transparent font-semibold bg-yellow-500 text-white hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 transition-all text-sm dark:focus:ring-offset-gray-800"
+              } @else {
+              <button
+                (click)="stopDatabase()"
+                type="button"
+                class="py-2 px-3 inline-flex justify-center items-center gap-2 rounded-md border border-transparent font-semibold bg-yellow-500 text-white hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 transition-all text-sm dark:focus:ring-offset-gray-800"
+              >
+                @if (databaseStatusLoader()) {
+                <span
+                  class="animate-spin inline-block w-4 h-4 border-[3px] border-current border-t-transparent text-white-600 rounded-full dark:text-white-500"
+                  role="status"
+                  aria-label="loading"
                 >
-                  <span
-                    *ngIf="databaseStatusLoader()"
-                    class="animate-spin inline-block w-4 h-4 border-[3px] border-current border-t-transparent text-white-600 rounded-full dark:text-white-500"
-                    role="status"
-                    aria-label="loading"
-                  >
-                    <span class="sr-only">Loading...</span>
-                  </span>
-                  Stop
-                </button>
-              </ng-template>
+                  <span class="sr-only">Loading...</span>
+                </span>
+                } Stop
+              </button>
+              }
+
+              <button
+                (click)="createBackup()"
+                type="button"
+                class="py-2 px-3 inline-flex justify-center items-center gap-2 rounded-md border border-transparent font-semibold bg-yellow-500 text-white hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 transition-all text-sm dark:focus:ring-offset-gray-800"
+              >
+                @if (databaseBackupLoader()) {
+                <span
+                  class="animate-spin inline-block w-4 h-4 border-[3px] border-current border-t-transparent text-white-600 rounded-full dark:text-white-500"
+                  role="status"
+                  aria-label="loading"
+                >
+                  <span class="sr-only">Loading...</span>
+                </span>
+                }
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="w-5 h-5"
+                >
+                  <ellipse cx="12" cy="5" rx="9" ry="3" />
+                  <path d="M3 12a9 3 0 0 0 5 2.69" />
+                  <path d="M21 9.3V5" />
+                  <path d="M3 5v14a9 3 0 0 0 6.47 2.88" />
+                  <path d="M12 12v4h4" />
+                  <path
+                    d="M13 20a5 5 0 0 0 9-3 4.5 4.5 0 0 0-4.5-4.5c-1.33 0-2.54.54-3.41 1.41L12 16"
+                  />
+                </svg>
+              </button>
+
+              <button
+                (click)="delete()"
+                type="button"
+                class="py-2 px-3 inline-flex justify-center items-center gap-2 rounded-md border border-transparent font-semibold text-gray-800 hover:bg-red-600 hover:text-white focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-all text-sm dark:focus:ring-offset-gray-800"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="w-5 h-5"
+                >
+                  <path d="M3 6h18" />
+                  <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
+                  <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
+                  <line x1="10" x2="10" y1="11" y2="17" />
+                  <line x1="14" x2="14" y1="11" y2="17" />
+                </svg>
+              </button>
             </div>
           </div>
 
@@ -66,19 +124,19 @@
                 role="tab"
               >
                 <svg
-                  class="flex-shrink-0 w-4 h-4"
                   xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
                   stroke-width="2"
                   stroke-linecap="round"
                   stroke-linejoin="round"
+                  class="w-4 h-4"
                 >
-                  <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-                  <polyline points="9 22 9 12 15 12 15 22" />
+                  <path
+                    d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"
+                  />
+                  <circle cx="12" cy="12" r="3" />
                 </svg>
                 Configuration
               </button>
@@ -92,22 +150,56 @@
                 role="tab"
               >
                 <svg
-                  class="flex-shrink-0 w-4 h-4"
                   xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
                   stroke-width="2"
                   stroke-linecap="round"
                   stroke-linejoin="round"
+                  class="w-4 h-4"
                 >
-                  <circle cx="12" cy="12" r="10" />
-                  <circle cx="12" cy="10" r="3" />
-                  <path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662" />
+                  <path
+                    d="M8 21h12a2 2 0 0 0 2-2v-2H10v2a2 2 0 1 1-4 0V5a2 2 0 1 0-4 0v3h4"
+                  />
+                  <path d="M19 17V5a2 2 0 0 0-2-2H4" />
+                  <path d="M15 8h-5" />
+                  <path d="M15 12h-5" />
                 </svg>
                 Logs
+              </button>
+
+              <button
+                (click)="openUsage()"
+                type="button"
+                class="hs-tab-active:font-semibold hs-tab-active:border-purple-600 hs-tab-active:text-purple-600 py-4 px-1 inline-flex items-center gap-x-2 border-b-2 border-transparent text-sm whitespace-nowrap text-gray-500 hover:text-purple-600 focus:outline-none focus:text-purple-600 disabled:opacity-50 disabled:pointer-events-none dark:text-gray-400 dark:hover:text-purple-500"
+                id="tabs-with-icons-item-3"
+                data-hs-tab="#tabs-with-icons-3"
+                aria-controls="tabs-with-icons-3"
+                role="tab"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="w-4 h-4"
+                >
+                  <rect x="4" y="4" width="16" height="16" rx="2" />
+                  <rect x="9" y="9" width="6" height="6" />
+                  <path d="M15 2v2" />
+                  <path d="M15 20v2" />
+                  <path d="M2 15h2" />
+                  <path d="M2 9h2" />
+                  <path d="M20 15h2" />
+                  <path d="M20 9h2" />
+                  <path d="M9 2v2" />
+                  <path d="M9 20v2" />
+                </svg>
+                Usage
               </button>
             </nav>
           </div>
@@ -384,7 +476,86 @@
             <div
               class="flex flex-1 flex-col p-2 bg-gray-200 border border-gray-200 rounded h-full w-full overflow-auto"
             >
-              <span *ngFor="let log of logs()">{{ log }}</span>
+              @if (!isRunning()) {
+              <span>Start database to show logs.</span>
+              } @else { @for (log of logs(); track $index) {
+              <span>{{ log }}</span>
+              } }
+            </div>
+          </div>
+
+          <div
+            id="tabs-with-icons-3"
+            class="hidden"
+            role="tabpanel"
+            aria-labelledby="tabs-with-icons-item-3"
+          >
+            <div
+              class="flex flex-1 flex-col p-2 bg-gray-200 border border-gray-200 rounded h-full w-full overflow-auto"
+            >
+              @if (!isRunning()) {
+              <span>Start database to show usage.</span>
+              } @else { @defer (when usage().BlockIO) {
+              <div class="max-w-[85rem] p-2 mx-auto">
+                <div
+                  class="grid gap-6 grid-cols-2 sm:gap-12 lg:grid-cols-3 lg:gap-8"
+                >
+                  <div>
+                    <h4
+                      class="text-lg sm:text-xl font-semibold text-gray-800 dark:text-gray-200"
+                    >
+                      CPU
+                    </h4>
+                    <p
+                      class="mt-2 sm:mt-3 text-4xl sm:text-2xl font-bold text-purple-600"
+                    >
+                      {{ usage().CPUPerc }}
+                    </p>
+                  </div>
+
+                  <div>
+                    <h4
+                      class="text-lg sm:text-xl font-semibold text-gray-800 dark:text-gray-200"
+                    >
+                      Memory %
+                    </h4>
+                    <p
+                      class="mt-2 sm:mt-3 text-4xl sm:text-2xl font-bold text-purple-600"
+                    >
+                      {{ usage().MemPerc }}
+                    </p>
+                  </div>
+
+                  <div>
+                    <h4
+                      class="text-lg sm:text-xl font-semibold text-gray-800 dark:text-gray-200"
+                    >
+                      Memory Usage
+                    </h4>
+                    <p
+                      class="mt-2 sm:mt-3 text-4xl sm:text-2xl font-bold text-purple-600"
+                    >
+                      {{ usage().MemUsage }}
+                    </p>
+                  </div>
+
+                  <div>
+                    <h4
+                      class="text-lg sm:text-xl font-semibold text-gray-800 dark:text-gray-200"
+                    >
+                      Net
+                    </h4>
+                    <p
+                      class="mt-2 sm:mt-3 text-4xl sm:text-2xl font-bold text-purple-600"
+                    >
+                      {{ usage().NetIO }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              } @loading (after 100ms; minimum 1s) {
+              <span>Loading...</span>
+              } }
             </div>
           </div>
         </div>

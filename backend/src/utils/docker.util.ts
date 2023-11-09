@@ -172,3 +172,43 @@ export async function removeContainer({ id }: { id: string }): Promise<void> {
     throw error;
   }
 }
+
+export async function getContainerUsage(container: string): Promise<any> {
+  try {
+    const { stdout } = await executeCommand(
+      `docker container stats ${container} --no-stream --no-trunc --format "{{json .}}"`,
+    );
+
+    return JSON.parse(stdout);
+  } catch (err) {
+    return {
+      MemUsage: 0,
+      CPUPerc: 0,
+      NetIO: 0,
+    };
+  }
+}
+
+export async function cleanupDockerStorage(volumes = false) {
+  // Cleanup images that are not used by any container
+  try {
+    await executeCommand(`docker image prune -af`);
+  } catch (error) {}
+
+  // Prune coolify managed containers
+  try {
+    await executeCommand(
+      `docker container prune -f --filter "label=coolify.managed=true"`,
+    );
+  } catch (error) {}
+
+  // Cleanup build caches
+  try {
+    await executeCommand(`docker builder prune -af`);
+  } catch (error) {}
+  if (volumes) {
+    try {
+      await executeCommand(`docker volume prune -af`);
+    } catch (error) {}
+  }
+}
