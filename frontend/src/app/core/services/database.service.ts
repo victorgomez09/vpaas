@@ -50,14 +50,19 @@ export class DatabaseService {
     );
   }
 
-  getDatabaseById(id: string): Observable<Database> {
-    return this.http.get<Database>(`${environment.apiUrl}/databases/${id}`, {
-      headers: {
-        Authorization: `Bearer ${sessionStorage.getItem(
-          environment.accessToken
-        )}`,
-      },
-    });
+  getDatabaseById(
+    id: string
+  ): Observable<{ database: Database; privatePort: number }> {
+    return this.http.get<{ database: Database; privatePort: number }>(
+      `${environment.apiUrl}/databases/${id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${sessionStorage.getItem(
+            environment.accessToken
+          )}`,
+        },
+      }
+    );
   }
 
   getDatabaseSecretsById(id: string): Observable<DatabaseSecrets[]> {

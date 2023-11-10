@@ -1,0 +1,76 @@
+<div class="p-2 w-full h-full mx-auto">
+  <!-- Card Section -->
+  <div class="flex flex-1 w-full h-full mx-auto">
+    <div
+      class="w-full h-full bg-white rounded-xl shadow overflow-auto dark:bg-slate-900"
+    >
+      <div class="mt-3 p-4">
+        <div
+          id="basic-tabs-1"
+          role="tabpanel"
+          aria-labelledby="basic-tabs-item-1"
+        >
+          <!-- Card Section -->
+          <div class="max-w-[85rem] mx-auto">
+            <!-- Grid -->
+            <div
+              class="p-2 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6"
+            >
+              <!-- Card -->
+              <button
+                *ngFor="let service of availableServices()"
+                (click)="selectService(service)"
+                class="group flex flex-col bg-white border shadow-sm rounded-xl hover:shadow-md transition dark:bg-slate-900 dark:border-gray-800"
+              >
+                <div class="p-4 md:p-5">
+                  <div class="flex justify-between items-center">
+                    <div class="flex items-center">
+                      <img
+                        src="/assets/icons/{{
+                          getServiceSvg(service.type)
+                        }}.png"
+                        alt="image"
+                        class="w-5 h-5"
+                      />
+
+                      <div class="flex flex-col justify-start ml-3">
+                        <h3
+                          class="group-hover:text-purple-600 font-semibold text-gray-800 dark:group-hover:text-gray-400 dark:text-gray-200"
+                        >
+                          {{ service.name }}
+                        </h3>
+
+                        <!-- <p class="text-gray-500 truncate">
+                          {{ service.description }}
+                        </p> -->
+                      </div>
+                    </div>
+                    <div class="pl-3">
+                      <svg
+                        class="w-3.5 h-3.5 text-gray-500"
+                        width="16"
+                        height="16"
+                        viewBox="0 0 16 16"
+                        fill="none"
+                      >
+                        <path
+                          d="M5.27921 2L10.9257 7.64645C11.1209 7.84171 11.1209 8.15829 10.9257 8.35355L5.27921 14"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+              </button>
+              <!-- End Card -->
+            </div>
+            <!-- End Grid -->
+          </div>
+          <!-- End Card Section -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

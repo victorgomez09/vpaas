@@ -1,3 +1,5 @@
+import { Destination } from './destination.model';
+
 export interface Database {
   id?: string;
   name?: string;
@@ -10,6 +12,8 @@ export interface Database {
   rootUser?: string;
   rootUserPassword?: string;
   destinationDockerId: string;
+  settings?: DatabaseSettings;
+  destination?: Destination;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -38,4 +42,13 @@ export interface DatabaseUsage {
   MemPerc: string;
   MemUsage: string;
   NetIO: string;
+}
+
+export interface DatabaseSettings {
+  id: string;
+  databaseId: string;
+  isPublic: boolean;
+  appendOnly: boolean;
+  createdAt: string;
+  updatedAt: string;
 }

@@ -38,14 +38,28 @@ export class DatabaseService {
     return await this.prisma.database.findMany();
   }
 
-  async getDatabaseById(id: string): Promise<Database> {
+  async getDatabaseById(
+    id: string,
+  ): Promise<{ database: Database; privatePort: number }> {
     const database = await this.prisma.database.findFirst({
       where: {
         id,
       },
+      include: {
+        settings: true,
+        destinationDocker: true,
+        databaseSecret: true,
+      },
     });
+    const configuration = generateDatabaseConfiguration(database);
 
-    return database;
+    return {
+      database: {
+        ...database,
+        dbUserPassword: decrypt(database.dbUserPassword),
+      },
+      privatePort: configuration?.privatePort,
+    };
   }
 
   async getDatabaseSecretsById(id: string): Promise<DatabaseSecret[]> {
