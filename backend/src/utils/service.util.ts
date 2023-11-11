@@ -1,7 +1,9 @@
 import { readFileSync } from 'fs';
 import * as path from 'path';
+import * as jwt from 'jsonwebtoken';
 
 import { isARM } from './database.util';
+import { getSecretKey } from './env.util';
 
 const isDev = process.env.NODE_ENV !== 'production';
 
@@ -68,4 +70,13 @@ export function getDomain(domain: string): string {
   } else {
     return '';
   }
+}
+
+export function generateToken() {
+  return jwt.sign(
+    {
+      nbf: Math.floor(Date.now() / 1000) - 30,
+    },
+    getSecretKey(),
+  );
 }

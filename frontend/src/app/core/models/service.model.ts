@@ -8,6 +8,17 @@ export interface Service {
   version?: string;
   templateVersion?: string;
   destinationDockerId?: string;
+  serviceSetting?: ServiceSettings[];
   createdAt?: Date;
   updatedAt?: Date;
+}
+
+export interface ServiceSettings {
+  id: string;
+  name: string;
+  serviceId: string;
+  value: string;
+  variableName: string;
+  createdAt: Date;
+  updatedAt: Date;
 }

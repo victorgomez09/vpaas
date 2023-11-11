@@ -48,14 +48,44 @@
       <div class="px-6 py-4 mx-auto">
         <div class="sticky top-0 bg-white">
           <!-- Card -->
-          <div class="flex flex-1 justify-between items-center mb-8">
-            {{ services() | json }}
-            <!-- Card content -->
+          <div class="lg:p-0 px-8">
+            <div
+              class="grid grid-flow-rows grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"
+            >
+              @for (service of services(); track $index) {
+              <button
+                routerLink="/services/{{ service.id }}"
+                class="group flex flex-col bg-white border shadow-sm rounded-xl hover:shadow-md transition dark:bg-slate-900 dark:border-gray-800"
+              >
+                <div class="p-4 md:p-5">
+                  <div class="flex flex-col justify-between items-center">
+                    <div class="flex items-center gap-2">
+                      <img
+                        src="/assets/icons/{{
+                          getServiceSvg(service.type)
+                        }}.png"
+                        alt="image"
+                        class="w-7 h-7"
+                      />
+                      <h3
+                        class="group-hover:text-purple-600 font-semibold text-gray-800 dark:group-hover:text-gray-400 dark:text-gray-200"
+                      >
+                        {{ service.name }}
+                      </h3>
+                    </div>
+
+                    <p class="text-sm text-gray-500">{{ service.fqdn }}</p>
+                  </div>
+                </div>
+              </button>
+              <!-- End Card -->
+              }
+            </div>
           </div>
+          <!-- End Card -->
         </div>
-        <!-- End Card -->
+        <!-- End Card Section -->
       </div>
-      <!-- End Card Section -->
     </div>
   </div>
 </div>

@@ -13,7 +13,7 @@ import { Service } from 'src/app/core/models/service.model';
   styleUrl: './new.component.css',
 })
 export class NewComponent {
-  public availableServices!: Signal<any[]>;
+  public availableTemplates!: Signal<any[]>;
 
   private exposePort: number;
 
@@ -22,35 +22,34 @@ export class NewComponent {
   }
 
   ngOnInit(): void {
-    this.availableServices = toSignal(this.service.getAvailableServices(), {
+    this.availableTemplates = toSignal(this.service.getAvailableServices(), {
       initialValue: [],
       injector: this.injector,
     });
   }
 
   selectService(data: any) {
-    const ports: string[] = [];
-    for (const service of Object.values(data.services)) {
-      const s: any = service;
-      if (s.proxy?.length > 0) {
-        for (const proxy of Array.of(s.proxy)) {
-          if (proxy.hostPort) {
-            ports.push(`${proxy.hostPort}:${proxy.port}`);
-          }
-        }
-      } else {
-        if (s.ports?.length === 1) {
-          for (const port of data.services[s].ports) {
-            if (this.exposePort) {
-              ports.push(`${this.exposePort}:${port}`);
-            }
-          }
-        }
-      }
-    }
-    console.log('ports', ports);
+    // const ports: string[] = [];
+    // for (const service of Object.values(data.services)) {
+    //   const s: any = service;
+    //   if (s.proxy?.length > 0) {
+    //     for (const proxy of Array.of(s.proxy)) {
+    //       if (proxy.hostPort) {
+    //         ports.push(`${proxy.hostPort}:${proxy.port}`);
+    //       }
+    //     }
+    //   } else {
+    //     if (s.ports?.length === 1) {
+    //       for (const port of data.services[s].ports) {
+    //         if (this.exposePort) {
+    //           ports.push(`${this.exposePort}:${port}`);
+    //         }
+    //       }
+    //     }
+    //   }
+    // }
     const service: Service = {
-      type: data.services.proxy,
+      type: data.type,
       exposePort: this.exposePort,
     };
     this.service.createService(service).subscribe((data) => {
@@ -61,4 +60,21 @@ export class NewComponent {
   getServiceSvg(type: string) {
     return type.split('-')[0];
   }
+
+  // sortMe(data: any[]) {
+  //   return data.sort((a, b) => {
+  //     let fa = a.name.toLowerCase(),
+  //       fb = b.name.toLowerCase();
+  //     console.log('fa', fa);
+  //     console.log('fb', fb);
+
+  //     if (fa < fb) {
+  //       return -1;
+  //     }
+  //     if (fa > fb) {
+  //       return 1;
+  //     }
+  //     return 0;
+  //   });
+  // }
 }

@@ -1,15 +1,23 @@
 import { Injectable } from '@nestjs/common';
+import { createId } from '@paralleldrive/cuid2';
 import { Service } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 
 import { PrismaService } from 'src/prisma/prisma.service';
+import { executeCommand } from 'src/utils/command.util';
 import {
   fixType,
+  generateToken,
   getDomain,
   getTags,
   getTemplates,
 } from 'src/utils/service.util';
-import { decrypt, generateName } from 'src/utils/string.util';
+import {
+  decrypt,
+  encrypt,
+  generateName,
+  generatePassword,
+} from 'src/utils/string.util';
 
 @Injectable()
 export class ServiceService {
@@ -23,7 +31,7 @@ export class ServiceService {
     return await this.prisma.service.findMany();
   }
 
-  async getServiceType(id: string) {
+  async getById(id: string) {
     try {
       const service = await this.getServiceFromDB(id);
       if (!service) {
@@ -47,13 +55,201 @@ export class ServiceService {
     }
   }
 
+  async getServiceStatus(id: string) {
+    try {
+      const service = await this.getServiceFromDB(id);
+      const { destinationDockerId } = service;
+      console.log('destinationDockerId', destinationDockerId);
+      const payload = {};
+      if (destinationDockerId) {
+        const { stdout: containers } = await executeCommand(
+          `docker ps -a --filter "label=com.docker.compose.project=${id}" --format '{{json .}}'`,
+        );
+        console.log('containers', containers);
+        if (containers) {
+          const containersArray = containers.trim().split('\n');
+          if (containersArray.length > 0 && containersArray[0] !== '') {
+            const templates = await getTemplates();
+            let template = templates.find((t) => t.type === service.type);
+            const templateStr = JSON.stringify(template);
+            if (templateStr) {
+              template = JSON.parse(templateStr.replaceAll('$$id', service.id));
+            }
+            for (const container of containersArray) {
+              let isRunning = false;
+              let isExited = false;
+              let isRestarting = false;
+              const isExcluded = false;
+              const containerObj = JSON.parse(container);
+              const exclude = template?.services[containerObj.Names]?.exclude;
+              if (exclude) {
+                payload[containerObj.Names] = {
+                  status: {
+                    isExcluded: true,
+                    isRunning: false,
+                    isExited: false,
+                    isRestarting: false,
+                  },
+                };
+                continue;
+              }
+
+              const status = containerObj.State;
+              if (status === 'running') {
+                isRunning = true;
+              }
+              if (status === 'exited') {
+                isExited = true;
+              }
+              if (status === 'restarting') {
+                isRestarting = true;
+              }
+              payload[containerObj.Names] = {
+                status: {
+                  isExcluded,
+                  isRunning,
+                  isExited,
+                  isRestarting,
+                },
+              };
+            }
+          }
+        }
+      }
+
+      return payload;
+    } catch ({ status, message }) {
+      console.log('status', status);
+      console.log('message', message);
+    }
+  }
+
   async create(data: Service) {
-    return this.prisma.service.create({
+    const service = await this.prisma.service.create({
       data: {
-        ...data,
+        type: data.type,
         name: generateName(),
       },
     });
+
+    const templates = await getTemplates();
+    let foundTemplate = templates.find(
+      (t: any) => fixType(t.type) === fixType(data.type),
+    );
+    if (foundTemplate) {
+      for (const object of Object.entries<any>(foundTemplate.services)) {
+        console.log('object', object);
+      }
+    }
+    if (foundTemplate) {
+      foundTemplate = JSON.parse(
+        JSON.stringify(foundTemplate).replaceAll('$$id', service.id),
+      );
+      if (foundTemplate.variables) {
+        if (foundTemplate.variables.length > 0) {
+          for (const variable of foundTemplate.variables) {
+            let { defaultValue } = variable;
+            defaultValue = defaultValue.toString();
+            const regex = /^\$\$.*\((\d+)\)$/g;
+            const length = Number(regex.exec(defaultValue)?.[1]) || undefined;
+            if (defaultValue.startsWith('$$generate_password')) {
+              variable.value = generatePassword({ length });
+            } else if (defaultValue.startsWith('$$generate_hex')) {
+              variable.value = generatePassword({ length }, true);
+            } else if (defaultValue.startsWith('$$generate_username')) {
+              variable.value = createId();
+            } else if (defaultValue.startsWith('$$generate_token')) {
+              variable.value = generateToken();
+            } else {
+              variable.value = defaultValue || '';
+            }
+            const foundVariableSomewhereElse = foundTemplate.variables.find(
+              (v) => v.defaultValue.toString().includes(variable.id),
+            );
+            if (foundVariableSomewhereElse) {
+              foundVariableSomewhereElse.value =
+                foundVariableSomewhereElse.value.replaceAll(
+                  variable.id,
+                  variable.value,
+                );
+            }
+          }
+        }
+        for (const variable of foundTemplate.variables) {
+          if (variable.id.startsWith('$$secret_')) {
+            const found = await this.prisma.serviceSecret.findFirst({
+              where: { name: variable.name, serviceId: service.id },
+            });
+            if (!found) {
+              await this.prisma.serviceSecret.create({
+                data: {
+                  name: variable.name,
+                  value: encrypt(variable.value) || '',
+                  service: { connect: { id: service.id } },
+                },
+              });
+            }
+          }
+          if (variable.id.startsWith('$$config_')) {
+            const found = await this.prisma.serviceSetting.findFirst({
+              where: { name: variable.name, serviceId: service.id },
+            });
+            if (!found) {
+              await this.prisma.serviceSetting.create({
+                data: {
+                  name: variable.name,
+                  value: variable.value.toString(),
+                  variableName: variable.id,
+                  service: { connect: { id: service.id } },
+                },
+              });
+            }
+          }
+        }
+      }
+      for (const serv of Object.keys(foundTemplate.services)) {
+        if (foundTemplate.services[serv].volumes) {
+          for (const volume of foundTemplate.services[serv].volumes) {
+            const [volumeName, path] = volume.split(':');
+            if (!volumeName.startsWith('/')) {
+              const found =
+                await this.prisma.servicePersistentStorage.findFirst({
+                  where: { volumeName, serviceId: service.id, path },
+                });
+              if (!found) {
+                await this.prisma.servicePersistentStorage.create({
+                  data: {
+                    volumeName,
+                    path,
+                    containerId: serv,
+                    predefined: true,
+                    service: { connect: { id: service.id } },
+                  },
+                });
+              }
+            }
+          }
+        }
+      }
+      await this.prisma.service.update({
+        where: { id: service.id },
+        data: {
+          type: data.type,
+          version: foundTemplate.defaultVersion,
+          templateVersion: foundTemplate.templateVersion,
+        },
+      });
+
+      if (data.type.startsWith('wordpress')) {
+        await this.prisma.service.update({
+          where: { id: service.id },
+          data: { wordpress: { create: {} } },
+        });
+      }
+      return service;
+    } else {
+      console.log('template not found');
+    }
   }
 
   private async getServiceFromDB(id: string): Promise<any> {

@@ -2994,7 +2994,7 @@ const generate = (options: GenerateOptions, pool: string) => {
 };
 
 // Generate a random password.
-export function generatePassword(options: GenerateOptions) {
+export function generatePassword(options: GenerateOptions, isHex = false) {
   // Set defaults.
   options = options || {};
   if (!Object.prototype.hasOwnProperty.call(options, 'length'))
@@ -3068,9 +3068,11 @@ export function generatePassword(options: GenerateOptions) {
     pool = pool.replace(options.exclude[i], '');
   }
 
-  const password = generate(options, pool);
+  if (isHex) {
+    return randomBytes(options.length).toString('hex');
+  }
 
-  return password;
+  return generate(options, pool);
 }
 
 export const encrypt = (text: string) => {

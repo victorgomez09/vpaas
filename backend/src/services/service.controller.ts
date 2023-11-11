@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { ServiceService } from './service.service';
 import { Service } from '@prisma/client';
 
@@ -14,6 +14,16 @@ export class ServiceController {
   @Get('list')
   getAll() {
     return this.service.getAll();
+  }
+
+  @Get(':id')
+  getById(@Param('id') id: string) {
+    return this.service.getById(id);
+  }
+
+  @Get(':id/status')
+  getStatusById(@Param('id') id: string) {
+    return this.service.getServiceStatus(id);
   }
 
   @Post('create')

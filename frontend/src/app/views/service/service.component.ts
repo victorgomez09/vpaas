@@ -22,5 +22,13 @@ export class ServiceComponent implements OnInit {
       initialValue: [],
       injector: this.injector,
     });
+
+    this.service.getAllServices().subscribe((services) => {
+      console.log('services', services);
+    });
+  }
+
+  getServiceSvg(type: string) {
+    return type.split('-')[0];
   }
 }

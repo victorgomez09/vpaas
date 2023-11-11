@@ -42,6 +42,12 @@ export const routes: Routes = [
     canActivate: [authGuard],
   },
   {
+    path: 'services/:id',
+    loadComponent: () =>
+      import('./views/service/id/id.component').then((mod) => mod.IdComponent),
+    canActivate: [authGuard],
+  },
+  {
     path: 'databases',
     loadComponent: () =>
       import('./views/database/database.component').then(

@@ -12,8 +12,8 @@ async function bootstrap() {
   app.use(cookieParser());
   app.enableCors({
     origin: [
-      // 'http://localhost:4200',
-      'https://4200-victorgomez09-vpaas-azdjnc9ya1a.ws-eu106.gitpod.io',
+      'http://localhost:4200',
+      // 'https://4200-victorgomez09-vpaas-azdjnc9ya1a.ws-eu106.gitpod.io',
     ],
   });
 

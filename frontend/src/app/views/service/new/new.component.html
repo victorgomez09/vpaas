@@ -16,34 +16,37 @@
             <div
               class="p-2 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6"
             >
+              @for (template of availableTemplates(); track $index) {
               <!-- Card -->
               <button
-                *ngFor="let service of availableServices()"
-                (click)="selectService(service)"
+                (click)="selectService(template)"
                 class="group flex flex-col bg-white border shadow-sm rounded-xl hover:shadow-md transition dark:bg-slate-900 dark:border-gray-800"
               >
                 <div class="p-4 md:p-5">
                   <div class="flex justify-between items-center">
-                    <div class="flex items-center">
-                      <img
-                        src="/assets/icons/{{
-                          getServiceSvg(service.type)
-                        }}.png"
-                        alt="image"
-                        class="w-5 h-5"
-                      />
+                    <div class="flex flex-col items-center">
+                      <div class="flex justify-start ml-3 gap-2">
+                        <img
+                          src="/assets/icons/{{
+                            getServiceSvg(template.type)
+                          }}.png"
+                          alt="image"
+                          class="w-7 h-7"
+                        />
 
-                      <div class="flex flex-col justify-start ml-3">
                         <h3
                           class="group-hover:text-purple-600 font-semibold text-gray-800 dark:group-hover:text-gray-400 dark:text-gray-200"
                         >
-                          {{ service.name }}
+                          {{ template.name }}
+                          @if (template.subname) {
+                          <div class="text-sm">{{ template.subname }}</div>
+                          }
                         </h3>
-
-                        <!-- <p class="text-gray-500 truncate">
-                          {{ service.description }}
-                        </p> -->
                       </div>
+
+                      <p class="text-gray-500 text-center mt-3">
+                        {{ template.description }}
+                      </p>
                     </div>
                     <div class="pl-3">
                       <svg
@@ -65,6 +68,7 @@
                 </div>
               </button>
               <!-- End Card -->
+              }
             </div>
             <!-- End Grid -->
           </div>
