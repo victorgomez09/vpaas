@@ -125,10 +125,12 @@ export class ServiceService {
   }
 
   async create(data: Service) {
+    console.log('data', data);
     const service = await this.prisma.service.create({
       data: {
         type: data.type,
         name: generateName(),
+        destinationDocker: { connect: { id: data.destinationDockerId } },
       },
     });
 
@@ -136,11 +138,6 @@ export class ServiceService {
     let foundTemplate = templates.find(
       (t: any) => fixType(t.type) === fixType(data.type),
     );
-    if (foundTemplate) {
-      for (const object of Object.entries<any>(foundTemplate.services)) {
-        console.log('object', object);
-      }
-    }
     if (foundTemplate) {
       foundTemplate = JSON.parse(
         JSON.stringify(foundTemplate).replaceAll('$$id', service.id),

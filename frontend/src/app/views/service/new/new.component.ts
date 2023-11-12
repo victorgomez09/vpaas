@@ -4,6 +4,9 @@ import { toSignal } from '@angular/core/rxjs-interop';
 
 import { ServiceService } from 'src/app/core/services/service.service';
 import { Service } from 'src/app/core/models/service.model';
+import { DestinationService } from 'src/app/core/services/destination.service';
+import { Destination } from 'src/app/core/models/destination.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-new',
@@ -14,10 +17,17 @@ import { Service } from 'src/app/core/models/service.model';
 })
 export class NewComponent {
   public availableTemplates!: Signal<any[]>;
+  public destinations!: Signal<Destination[]>;
+  public selectedTemplate!: any;
 
   private exposePort: number;
 
-  constructor(private service: ServiceService, private injector: Injector) {
+  constructor(
+    private service: ServiceService,
+    private destinationService: DestinationService,
+    private injector: Injector,
+    private router: Router
+  ) {
     this.exposePort = 12345;
   }
 
@@ -26,35 +36,16 @@ export class NewComponent {
       initialValue: [],
       injector: this.injector,
     });
+
+    this.destinations = toSignal(this.destinationService.getAllDestinations(), {
+      initialValue: [],
+      injector: this.injector,
+    });
   }
 
   selectService(data: any) {
-    // const ports: string[] = [];
-    // for (const service of Object.values(data.services)) {
-    //   const s: any = service;
-    //   if (s.proxy?.length > 0) {
-    //     for (const proxy of Array.of(s.proxy)) {
-    //       if (proxy.hostPort) {
-    //         ports.push(`${proxy.hostPort}:${proxy.port}`);
-    //       }
-    //     }
-    //   } else {
-    //     if (s.ports?.length === 1) {
-    //       for (const port of data.services[s].ports) {
-    //         if (this.exposePort) {
-    //           ports.push(`${this.exposePort}:${port}`);
-    //         }
-    //       }
-    //     }
-    //   }
-    // }
-    const service: Service = {
-      type: data.type,
-      exposePort: this.exposePort,
-    };
-    this.service.createService(service).subscribe((data) => {
-      console.log('data', data.name);
-    });
+    this.selectedTemplate = data;
+    window.HSTabs.open(document.getElementById('select-destination-id'));
   }
 
   getServiceSvg(type: string) {
@@ -77,4 +68,16 @@ export class NewComponent {
   //     return 0;
   //   });
   // }
+
+  selectDestination(destination: Destination) {
+    const service: Service = {
+      type: this.selectedTemplate.type,
+      exposePort: this.exposePort,
+      destinationDockerId: destination.id,
+    };
+
+    this.service.createService(service).subscribe((data) => {
+      this.router.navigate(['/services', data.id]);
+    });
+  }
 }

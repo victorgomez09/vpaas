@@ -1,3 +1,5 @@
+import { Destination } from './destination.model';
+
 export interface Service {
   id?: string;
   name?: string;
@@ -7,7 +9,8 @@ export interface Service {
   type: string;
   version?: string;
   templateVersion?: string;
-  destinationDockerId?: string;
+  destinationDockerId: string;
+  destinationDocker?: Destination;
   serviceSetting?: ServiceSettings[];
   createdAt?: Date;
   updatedAt?: Date;

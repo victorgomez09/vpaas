@@ -1,4 +1,11 @@
-import { Component, OnInit, WritableSignal, signal } from '@angular/core';
+import {
+  Component,
+  Injector,
+  OnInit,
+  Signal,
+  WritableSignal,
+  signal,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { ServiceService } from 'src/app/core/services/service.service';
@@ -9,6 +16,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { Destination } from 'src/app/core/models/destination.model';
 
 @Component({
   selector: 'app-id',
@@ -20,7 +28,9 @@ import {
 export class IdComponent implements OnInit {
   public serviceData!: WritableSignal<Service>;
   public templates!: any;
-  public templateKeys!: any[];
+  public templateKeys!: string[];
+  public destinations!: Signal<Destination[]>;
+  public tags!: string[];
 
   public form: FormGroup;
 
@@ -44,11 +54,6 @@ export class IdComponent implements OnInit {
     });
   }
 
-  /**
-   * TODO:
-   * 1-If template environment name is equal to service name, print env variables
-   * 2-If template environment name is not equal to service name, print only env name with status
-   */
   ngOnInit(): void {
     this.id = this.route.snapshot.paramMap.get('id')!;
 
@@ -56,6 +61,8 @@ export class IdComponent implements OnInit {
       this.serviceData.set(data.service);
       this.templateKeys = Object.keys(data.template);
       this.templates = data.template;
+      this.tags = data.tags.tags;
+      console.log(data);
 
       this.service.getServiceStatusById(this.id).subscribe((data) => {
         console.log(data);
@@ -76,5 +83,13 @@ export class IdComponent implements OnInit {
         .replace(`${this.id}-`, '')
         .replace(this.id, this.serviceData().type)
     );
+  }
+
+  getDomain(domain: string) {
+    return domain?.replace('https://', '').replace('http://', '');
+  }
+
+  print(variable: any) {
+    console.log(variable);
   }
 }
