@@ -1,23 +1,13 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 
-import { DestinationModule } from './destination/destination.module';
-import { UserModule } from './user/user.module';
-import { AuthenticationModule } from './authentication/authentication.module';
-import { DatabaseModule } from './database/database.module';
-import { SchedulerModule } from './scheduler/scheduler.module';
-import { ServiceModule } from './services/service.module';
+import { AppService } from './app.service';
+import { AuthModule } from './common/modules/auth.module';
+import { UsersModule } from './common/modules/users.module';
+import { DockerModule } from './common/modules/docker.module';
 
 @Module({
-  imports: [
-    ConfigModule.forRoot(),
-    SchedulerModule,
-    AppModule,
-    AuthenticationModule,
-    DestinationModule,
-    UserModule,
-    DatabaseModule,
-    ServiceModule,
-  ],
+  providers: [AppService],
+  imports: [ConfigModule.forRoot(), AuthModule, UsersModule, DockerModule],
 })
 export class AppModule {}
