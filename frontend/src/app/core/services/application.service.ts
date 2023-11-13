@@ -1,5 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
+import { lastValueFrom } from 'rxjs';
+import { environment } from 'src/environments/environment';
+import { Destination } from '../models/destination.model';
 
 @Injectable({
   providedIn: 'root',
@@ -7,9 +11,8 @@ import { Injectable } from '@angular/core';
 export class ApplicationService {
   constructor(private http: HttpClient) {}
 
-  async loadBranches(id: string) {
-    let publicRepositoryLink = '';
-    let branchSelectOptions: any = [];
+  async loadBranches(publicRepositoryLink: string): Promise<any> {
+    let branchSelectOptions: { value: string; label: string }[] = [];
 
     try {
       publicRepositoryLink = publicRepositoryLink.trim();
@@ -53,6 +56,7 @@ export class ApplicationService {
           .get<any>(`${apiUrl}/repos/${ownerName}/${repositoryName}`)
           .subscribe((data) => {
             projectId = data.id.toString();
+            console.log('projectId', projectId);
           });
       }
       if (type === 'gitlab') {
@@ -64,40 +68,38 @@ export class ApplicationService {
       }
       if (type === 'github' && branchName) {
         try {
-          this.http
-            .get(
-              `${apiUrl}/repos/${ownerName}/${repositoryName}/branches/${branchName}`
-            )
-            .subscribe(async () => {
-              await this.saveRepository(
-                id,
-                branchName,
-                ownerName,
-                repositoryName,
-                projectId,
-                type
-              );
-            });
+          this.http.get(
+            `${apiUrl}/repos/${ownerName}/${repositoryName}/branches/${branchName}`
+          );
+          // .subscribe(async () => {
+          //   await this.saveRepository(
+          //     id,
+          //     branchName,
+          //     ownerName,
+          //     repositoryName,
+          //     projectId,
+          //     type
+          //   );
+          // });
         } catch (error) {
           console.log('error');
         }
       }
       if (type === 'gitlab' && branchName) {
         try {
-          this.http
-            .get(
-              `${apiUrl}/projects/${ownerName}%2F${repositoryName}/repository/branches/${branchName}`
-            )
-            .subscribe(async () => {
-              await this.saveRepository(
-                id,
-                branchName,
-                ownerName,
-                repositoryName,
-                projectId,
-                type
-              );
-            });
+          this.http.get(
+            `${apiUrl}/projects/${ownerName}%2F${repositoryName}/repository/branches/${branchName}`
+          );
+          // .subscribe(async () => {
+          //   await this.saveRepository(
+          //     id,
+          //     branchName,
+          //     ownerName,
+          //     repositoryName,
+          //     projectId,
+          //     type
+          //   );
+          // });
           return;
         } catch (error) {
           console.log('error', error);
@@ -106,16 +108,18 @@ export class ApplicationService {
       let branches: any[] = [];
       let page = 1;
       let branchCount = 0;
-      this.loadBranchesByPage(
+      const load = this.loadBranchesByPage(
         apiUrl,
         ownerName,
         repositoryName,
         page,
         type
-      ).subscribe((data) => {
-        branches = branches.concat(data);
-        branchCount = branches.length;
-      });
+      );
+
+      const data = await lastValueFrom(load);
+      branches = branches.concat(data);
+      branchCount = branches.length;
+
       if (branchCount === 100) {
         while (branchCount === 100) {
           page = page + 1;
@@ -131,42 +135,78 @@ export class ApplicationService {
           });
         }
       }
+
       branchSelectOptions = branches.map((branch: any) => ({
         value: branch.name,
         label: branch.name,
       }));
+
+      return {
+        branchSelectOptions,
+        branchName,
+        ownerName,
+        repositoryName,
+        projectId,
+        type,
+      };
     } catch (error) {
       console.log('error', error);
     }
   }
 
   async saveRepository(
-    id: string,
     branchName: string,
     ownerName: string,
     repositoryName: string,
     projectId: string,
     type: string,
+    destination: string,
     event?: any
   ) {
     if (event?.detail?.value) {
       branchName = event.detail.value;
     }
     return this.http
-      .post(`/applications/${id}/configuration/source`, {
-        gitSourceId: null,
-        forPublic: true,
-        type,
-      })
-      .subscribe(() => {
-        this.http.post(`/applications/${id}/configuration/repository`, {
-          repository: `${ownerName}/${repositoryName}`,
-          branch: branchName,
-          projectId,
-          autodeploy: false,
-          webhookToken: null,
-          isPublicRepository: true,
-        });
+      .post<any>(
+        `${environment.apiUrl}/applications/configuration/source`,
+        {
+          gitSourceId: null,
+          forPublic: true,
+          type,
+          destinationId: destination,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${sessionStorage.getItem(
+              environment.accessToken
+            )}`,
+          },
+        }
+      )
+      .subscribe((data) => {
+        console.log('data after create', data);
+        this.http
+          .post(
+            `${environment.apiUrl}/applications/${data.id}/configuration/repository`,
+            {
+              repository: `${ownerName}/${repositoryName}`,
+              branch: branchName,
+              projectId,
+              autodeploy: false,
+              webhookToken: null,
+              isPublicRepository: true,
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${sessionStorage.getItem(
+                  environment.accessToken
+                )}`,
+              },
+            }
+          )
+          .subscribe((data) => {
+            console.log('data', data);
+          });
       });
   }
 

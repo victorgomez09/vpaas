@@ -12,7 +12,7 @@ export class AuthService {
 
   signIn(data: SignIn) {
     return this.http.post<SignInResponse>(
-      `${environment.apiUrl}/auth/signIn`,
+      `${environment.apiUrl}/auth/signin`,
       data
     );
   }

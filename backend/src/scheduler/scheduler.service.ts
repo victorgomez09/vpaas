@@ -21,6 +21,37 @@ export class SchedulerService implements OnModuleInit {
   constructor(private prisma: PrismaService) {}
 
   async onModuleInit() {
+    // Create public github source
+    const github = await this.prisma.gitSource.findFirst({
+      where: { htmlUrl: 'https://github.com', forPublic: true },
+    });
+    if (!github) {
+      await this.prisma.gitSource.create({
+        data: {
+          apiUrl: 'https://api.github.com',
+          htmlUrl: 'https://github.com',
+          forPublic: true,
+          name: 'Github Public',
+          type: 'github',
+        },
+      });
+    }
+    // Create public gitlab source
+    const gitlab = await this.prisma.gitSource.findFirst({
+      where: { htmlUrl: 'https://gitlab.com', forPublic: true },
+    });
+    if (!gitlab) {
+      await this.prisma.gitSource.create({
+        data: {
+          apiUrl: 'https://gitlab.com/api/v4',
+          htmlUrl: 'https://gitlab.com',
+          forPublic: true,
+          name: 'Gitlab Public',
+          type: 'gitlab',
+        },
+      });
+    }
+
     await Promise.all([
       this.getTagsTemplates(),
       this.getArch(),

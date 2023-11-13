@@ -2,9 +2,9 @@ import { Injectable, Logger } from '@nestjs/common';
 import { Application } from '@prisma/client';
 import { setDefaultConfiguration } from 'src/buildpack/common.buildpack';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { generateName } from 'src/utils/string.util';
 import { decryptApplication } from 'src/utils/application.util';
 import { setDefaultBaseImage } from 'src/utils/build.pack.util';
+import { generateName } from 'src/utils/string.util';
 
 @Injectable()
 export class ApplicationService {
@@ -61,20 +61,28 @@ export class ApplicationService {
   }
 
   async saveApplicationSource({
-    id,
     forPublic,
     gitSourceId,
     simpleDockerfile,
     type,
+    destinationId,
   }: {
-    id: string;
     gitSourceId?: string | null;
     forPublic?: boolean;
     type?: string;
     simpleDockerfile?: string;
+    destinationId: string;
   }) {
     let application: Application;
     try {
+      const { id } = await this.prisma.application.create({
+        data: {
+          name: generateName(),
+          destinationDocker: { connect: { id: destinationId } },
+          settings: { create: { debug: false, previews: false } },
+        },
+      });
+
       if (forPublic) {
         const publicGit = await this.prisma.gitSource.findFirst({
           where: { type, forPublic },
@@ -102,21 +110,13 @@ export class ApplicationService {
       }
 
       return application;
-    } catch ({ status, message }) {
-      Logger.error('status', status);
-      Logger.error('message', message);
+    } catch (error) {
+      Logger.error('error', error);
     }
   }
 
-  async create(data: any) {
+  async create(id: string, data: any) {
     try {
-      const { id } = await this.prisma.application.create({
-        data: {
-          name: generateName(),
-          settings: { create: { debug: false, previews: false } },
-        },
-      });
-
       let { port, exposePort, denoOptions } = data;
       const {
         name,
@@ -236,6 +236,7 @@ export class ApplicationService {
       return;
     } catch (error) {
       Logger.error(error);
+      console.log(error);
     }
   }
 
