@@ -7,6 +7,7 @@ import { AuthenticationModule } from './authentication/authentication.module';
 import { DatabaseModule } from './database/database.module';
 import { SchedulerModule } from './scheduler/scheduler.module';
 import { ServiceModule } from './services/service.module';
+import { ApplicationModule } from './application/application.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { ServiceModule } from './services/service.module';
     UserModule,
     DatabaseModule,
     ServiceModule,
+    ApplicationModule,
   ],
 })
 export class AppModule {}

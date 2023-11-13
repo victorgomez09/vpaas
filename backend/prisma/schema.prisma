@@ -52,34 +52,36 @@ model Permission {
 }
 
 model Destination {
-  id          String     @id @default(cuid())
+  id          String        @id @default(cuid())
   network     String
-  name        String     @unique
+  name        String        @unique
   engine      String
-  isProxyUsed Boolean    @default(false)
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
+  isProxyUsed Boolean       @default(false)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
   databases   Database[]
   services    Service[]
+  Application Application[]
 }
 
 model Database {
-  id                  String            @id @default(cuid())
-  name                String
-  publicPort          Int?
-  defaultDatabase     String?
-  type                String?
-  version             String?
-  dbUser              String?
-  dbUserPassword      String?
-  rootUser            String?
-  rootUserPassword    String?
-  destinationDockerId String?
-  createdAt           DateTime          @default(now())
-  updatedAt           DateTime          @updatedAt
-  destinationDocker   Destination?      @relation(fields: [destinationDockerId], references: [id])
-  settings            DatabaseSettings?
-  databaseSecret      DatabaseSecret[]
+  id                           String                         @id @default(cuid())
+  name                         String
+  publicPort                   Int?
+  defaultDatabase              String?
+  type                         String?
+  version                      String?
+  dbUser                       String?
+  dbUserPassword               String?
+  rootUser                     String?
+  rootUserPassword             String?
+  destinationDockerId          String?
+  createdAt                    DateTime                       @default(now())
+  updatedAt                    DateTime                       @updatedAt
+  destinationDocker            Destination?                   @relation(fields: [destinationDockerId], references: [id])
+  settings                     DatabaseSettings?
+  databaseSecret               DatabaseSecret[]
+  ApplicationConnectedDatabase ApplicationConnectedDatabase[]
 }
 
 model DatabaseSecret {
@@ -102,6 +104,191 @@ model DatabaseSettings {
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
   database   Database @relation(fields: [databaseId], references: [id])
+}
+
+model Secret {
+  id            String      @id @default(cuid())
+  name          String
+  value         String
+  isPRMRSecret  Boolean     @default(false)
+  isBuildSecret Boolean     @default(false)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  applicationId String
+  application   Application @relation(fields: [applicationId], references: [id])
+
+  @@unique([name, applicationId, isPRMRSecret])
+}
+
+model Application {
+  id                         String               @id @default(cuid())
+  name                       String
+  fqdn                       String?
+  repository                 String?
+  configHash                 String?
+  branch                     String?
+  buildPack                  String?
+  projectId                  Int?
+  port                       Int?
+  exposePort                 Int?
+  installCommand             String?
+  buildCommand               String?
+  startCommand               String?
+  baseDirectory              String?
+  publishDirectory           String?
+  deploymentType             String?
+  phpModules                 String?
+  pythonWSGI                 String?
+  pythonModule               String?
+  pythonVariable             String?
+  dockerFileLocation         String?
+  denoMainFile               String?
+  denoOptions                String?
+  dockerComposeFile          String?
+  dockerComposeFileLocation  String?
+  dockerComposeConfiguration String?
+  createdAt                  DateTime             @default(now())
+  updatedAt                  DateTime             @updatedAt
+  destinationDockerId        String?
+  gitSourceId                String?
+  gitCommitHash              String?
+  baseImage                  String?
+  baseBuildImage             String?
+  settings                   ApplicationSettings?
+  dockerRegistryId           String?
+  dockerRegistryImageName    String?
+  simpleDockerfile           String?
+  basicAuthUser              String?
+  basicAuthPw                String?
+
+  persistentStorage  ApplicationPersistentStorage[]
+  secrets            Secret[]
+  connectedDatabase  ApplicationConnectedDatabase?
+  previewApplication PreviewApplication[]
+  gitSource          GitSource?                     @relation(fields: [gitSourceId], references: [id])
+  destinationDocker  Destination?                   @relation(fields: [destinationDockerId], references: [id])
+  dockerRegistry     DockerRegistry?                @relation(fields: [dockerRegistryId], references: [id])
+}
+
+model PreviewApplication {
+  id                 String      @id @default(cuid())
+  pullmergeRequestId String
+  sourceBranch       String
+  isRandomDomain     Boolean     @default(false)
+  customDomain       String?
+  applicationId      String
+  application        Application @relation(fields: [applicationId], references: [id])
+  createdAt          DateTime    @default(now())
+  updatedAt          DateTime    @updatedAt
+}
+
+model ApplicationConnectedDatabase {
+  id                     String      @id @default(cuid())
+  applicationId          String      @unique
+  databaseId             String?
+  hostedDatabaseType     String?
+  hostedDatabaseHost     String?
+  hostedDatabasePort     Int?
+  hostedDatabaseName     String?
+  hostedDatabaseUser     String?
+  hostedDatabasePassword String?
+  hostedDatabaseDBName   String?
+  createdAt              DateTime    @default(now())
+  updatedAt              DateTime    @updatedAt
+  database               Database?   @relation(fields: [databaseId], references: [id])
+  application            Application @relation(fields: [applicationId], references: [id])
+}
+
+model ApplicationSettings {
+  id                 String      @id @default(cuid())
+  applicationId      String      @unique
+  dualCerts          Boolean     @default(false)
+  debug              Boolean     @default(false)
+  previews           Boolean     @default(false)
+  autodeploy         Boolean     @default(true)
+  isBot              Boolean     @default(false)
+  isPublicRepository Boolean     @default(false)
+  isDBBranching      Boolean     @default(false)
+  isCustomSSL        Boolean     @default(false)
+  isHttp2            Boolean     @default(false)
+  basicAuth          Boolean     @default(false)
+  createdAt          DateTime    @default(now())
+  updatedAt          DateTime    @updatedAt
+  application        Application @relation(fields: [applicationId], references: [id])
+}
+
+model ApplicationPersistentStorage {
+  id            String      @id @default(cuid())
+  applicationId String
+  hostPath      String?
+  path          String
+  oldPath       Boolean     @default(false)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  application   Application @relation(fields: [applicationId], references: [id])
+
+  @@unique([applicationId, path])
+}
+
+model GitSource {
+  id           String        @id @default(cuid())
+  name         String
+  forPublic    Boolean       @default(false)
+  type         String?
+  apiUrl       String?
+  htmlUrl      String?
+  customPort   Int           @default(22)
+  customUser   String        @default("git")
+  organization String?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  githubAppId  String?       @unique
+  gitlabAppId  String?       @unique
+  isSystemWide Boolean       @default(false)
+  gitlabApp    GitlabApp?    @relation(fields: [gitlabAppId], references: [id])
+  githubApp    GithubApp?    @relation(fields: [githubAppId], references: [id])
+  application  Application[]
+}
+
+model GithubApp {
+  id             String     @id @default(cuid())
+  name           String?    @unique
+  appId          Int?
+  installationId Int?
+  clientId       String?
+  clientSecret   String?
+  webhookSecret  String?
+  privateKey     String?
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+  gitSource      GitSource?
+}
+
+model GitlabApp {
+  id            String     @id @default(cuid())
+  oauthId       Int        @unique
+  groupName     String?    @unique
+  deployKeyId   Int?
+  privateSshKey String?
+  publicSshKey  String?
+  webhookToken  String?
+  appId         String?
+  appSecret     String?
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  gitSource     GitSource?
+}
+
+model DockerRegistry {
+  id          String        @id @default(cuid())
+  name        String
+  url         String
+  username    String?
+  password    String?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  teamId      String?
+  application Application[]
 }
 
 model Service {
