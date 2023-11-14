@@ -36,25 +36,25 @@
 	onMount(async () => {
 		loading.proxy = true;
 		const { isRunning } = await get(`/destinations/${id}/status`);
-		let proxyUsed = !destination.isCoolifyProxyUsed;
-		if (isRunning === false && destination.isCoolifyProxyUsed === true) {
+		let proxyUsed = !destination.isProxyUsed;
+		if (isRunning === false && destination.isProxyUsed === true) {
 			try {
 				await post(`/destinations/${id}/settings`, {
-					isCoolifyProxyUsed: proxyUsed,
+					isProxyUsed: proxyUsed,
 					engine: destination.engine
 				});
 				await stopProxy();
 			} catch (error) {
 				return errorNotification(error);
 			}
-		} else if (isRunning === true && destination.isCoolifyProxyUsed === false) {
+		} else if (isRunning === true && destination.isProxyUsed === false) {
 			try {
 				await post(`/destinations/${id}/settings`, {
-					isCoolifyProxyUsed: proxyUsed,
+					isProxyUsed: proxyUsed,
 					engine: destination.engine
 				});
 				await startProxy();
-				destination.isCoolifyProxyUsed = proxyUsed;
+				destination.isProxyUsed = proxyUsed;
 			} catch (error) {
 				return errorNotification(error);
 			} finally {
@@ -65,22 +65,22 @@
 	});
 	async function changeProxySetting() {
 		if (!cannotDisable) {
-			const isProxyActivated = destination.isCoolifyProxyUsed;
+			const isProxyActivated = destination.isProxyUsed;
 			if (isProxyActivated) {
 				const sure = confirm(
 					`Are you sure you want to ${
-						destination.isCoolifyProxyUsed ? 'disable' : 'enable'
+						destination.isProxyUsed ? 'disable' : 'enable'
 					} Coolify proxy? It will remove the proxy for all configured networks and all deployments on '${
 						destination.engine
 					}'! Nothing will be reachable if you do it!`
 				);
 				if (!sure) return;
 			}
-			destination.isCoolifyProxyUsed = !destination.isCoolifyProxyUsed;
+			destination.isProxyUsed = !destination.isProxyUsed;
 			try {
 				loading.proxy = true;
 				await post(`/destinations/${id}/settings`, {
-					isCoolifyProxyUsed: destination.isCoolifyProxyUsed,
+					isProxyUsed: destination.isProxyUsed,
 					engine: destination.engine
 				});
 				if (isProxyActivated) {
@@ -192,7 +192,7 @@
 				id="changeProxySetting"
 				loading={loading.proxy}
 				disabled={cannotDisable}
-				bind:setting={destination.isCoolifyProxyUsed}
+				bind:setting={destination.isProxyUsed}
 				on:click={changeProxySetting}
 				title={$t('destination.use_coolify_proxy')}
 				description={`This will install a proxy on the destination to allow you to access your applications and services without any manual configuration.${

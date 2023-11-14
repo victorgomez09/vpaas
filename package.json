@@ -3,16 +3,18 @@
   "description": "An open-source & self-hostable Heroku / Netlify alternative.",
   "version": "3.12.39",
   "license": "Apache-2.0",
+  "repository": "github:coollabsio/coolify",
   "scripts": {
+    "oc": "opencollective-setup",
     "translate": "pnpm run --filter i18n-converter translate",
     "db:studio": "pnpm run --filter api db:studio",
     "db:studio-trpc": "pnpm run --filter server db:studio",
-    "db:studio:container": "docker exec coolify pnpm run --filter api db:studio",
+    "db:studio:container": "docker exec vpaas pnpm run --filter api db:studio",
     "db:push": "pnpm run --filter api db:push",
     "db:push-trpc": "pnpm run --filter server db:push",
     "db:seed": "pnpm run --filter api db:seed",
     "db:migrate": "pnpm run --filter api db:migrate",
-    "db:migrate:container": "docker exec coolify pnpm run --filter api db:migrate",
+    "db:migrate:container": "docker exec vpaas pnpm run --filter api db:migrate",
     "format": "run-p -l -n format:*",
     "format:api": "NODE_ENV=development pnpm run --filter api format",
     "lint": "run-p -l -n lint:*",
@@ -35,7 +37,8 @@
   },
   "devDependencies": {
     "cross-var": "1.1.0",
-    "npm-run-all": "4.1.5"
+    "npm-run-all": "4.1.5",
+    "opencollective-setup": "1.4.1"
   },
   "keywords": [
     "docker",
@@ -44,7 +47,6 @@
     "paas",
     "heroku",
     "netlify",
-    "open-source",
-    "coolify"
+    "open-source"
   ]
 }

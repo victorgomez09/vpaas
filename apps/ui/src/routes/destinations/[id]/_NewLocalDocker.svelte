@@ -41,7 +41,7 @@
 				class:loading
 				disabled={loading}
 				>{loading
-					? payload.isCoolifyProxyUsed
+					? payload.isProxyUsed
 						? $t('destination.new.saving_and_configuring_proxy')
 						: $t('forms.saving')
 					: $t('forms.save')}</button
@@ -74,8 +74,8 @@
 			<div class="grid grid-cols-2 items-center lg:pl-10">
 				<Setting
 					id="changeProxySetting"
-					bind:setting={payload.isCoolifyProxyUsed}
-					on:click={() => (payload.isCoolifyProxyUsed = !payload.isCoolifyProxyUsed)}
+					bind:setting={payload.isProxyUsed}
+					on:click={() => (payload.isProxyUsed = !payload.isProxyUsed)}
 					title={$t('destination.use_coolify_proxy')}
 					description={'This will install a proxy on the destination to allow you to access your applications and services without any manual configuration.'}
 				/>

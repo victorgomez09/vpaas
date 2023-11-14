@@ -41,7 +41,7 @@ async function main() {
 	}
 
 	// Set auto-update based on env variable
-	const isAutoUpdateEnabled = process.env['VPAAS_AUTO_UPDATE'] === 'true';
+	const isAutoUpdateEnabled = process.env['COOLIFY_AUTO_UPDATE'] === 'true';
 	await prisma.setting.update({
 		where: {
 			id: '0'
@@ -105,13 +105,13 @@ async function reEncryptSecrets() {
 	// if (version) {
 	// 	backupfile = `/app/db/prod.db_${version}_${date}`;
 	// }
-	await execaCommand('env | grep "^VPAAS" | sort > .env', {
+	await execaCommand('env | grep "^COOLIFY" | sort > .env', {
 		shell: true
 	});
-	const secretOld = process.env['VPAAS_SECRET_KEY'];
-	let secretNew = process.env['VPAAS_SECRET_KEY_BETTER'];
+	const secretOld = process.env['COOLIFY_SECRET_KEY'];
+	let secretNew = process.env['COOLIFY_SECRET_KEY_BETTER'];
 	if (!secretNew) {
-		console.log('No VPAAS_SECRET_KEY_BETTER found... Generating new one...');
+		console.log('No COOLIFY_SECRET_KEY_BETTER found... Generating new one...');
 		const { stdout: newKey } = await execaCommand(
 			'openssl rand -base64 1024 | sha256sum | base64 | head -c 32',
 			{ shell: true }
@@ -122,15 +122,15 @@ async function reEncryptSecrets() {
 		console.log(`Backup database to ${backupfile}.`);
 		// await execaCommand(`cp /app/db/prod.db ${backupfile}`, { shell: true });
 		console.log(
-			'Secrets (VPAAS_SECRET_KEY & VPAAS_SECRET_KEY_BETTER) are different, so re-encrypting everything...'
+			'Secrets (COOLIFY_SECRET_KEY & COOLIFY_SECRET_KEY_BETTER) are different, so re-encrypting everything...'
 		);
-		await execaCommand(`sed -i '/VPAAS_SECRET_KEY=/d' .env`, { shell: true });
-		await execaCommand(`sed -i '/VPAAS_SECRET_KEY_BETTER=/d' .env`, { shell: true });
-		await execaCommand(`echo "VPAAS_SECRET_KEY=${secretNew}" >> .env`, { shell: true });
-		await execaCommand('echo "VPAAS_SECRET_KEY_BETTER=' + secretNew + '" >> .env ', {
+		await execaCommand(`sed -i '/COOLIFY_SECRET_KEY=/d' .env`, { shell: true });
+		await execaCommand(`sed -i '/COOLIFY_SECRET_KEY_BETTER=/d' .env`, { shell: true });
+		await execaCommand(`echo "COOLIFY_SECRET_KEY=${secretNew}" >> .env`, { shell: true });
+		await execaCommand('echo "COOLIFY_SECRET_KEY_BETTER=' + secretNew + '" >> .env ', {
 			shell: true
 		});
-		await execaCommand(`echo "VPAAS_SECRET_KEY_OLD_${date}=${secretOld}" >> .env`, {
+		await execaCommand(`echo "COOLIFY_SECRET_KEY_OLD_${date}=${secretOld}" >> .env`, {
 			shell: true
 		});
 		const transactions = [];

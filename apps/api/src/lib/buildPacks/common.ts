@@ -376,13 +376,17 @@ export function setDefaultBaseImage(
 		payload.baseImage = 'denoland/deno:latest';
 	}
 	if (buildPack === 'php') {
-		payload.baseImage = isARM() ? 'php:8.1-fpm-alpine' : 'webdevops/php-apache:8.2-alpine';
+		payload.baseImage = isARM()
+			? 'php:8.1-fpm-alpine'
+			: 'webdevops/php-apache:8.2-alpine';
 		payload.baseImages = isARM()
 			? phpVersions.filter((version) => !version.value.includes('webdevops'))
 			: phpVersions;
 	}
 	if (buildPack === 'laravel') {
-		payload.baseImage = isARM() ? 'php:8.1-fpm-alpine' : 'webdevops/php-apache:8.2-alpine';
+		payload.baseImage = isARM()
+			? 'php:8.1-fpm-alpine'
+			: 'webdevops/php-apache:8.2-alpine';
 		payload.baseImages = isARM()
 			? phpVersions.filter((version) => !version.value.includes('webdevops'))
 			: phpVersions;
@@ -535,12 +539,12 @@ export const saveBuildLog = async ({
 	}
 	const addTimestamp = `[${generateTimestamp()}] ${line}`;
 	const fluentBitUrl = isDev
-		? process.env.VPAAS_CONTAINER_DEV === 'true'
-			? 'http://coolify-fluentbit:24224'
+		? process.env.COOLIFY_CONTAINER_DEV === 'true'
+			? 'http://vpaas-fluentbit:24224'
 			: 'http://localhost:24224'
-		: 'http://coolify-fluentbit:24224';
+		: 'http://vpaas-fluentbit:24224';
 
-	if (isDev && !process.env.VPAAS_CONTAINER_DEV) {
+	if (isDev && !process.env.COOLIFY_CONTAINER_DEV) {
 		console.debug(`[${applicationId}] ${addTimestamp}`);
 	}
 	try {
@@ -703,9 +707,8 @@ export async function buildImage({
 		buildId,
 		applicationId,
 		dockerId,
-		command: `docker ${location ? `--config ${location}` : ''} build ${
-			forceRebuild ? '--no-cache' : ''
-		} --progress plain -f ${workdir}/${dockerFile} -t ${cache} --build-arg SOURCE_COMMIT=${commit} ${workdir}`
+		command: `docker ${location ? `--config ${location}` : ''} build ${forceRebuild ? '--no-cache' : ''
+			} --progress plain -f ${workdir}/${dockerFile} -t ${cache} --build-arg SOURCE_COMMIT=${commit} ${workdir}`
 	});
 
 	const { status } = await prisma.build.findUnique({ where: { id: buildId } });

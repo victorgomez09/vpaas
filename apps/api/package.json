@@ -1,13 +1,13 @@
 {
 	"name": "api",
-	"description": "Vpaas's Fastify API",
+	"description": "Coolify's Fastify API",
 	"license": "Apache-2.0",
 	"scripts": {
 		"db:generate": "prisma generate",
 		"db:push": "prisma db push && prisma generate",
 		"db:seed": "prisma db seed",
 		"db:studio": "prisma studio",
-		"db:migrate": "VPAAS_DATABASE_URL=file:../db/migration.db prisma migrate dev --skip-seed --name",
+		"db:migrate": "COOLIFY_DATABASE_URL=file:../db/migration.db prisma migrate dev --skip-seed --name",
 		"dev": "nodemon",
 		"build": "rimraf build && esbuild `find src \\( -name '*.ts' \\)| grep -v client/` --platform=node --outdir=build --format=cjs",
 		"format": "prettier --write 'src/**/*.{js,ts,json,md}'",

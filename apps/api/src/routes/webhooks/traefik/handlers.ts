@@ -50,12 +50,12 @@ async function generateRouters({
 	isDualCerts,
 	isCustomSSL,
 	isHttp2 = false,
-	httpBasicAuth = null
+	httpBasicAuth = null,
 }) {
 	const rule = `Host(\`${nakedDomain}\`)${pathPrefix ? ` && PathPrefix(\`${pathPrefix}\`)` : ''}`;
-	const ruleWWW = `Host(\`www.${nakedDomain}\`)${
-		pathPrefix ? ` && PathPrefix(\`${pathPrefix}\`)` : ''
-	}`;
+	const ruleWWW = `Host(\`www.${nakedDomain}\`)${pathPrefix ? ` && PathPrefix(\`${pathPrefix}\`)` : ''
+		}`;
+
 
 	const http: any = {
 		entrypoints: ['web'],
@@ -412,7 +412,7 @@ export async function proxyConfiguration(request: FastifyRequest<OnlyId>, remote
 					if (basicAuthUser && basicAuthPw && isBasicAuthEnabled) {
 						httpBasicAuth = {
 							basicAuth: {
-								users: [basicAuthUser + ':' + (await hashPassword(basicAuthPw, 1))]
+								users: [basicAuthUser + ':' + await hashPassword(basicAuthPw, 1)]
 							}
 						};
 					}
@@ -438,7 +438,7 @@ export async function proxyConfiguration(request: FastifyRequest<OnlyId>, remote
 
 									traefik.http.routers = {
 										...traefik.http.routers,
-										...(await generateRouters({
+										...await generateRouters({
 											serviceId,
 											domain,
 											nakedDomain,
@@ -448,7 +448,7 @@ export async function proxyConfiguration(request: FastifyRequest<OnlyId>, remote
 											isDualCerts: dualCerts,
 											isCustomSSL,
 											httpBasicAuth
-										}))
+										})
 									};
 									traefik.http.services = {
 										...traefik.http.services,
@@ -477,7 +477,7 @@ export async function proxyConfiguration(request: FastifyRequest<OnlyId>, remote
 					const serviceId = `${id}-${port || 'default'}`;
 					traefik.http.routers = {
 						...traefik.http.routers,
-						...(await generateRouters({
+						...await generateRouters({
 							serviceId,
 							domain,
 							nakedDomain,
@@ -488,7 +488,7 @@ export async function proxyConfiguration(request: FastifyRequest<OnlyId>, remote
 							isCustomSSL,
 							isHttp2,
 							httpBasicAuth
-						}))
+						})
 					};
 					traefik.http.services = {
 						...traefik.http.services,
@@ -512,15 +512,14 @@ export async function proxyConfiguration(request: FastifyRequest<OnlyId>, remote
 								.map((c) => c.replace(/"/g, ''));
 							if (containers.length > 0) {
 								for (const container of containers) {
-									const previewDomain = `${container.split('-')[1]}${
-										vpaasSettings.previewSeparator
-									}${domain}`;
+									const previewDomain = `${container.split('-')[1]}${vpaasSettings.previewSeparator
+										}${domain}`;
 									const nakedDomain = previewDomain.replace(/^www\./, '');
 									const pathPrefix = '/';
 									const serviceId = `${container}-${port || 'default'}`;
 									traefik.http.routers = {
 										...traefik.http.routers,
-										...(await generateRouters({
+										...await generateRouters({
 											serviceId,
 											domain: previewDomain,
 											nakedDomain,
@@ -531,7 +530,7 @@ export async function proxyConfiguration(request: FastifyRequest<OnlyId>, remote
 											isCustomSSL,
 											isHttp2: false,
 											httpBasicAuth
-										}))
+										})
 									};
 									traefik.http.services = {
 										...traefik.http.services,
@@ -635,7 +634,7 @@ export async function proxyConfiguration(request: FastifyRequest<OnlyId>, remote
 								const serviceId = `${oneService}-${port || 'default'}`;
 								traefik.http.routers = {
 									...traefik.http.routers,
-									...(await generateRouters({
+									...await generateRouters({
 										serviceId,
 										domain,
 										nakedDomain,
@@ -643,8 +642,8 @@ export async function proxyConfiguration(request: FastifyRequest<OnlyId>, remote
 										isHttps,
 										isWWW,
 										isDualCerts: dualCerts,
-										isCustomSSL
-									}))
+										isCustomSSL,
+									})
 								};
 								traefik.http.services = {
 									...traefik.http.services,
@@ -672,7 +671,7 @@ export async function proxyConfiguration(request: FastifyRequest<OnlyId>, remote
 									const serviceId = `${oneService}-${port || 'default'}`;
 									traefik.http.routers = {
 										...traefik.http.routers,
-										...(await generateRouters({
+										...await generateRouters({
 											serviceId,
 											domain,
 											nakedDomain,
@@ -681,7 +680,7 @@ export async function proxyConfiguration(request: FastifyRequest<OnlyId>, remote
 											isWWW,
 											isDualCerts: dualCerts,
 											isCustomSSL
-										}))
+										})
 									};
 									traefik.http.services = {
 										...traefik.http.services,
@@ -713,7 +712,7 @@ export async function proxyConfiguration(request: FastifyRequest<OnlyId>, remote
 			const serviceId = `${id}-${port || 'default'}`;
 			traefik.http.routers = {
 				...traefik.http.routers,
-				...(await generateRouters({
+				...await generateRouters({
 					serviceId,
 					domain,
 					nakedDomain,
@@ -722,7 +721,7 @@ export async function proxyConfiguration(request: FastifyRequest<OnlyId>, remote
 					isWWW,
 					isDualCerts: dualCerts,
 					isCustomSSL
-				}))
+				})
 			};
 			traefik.http.services = {
 				...traefik.http.services,

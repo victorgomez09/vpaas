@@ -17,8 +17,8 @@ const root: FastifyPluginAsync = async (fastify): Promise<void> => {
 				ipv4: teamId ? settings.ipv4 : null,
 				ipv6: teamId ? settings.ipv6 : null,
 				version,
-				whiteLabeled: process.env.VPAAS_WHITE_LABELED === 'true',
-				whiteLabeledIcon: process.env.VPAAS_WHITE_LABELED_ICON,
+				whiteLabeled: process.env.COOLIFY_WHITE_LABELED === 'true',
+				whiteLabeledIcon: process.env.COOLIFY_WHITE_LABELED_ICON,
 				isRegistrationEnabled: settings.isRegistrationEnabled,
 				isARM: isARM()
 			};

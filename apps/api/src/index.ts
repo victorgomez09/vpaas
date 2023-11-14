@@ -34,14 +34,14 @@ import { refreshTags, refreshTemplates } from './routes/api/v1/handlers';
 declare module 'fastify' {
 	interface FastifyInstance {
 		config: {
-			VPAAS_APP_ID: string;
-			VPAAS_SECRET_KEY: string;
-			VPAAS_SECRET_KEY_BETTER: string | null;
-			VPAAS_DATABASE_URL: string;
-			VPAAS_IS_ON: string;
-			VPAAS_WHITE_LABELED: string;
-			VPAAS_WHITE_LABELED_ICON: string | null;
-			VPAAS_AUTO_UPDATE: string;
+			COOLIFY_APP_ID: string;
+			COOLIFY_SECRET_KEY: string;
+			COOLIFY_SECRET_KEY_BETTER: string | null;
+			COOLIFY_DATABASE_URL: string;
+			COOLIFY_IS_ON: string;
+			COOLIFY_WHITE_LABELED: string;
+			COOLIFY_WHITE_LABELED_ICON: string | null;
+			COOLIFY_AUTO_UPDATE: string;
 		};
 	}
 }
@@ -58,35 +58,35 @@ const host = '0.0.0.0';
 
 	const schema = {
 		type: 'object',
-		required: ['VPAAS_SECRET_KEY', 'VPAAS_DATABASE_URL', 'VPAAS_IS_ON'],
+		required: ['COOLIFY_SECRET_KEY', 'COOLIFY_DATABASE_URL', 'COOLIFY_IS_ON'],
 		properties: {
-			VPAAS_APP_ID: {
+			COOLIFY_APP_ID: {
 				type: 'string'
 			},
-			VPAAS_SECRET_KEY: {
+			COOLIFY_SECRET_KEY: {
 				type: 'string'
 			},
-			VPAAS_SECRET_KEY_BETTER: {
+			COOLIFY_SECRET_KEY_BETTER: {
 				type: 'string',
 				default: null
 			},
-			VPAAS_DATABASE_URL: {
+			COOLIFY_DATABASE_URL: {
 				type: 'string',
 				default: 'file:../db/dev.db'
 			},
-			VPAAS_IS_ON: {
+			COOLIFY_IS_ON: {
 				type: 'string',
 				default: 'docker'
 			},
-			VPAAS_WHITE_LABELED: {
+			COOLIFY_WHITE_LABELED: {
 				type: 'string',
 				default: 'false'
 			},
-			VPAAS_WHITE_LABELED_ICON: {
+			COOLIFY_WHITE_LABELED_ICON: {
 				type: 'string',
 				default: null
 			},
-			VPAAS_AUTO_UPDATE: {
+			COOLIFY_AUTO_UPDATE: {
 				type: 'string',
 				default: 'false'
 			}
@@ -128,7 +128,7 @@ const host = '0.0.0.0';
 	// To detect allowed origins
 	// fastify.addHook('onRequest', async (request, reply) => {
 	// 	console.log(request.headers.host)
-	// 	let allowedList = ['vpaas:3000'];
+	// 	let allowedList = ['coolify:3000'];
 	// 	const { ipv4, ipv6, fqdn } = await prisma.setting.findFirst({})
 
 	// 	ipv4 && allowedList.push(`${ipv4}:3000`);
@@ -149,7 +149,7 @@ const host = '0.0.0.0';
 	try {
 		await fastify.listen({ port, host });
 		await socketIOServer(fastify);
-		console.log(`Vpaas's API is listening on ${host}:${port}`);
+		console.log(`Coolify's API is listening on ${host}:${port}`);
 
 		migrateServicesToNewTemplate();
 		await migrateApplicationPersistentStorage();
@@ -174,7 +174,7 @@ const host = '0.0.0.0';
 			await cleanupStorage();
 		}, 60000 * 15);
 
-		// Cleanup stucked containers (not defined in Vpaas, but still running and managed by Vpaas)
+		// Cleanup stucked containers (not defined in Coolify, but still running and managed by Coolify)
 		setInterval(async () => {
 			await cleanupStuckedContainers();
 		}, 60000);
@@ -235,7 +235,7 @@ async function getIPAddress() {
 			console.log(`Getting public IPv6 address...`);
 			await prisma.setting.update({ where: { id: settings.id }, data: { ipv6 } });
 		}
-	} catch (error) {}
+	} catch (error) { }
 }
 async function getTagsTemplates() {
 	const { default: got } = await import('got');
@@ -247,7 +247,7 @@ async function getTagsTemplates() {
 				if (await fs.stat('./testTemplate.yaml')) {
 					templates = templates + (await fs.readFile('./testTemplate.yaml', 'utf8'));
 				}
-			} catch (error) {}
+			} catch (error) { }
 			try {
 				if (await fs.stat('./testTags.json')) {
 					const testTags = await fs.readFile('./testTags.json', 'utf8');
@@ -255,7 +255,7 @@ async function getTagsTemplates() {
 						tags = JSON.stringify(JSON.parse(tags).concat(JSON.parse(testTags)));
 					}
 				}
-			} catch (error) {}
+			} catch (error) { }
 
 			await fs.writeFile('./templates.json', JSON.stringify(yaml.load(templates)));
 			await fs.writeFile('./tags.json', tags);
@@ -275,7 +275,7 @@ async function getTagsTemplates() {
 	}
 }
 async function initServer() {
-	const appId = process.env['VPAAS_APP_ID'];
+	const appId = process.env['COOLIFY_APP_ID'];
 	const settings = await prisma.setting.findUnique({ where: { id: '0' } });
 	try {
 		if (settings.doNotTrack === true) {
@@ -295,9 +295,7 @@ async function initServer() {
 	try {
 		console.log(`[001] Initializing server...`);
 		await executeCommand({ command: `docker network create --attachable vpaas` });
-	} catch (error) {
-		// Ignore
-	}
+	} catch (error) { }
 	try {
 		console.log(`[002] Cleanup stucked builds...`);
 		const isOlder = compareVersions('3.8.1', version);
@@ -307,7 +305,7 @@ async function initServer() {
 				data: { status: 'failed' }
 			});
 		}
-	} catch (error) {}
+	} catch (error) { }
 	try {
 		console.log('[003] Cleaning up old build sources under /tmp/build-sources/...');
 		if (!isDev) await fs.rm('/tmp/build-sources', { recursive: true, force: true });
@@ -323,7 +321,7 @@ async function getArch() {
 			console.log(`Getting architecture...`);
 			await prisma.setting.update({ where: { id: settings.id }, data: { arch: process.arch } });
 		}
-	} catch (error) {}
+	} catch (error) { }
 }
 
 async function cleanupStuckedContainers() {
@@ -393,7 +391,7 @@ async function autoUpdater() {
 		const { coolify } = await got
 			.get('https://get.coollabs.io/versions.json', {
 				searchParams: {
-					appId: process.env['VPAAS_APP_ID'] || undefined,
+					appId: process.env['COOLIFY_APP_ID'] || undefined,
 					version: currentVersion
 				}
 			})
@@ -414,16 +412,13 @@ async function autoUpdater() {
 							await executeCommand({ command: `docker pull ${image}` });
 						}
 
+						await executeCommand({ shell: true, command: `ls .env || env | grep "^COOLIFY" | sort > .env` });
 						await executeCommand({
-							shell: true,
-							command: `ls .env || env | grep "^VPAAS" | sort > .env`
-						});
-						await executeCommand({
-							command: `sed -i '/VPAAS_AUTO_UPDATE=/cVPAAS_AUTO_UPDATE=${isAutoUpdateEnabled}' .env`
+							command: `sed -i '/COOLIFY_AUTO_UPDATE=/cCOOLIFY_AUTO_UPDATE=${isAutoUpdateEnabled}' .env`
 						});
 						await executeCommand({
 							shell: true,
-							command: `docker run --rm -tid --env-file .env -v /var/run/docker.sock:/var/run/docker.sock -v vpaas-db ${image} /bin/sh -c "env | grep "^VPAAS" | sort > .env && echo 'TAG=${latestVersion}' >> .env && docker stop -t 0 vpaas vpaas-fluentbit && docker rm vpaas vpaas-fluentbit && docker compose pull && docker compose up -d --force-recreate"`
+							command: `docker run --rm -tid --env-file .env -v /var/run/docker.sock:/var/run/docker.sock -v vpaas-db ${image} /bin/sh -c "env | grep "^COOLIFY" | sort > .env && echo 'TAG=${latestVersion}' >> .env && docker stop -t 0 vpaas vpaas-fluentbit && docker rm vpaas vpaas-fluentbit && docker compose pull && docker compose up -d --force-recreate"`
 						});
 					}
 				} else {
@@ -449,7 +444,7 @@ async function checkFluentBit() {
 				remove: true
 			});
 			if (!found) {
-				await executeCommand({ shell: true, command: `env | grep '^VPAAS' > .env` });
+				await executeCommand({ shell: true, command: `env | grep '^COOLIFY' > .env` });
 				await executeCommand({ command: `docker compose up -d fluent-bit` });
 			}
 		}
@@ -464,7 +459,7 @@ async function checkProxies() {
 
 		const { arch, ipv4, ipv6 } = await listSettings();
 
-		// Vpaas Proxy local
+		// Coolify Proxy local
 		const engine = '/var/run/docker.sock';
 		const localDocker = await prisma.destinationDocker.findFirst({
 			where: { engine, network: 'vpaas', isProxyUsed: true }
@@ -475,7 +470,7 @@ async function checkProxies() {
 				await startTraefikProxy(localDocker.id);
 			}
 		}
-		// Vpaas Proxy remote
+		// Coolify Proxy remote
 		const remoteDocker = await prisma.destinationDocker.findMany({
 			where: { remoteEngine: true, remoteVerified: true }
 		});
@@ -489,7 +484,7 @@ async function checkProxies() {
 				}
 				try {
 					await createRemoteEngineConfiguration(docker.id);
-				} catch (error) {}
+				} catch (error) { }
 			}
 		}
 		// TCP Proxies
@@ -528,7 +523,7 @@ async function checkProxies() {
 		// 		await startTraefikTCPProxy(destinationDocker, id, publicPort, 9000);
 		// 	}
 		// }
-	} catch (error) {}
+	} catch (error) { }
 }
 
 async function copySSLCertificates() {

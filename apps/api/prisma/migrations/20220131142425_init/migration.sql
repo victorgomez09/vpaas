@@ -132,7 +132,7 @@ CREATE TABLE "DestinationDocker" (
     "name" TEXT NOT NULL,
     "engine" TEXT NOT NULL,
     "remoteEngine" BOOLEAN NOT NULL DEFAULT false,
-    "isCoolifyProxyUsed" BOOLEAN DEFAULT false,
+    "isProxyUsed" BOOLEAN DEFAULT false,
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" DATETIME NOT NULL
 );

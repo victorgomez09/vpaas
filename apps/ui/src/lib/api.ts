@@ -12,7 +12,8 @@ export function getAPIUrl() {
 		return `https://${CODESANDBOX_HOST.replace(/\$PORT/, '3001')}`;
 	}
 	return dev
-		? `http://${window.location.hostname}:3001`
+		// ? `http://${window.location.hostname}:3001`
+		? `https://ideal-zebra-54pwg47qjj6h44w7-3001.app.github.dev`
 		: 'http://localhost:3000';
 }
 export function getWebhookUrl(type: string) {

@@ -7,7 +7,7 @@ import type { Config } from 'unique-names-generator';
 import generator from 'generate-password';
 import crypto from 'crypto';
 import { promises as dns } from 'dns';
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Setting } from '@prisma/client';
 import os from 'os';
 import * as SSHConfig from 'ssh-config/src/ssh-config';
 import jsonwebtoken from 'jsonwebtoken';
@@ -20,8 +20,8 @@ import { FastifyReply } from 'fastify';
 
 export const version = '3.12.39';
 export const isDev = process.env.NODE_ENV === 'development';
-export const proxyPort = process.env.VPAAS_PROXY_PORT;
-export const proxySecurePort = process.env.VPAAS_PROXY_SECURE_PORT;
+export const proxyPort = process.env.COOLIFY_PROXY_PORT;
+export const proxySecurePort = process.env.COOLIFY_PROXY_SECURE_PORT;
 
 const algorithm = 'aes-256-ctr';
 const customConfig: Config = {
@@ -58,11 +58,11 @@ export function getUIUrl() {
 
 const mainTraefikEndpoint = isDev
 	? `${getAPIUrl()}/webhooks/traefik/main.json`
-	: 'http://coolify:3000/webhooks/traefik/main.json';
+	: 'http://vpaas:3000/webhooks/traefik/main.json';
 
 const otherTraefikEndpoint = isDev
 	? `${getAPIUrl()}/webhooks/traefik/other.json`
-	: 'http://coolify:3000/webhooks/traefik/other.json';
+	: 'http://vpaas:3000/webhooks/traefik/other.json';
 
 export const uniqueName = (): string => uniqueNamesGenerator(customConfig);
 export const asyncExecShellStream = async ({
@@ -171,10 +171,10 @@ export const base64Decode = (text: string): string => {
 	return Buffer.from(text, 'base64').toString('ascii');
 };
 export const getSecretKey = () => {
-	if (process.env['VPAAS_SECRET_KEY_BETTER']) {
-		return process.env['VPAAS_SECRET_KEY_BETTER'];
+	if (process.env['COOLIFY_SECRET_KEY_BETTER']) {
+		return process.env['COOLIFY_SECRET_KEY_BETTER'];
 	}
-	return process.env['VPAAS_SECRET_KEY'];
+	return process.env['COOLIFY_SECRET_KEY'];
 };
 export const decrypt = (hashString: string) => {
 	if (hashString) {
@@ -836,7 +836,7 @@ export async function stopTraefikProxy(
 	}
 }
 
-export async function listSettings(): Promise<any> {
+export async function listSettings(): Promise<Setting> {
 	return await prisma.setting.findUnique({ where: { id: '0' } });
 }
 
@@ -868,97 +868,97 @@ export function generatePassword({
 
 type DatabaseConfiguration =
 	| {
-			volume: string;
-			image: string;
-			command?: string;
-			ulimits: Record<string, unknown>;
-			privatePort: number;
-			environmentVariables: {
-				MYSQL_DATABASE: string;
-				MYSQL_PASSWORD: string;
-				MYSQL_ROOT_USER: string;
-				MYSQL_USER: string;
-				MYSQL_ROOT_PASSWORD: string;
-			};
-	  }
+		volume: string;
+		image: string;
+		command?: string;
+		ulimits: Record<string, unknown>;
+		privatePort: number;
+		environmentVariables: {
+			MYSQL_DATABASE: string;
+			MYSQL_PASSWORD: string;
+			MYSQL_ROOT_USER: string;
+			MYSQL_USER: string;
+			MYSQL_ROOT_PASSWORD: string;
+		};
+	}
 	| {
-			volume: string;
-			image: string;
-			command?: string;
-			ulimits: Record<string, unknown>;
-			privatePort: number;
-			environmentVariables: {
-				MONGO_INITDB_ROOT_USERNAME?: string;
-				MONGO_INITDB_ROOT_PASSWORD?: string;
-				MONGODB_ROOT_USER?: string;
-				MONGODB_ROOT_PASSWORD?: string;
-			};
-	  }
+		volume: string;
+		image: string;
+		command?: string;
+		ulimits: Record<string, unknown>;
+		privatePort: number;
+		environmentVariables: {
+			MONGO_INITDB_ROOT_USERNAME?: string;
+			MONGO_INITDB_ROOT_PASSWORD?: string;
+			MONGODB_ROOT_USER?: string;
+			MONGODB_ROOT_PASSWORD?: string;
+		};
+	}
 	| {
-			volume: string;
-			image: string;
-			command?: string;
-			ulimits: Record<string, unknown>;
-			privatePort: number;
-			environmentVariables: {
-				MARIADB_ROOT_USER: string;
-				MARIADB_ROOT_PASSWORD: string;
-				MARIADB_USER: string;
-				MARIADB_PASSWORD: string;
-				MARIADB_DATABASE: string;
-			};
-	  }
+		volume: string;
+		image: string;
+		command?: string;
+		ulimits: Record<string, unknown>;
+		privatePort: number;
+		environmentVariables: {
+			MARIADB_ROOT_USER: string;
+			MARIADB_ROOT_PASSWORD: string;
+			MARIADB_USER: string;
+			MARIADB_PASSWORD: string;
+			MARIADB_DATABASE: string;
+		};
+	}
 	| {
-			volume: string;
-			image: string;
-			command?: string;
-			ulimits: Record<string, unknown>;
-			privatePort: number;
-			environmentVariables: {
-				POSTGRES_PASSWORD?: string;
-				POSTGRES_USER?: string;
-				POSTGRES_DB?: string;
-				POSTGRESQL_POSTGRES_PASSWORD?: string;
-				POSTGRESQL_USERNAME?: string;
-				POSTGRESQL_PASSWORD?: string;
-				POSTGRESQL_DATABASE?: string;
-			};
-	  }
+		volume: string;
+		image: string;
+		command?: string;
+		ulimits: Record<string, unknown>;
+		privatePort: number;
+		environmentVariables: {
+			POSTGRES_PASSWORD?: string;
+			POSTGRES_USER?: string;
+			POSTGRES_DB?: string;
+			POSTGRESQL_POSTGRES_PASSWORD?: string;
+			POSTGRESQL_USERNAME?: string;
+			POSTGRESQL_PASSWORD?: string;
+			POSTGRESQL_DATABASE?: string;
+		};
+	}
 	| {
-			volume: string;
-			image: string;
-			command?: string;
-			ulimits: Record<string, unknown>;
-			privatePort: number;
-			environmentVariables: {
-				REDIS_AOF_ENABLED: string;
-				REDIS_PASSWORD: string;
-			};
-	  }
+		volume: string;
+		image: string;
+		command?: string;
+		ulimits: Record<string, unknown>;
+		privatePort: number;
+		environmentVariables: {
+			REDIS_AOF_ENABLED: string;
+			REDIS_PASSWORD: string;
+		};
+	}
 	| {
-			volume: string;
-			image: string;
-			command?: string;
-			ulimits: Record<string, unknown>;
-			privatePort: number;
-			environmentVariables: {
-				COUCHDB_PASSWORD: string;
-				COUCHDB_USER: string;
-			};
-	  }
+		volume: string;
+		image: string;
+		command?: string;
+		ulimits: Record<string, unknown>;
+		privatePort: number;
+		environmentVariables: {
+			COUCHDB_PASSWORD: string;
+			COUCHDB_USER: string;
+		};
+	}
 	| {
-			volume: string;
-			image: string;
-			command?: string;
-			ulimits: Record<string, unknown>;
-			privatePort: number;
-			environmentVariables: {
-				EDGEDB_SERVER_PASSWORD: string;
-				EDGEDB_SERVER_USER: string;
-				EDGEDB_SERVER_DATABASE: string;
-				EDGEDB_SERVER_TLS_CERT_MODE: string;
-			};
-	  };
+		volume: string;
+		image: string;
+		command?: string;
+		ulimits: Record<string, unknown>;
+		privatePort: number;
+		environmentVariables: {
+			EDGEDB_SERVER_PASSWORD: string;
+			EDGEDB_SERVER_USER: string;
+			EDGEDB_SERVER_DATABASE: string;
+			EDGEDB_SERVER_TLS_CERT_MODE: string;
+		};
+	};
 export function generateDatabaseConfiguration(database: any): DatabaseConfiguration {
 	const { id, dbUser, dbUserPassword, rootUser, rootUserPassword, defaultDatabase, version, type } =
 		database;
@@ -1057,9 +1057,8 @@ export function generateDatabaseConfiguration(database: any): DatabaseConfigurat
 		};
 		if (isARM()) {
 			configuration.volume = `${id}-${type}-data:/data`;
-			configuration.command = `/usr/local/bin/redis-server --appendonly ${
-				appendOnly ? 'yes' : 'no'
-			} --requirepass ${dbUserPassword}`;
+			configuration.command = `/usr/local/bin/redis-server --appendonly ${appendOnly ? 'yes' : 'no'
+				} --requirepass ${dbUserPassword}`;
 		}
 		return configuration;
 	} else if (type === 'couchdb') {
@@ -1144,12 +1143,12 @@ export type ComposeFileService = {
 	command?: string;
 	ports?: string[];
 	build?:
-		| {
-				context: string;
-				dockerfile: string;
-				args?: Record<string, unknown>;
-		  }
-		| string;
+	| {
+		context: string;
+		dockerfile: string;
+		args?: Record<string, unknown>;
+	}
+	| string;
 	deploy?: {
 		restart_policy?: {
 			condition?: string;
@@ -1220,7 +1219,7 @@ export const createDirectories = async ({
 	let workdirFound = false;
 	try {
 		workdirFound = !!(await fs.stat(workdir));
-	} catch (error) {}
+	} catch (error) { }
 	if (workdirFound) {
 		await executeCommand({ command: `rm -fr ${workdir}` });
 	}
@@ -1744,7 +1743,7 @@ export async function stopBuild(buildId, applicationId) {
 					}
 				}
 				count++;
-			} catch (error) {}
+			} catch (error) { }
 		}, 100);
 	});
 }
@@ -1767,7 +1766,7 @@ export async function cleanupDockerStorage(dockerId, volumes = false) {
 	// Cleanup images that are not used by any container
 	try {
 		await executeCommand({ dockerId, command: `docker image prune -af` });
-	} catch (error) {}
+	} catch (error) { }
 
 	// Prune vpaas managed containers
 	try {
@@ -1775,16 +1774,16 @@ export async function cleanupDockerStorage(dockerId, volumes = false) {
 			dockerId,
 			command: `docker container prune -f --filter "label=vpaas.managed=true"`
 		});
-	} catch (error) {}
+	} catch (error) { }
 
 	// Cleanup build caches
 	try {
 		await executeCommand({ dockerId, command: `docker builder prune -af` });
-	} catch (error) {}
+	} catch (error) { }
 	if (volumes) {
 		try {
 			await executeCommand({ dockerId, command: `docker volume prune -af` });
-		} catch (error) {}
+		} catch (error) { }
 	}
 }
 
@@ -1950,35 +1949,35 @@ export function generateSecrets(
 }
 
 export async function backupDatabaseNow(database, reply) {
-	const backupFolder = '/tmp';
-	const fileName = `${database.id}-${new Date().getTime()}.gz`;
-	const backupFileName = `${backupFolder}/${fileName}`;
-	const backupStorageFilename = `/app/backups/${fileName}`;
-	let command = null;
+	const backupFolder = '/tmp'
+	const fileName = `${database.id}-${new Date().getTime()}.gz`
+	const backupFileName = `${backupFolder}/${fileName}`
+	const backupStorageFilename = `/app/backups/${fileName}`
+	let command = null
 	switch (database?.type) {
 		case 'postgresql':
-			command = `docker exec ${database.id} sh -c "PGPASSWORD=${database.rootUserPassword} pg_dumpall -U postgres | gzip > ${backupFileName}"`;
+			command = `docker exec ${database.id} sh -c "PGPASSWORD=${database.rootUserPassword} pg_dumpall -U postgres | gzip > ${backupFileName}"`
 			break;
 		case 'mongodb':
-			command = `docker exec ${database.id} sh -c "mongodump --archive=${backupFileName} --gzip --username=${database.rootUser} --password=${database.rootUserPassword}"`;
+			command = `docker exec ${database.id} sh -c "mongodump --archive=${backupFileName} --gzip --username=${database.rootUser} --password=${database.rootUserPassword}"`
 			break;
 		case 'mysql':
-			command = `docker exec ${database.id} sh -c "mysqldump --all-databases --single-transaction --quick --lock-tables=false --user=${database.rootUser} --password=${database.rootUserPassword} | gzip > ${backupFileName}"`;
+			command = `docker exec ${database.id} sh -c "mysqldump --all-databases --single-transaction --quick --lock-tables=false --user=${database.rootUser} --password=${database.rootUserPassword} | gzip > ${backupFileName}"`
 			break;
 		case 'mariadb':
-			command = `docker exec ${database.id} sh -c "mysqldump --all-databases --single-transaction --quick --lock-tables=false --user=${database.rootUser} --password=${database.rootUserPassword} | gzip > ${backupFileName}"`;
+			command = `docker exec ${database.id} sh -c "mysqldump --all-databases --single-transaction --quick --lock-tables=false --user=${database.rootUser} --password=${database.rootUserPassword} | gzip > ${backupFileName}"`
 			break;
 		case 'couchdb':
-			command = `docker exec ${database.id} sh -c "tar -czvf ${backupFileName} /bitnami/couchdb/data"`;
+			command = `docker exec ${database.id} sh -c "tar -czvf ${backupFileName} /bitnami/couchdb/data"`
 			break;
 		default:
 			return;
 	}
 	await executeCommand({
 		dockerId: database.destinationDockerId,
-		command
+		command,
 	});
-	const copyCommand = `docker cp ${database.id}:${backupFileName} ${backupFileName}`;
+	const copyCommand = `docker cp ${database.id}:${backupFileName} ${backupFileName}`
 	await executeCommand({
 		dockerId: database.destinationDockerId,
 		command: copyCommand
@@ -1992,5 +1991,5 @@ export async function backupDatabaseNow(database, reply) {
 	reply.header('Content-Disposition', `attachment; filename=${fileName}`);
 	reply.header('Content-Length', fsNormal.statSync(backupFileName).size);
 	reply.header('Content-Transfer-Encoding', 'binary');
-	return reply.send(stream);
+	return reply.send(stream)
 }

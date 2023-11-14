@@ -1,51 +1,51 @@
 version: '3.8'
 
 services:
-  coolify:
+  vpaas:
     image: ghcr.io/coollabsio/coolify:${TAG:-latest}
     restart: always
-    container_name: coolify
+    container_name: vpaas
     ports:
       - target: 3000
         published: 3000
         protocol: tcp
         mode: host
     volumes:
-      - 'coolify-local-backup:/app/backups'
-      - 'coolify-db:/app/db'
-      - 'coolify-logs:/app/logs'
-      - 'coolify-ssl-certs:/app/ssl'
-      - 'coolify-traefik-letsencrypt:/etc/traefik/acme'
-      - 'coolify-letsencrypt:/etc/letsencrypt'
+      - 'vpaas-local-backup:/app/backups'
+      - 'vpaas-db:/app/db'
+      - 'vpaas-logs:/app/logs'
+      - 'vpaas-ssl-certs:/app/ssl'
+      - 'vpaas-traefik-letsencrypt:/etc/traefik/acme'
+      - 'vpaas-letsencrypt:/etc/letsencrypt'
       - '/var/run/docker.sock:/var/run/docker.sock'
     env_file:
       - '.env'
     networks:
-      - coolify-infra
+      - vpaas-infra
   fluent-bit:
     image: ghcr.io/coollabsio/fluent-bit:1.0.0
-    container_name: coolify-fluentbit
+    container_name: vpaas-fluentbit
     volumes:
-      - 'coolify-logs:/app/logs'
+      - 'vpaas-logs:/app/logs'
     networks:
-      - coolify-infra
+      - vpaas-infra
 networks:
-  coolify-infra:
+  vpaas-infra:
     attachable: true
-    name: coolify-infra
+    name: vpaas-infra
 
 volumes:
-  coolify-local-backup:
-    name: coolify-local-backup
-  coolify-logs:
-    name: coolify-logs
-  coolify-db:
-    name: coolify-db
-  coolify-pgdb:
-    name: coolify-pgdb
-  coolify-ssl-certs:
-    name: coolify-ssl-certs
-  coolify-letsencrypt:
-    name: coolify-letsencrypt
-  coolify-traefik-letsencrypt:
-    name: coolify-traefik-letsencrypt
+  vpaas-local-backup:
+    name: vpaas-local-backup
+  vpaas-logs:
+    name: vpaas-logs
+  vpaas-db:
+    name: vpaas-db
+  vpaas-pgdb:
+    name: vpaas-pgdb
+  vpaas-ssl-certs:
+    name: vpaas-ssl-certs
+  vpaas-letsencrypt:
+    name: vpaas-letsencrypt
+  vpaas-traefik-letsencrypt:
+    name: vpaas-traefik-letsencrypt

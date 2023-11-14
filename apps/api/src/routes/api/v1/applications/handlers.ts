@@ -235,7 +235,7 @@ export async function getApplication(request: FastifyRequest<OnlyId>) {
 	try {
 		const { id } = request.params;
 		const { teamId } = request.user;
-		const appId = process.env['VPAAS_APP_ID'];
+		const appId = process.env['COOLIFY_APP_ID'];
 		const application: any = await getApplicationFromDB(id, teamId);
 		const settings = await listSettings();
 		return {
@@ -371,6 +371,7 @@ export async function saveApplication(
 	reply: FastifyReply
 ) {
 	try {
+		console.log('save!!!')
 		const { id } = request.params;
 		let {
 			name,
@@ -400,7 +401,7 @@ export async function saveApplication(
 			simpleDockerfile,
 			dockerRegistryImageName,
 			basicAuthPw,
-			basicAuthUser
+			basicAuthUser,
 		} = request.body;
 		if (port) port = Number(port);
 		if (exposePort) {
@@ -509,7 +510,7 @@ export async function saveApplicationSettings(
 			isDBBranching,
 			isCustomSSL,
 			isHttp2,
-			basicAuth
+			basicAuth,
 		} = request.body;
 		await prisma.application.update({
 			where: { id },
@@ -525,7 +526,7 @@ export async function saveApplicationSettings(
 						isDBBranching,
 						isCustomSSL,
 						isHttp2,
-						basicAuth
+						basicAuth,
 					}
 				}
 			},
@@ -1432,9 +1433,8 @@ export async function restartPreview(
 
 			const volumes =
 				persistentStorage?.map((storage) => {
-					return `${applicationId}${storage.path.replace(/\//gi, '-')}:${
-						buildPack !== 'docker' ? '/app' : ''
-					}${storage.path}`;
+					return `${applicationId}${storage.path.replace(/\//gi, '-')}:${buildPack !== 'docker' ? '/app' : ''
+						}${storage.path}`;
 				}) || [];
 			const composeVolumes = volumes.map((volume) => {
 				return {

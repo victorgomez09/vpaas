@@ -105,7 +105,8 @@ export async function newDestination(request: FastifyRequest<NewDestination>, re
 				const destination = destinations.find((destination) => destination.network === network);
 				if (destinations.length > 0) {
 					const proxyConfigured = destinations.find(
-						(destination) => destination.network !== network && destination.isProxyUsed === true
+						(destination) =>
+							destination.network !== network && destination.isProxyUsed === true
 					);
 					if (proxyConfigured) {
 						isProxyUsed = !!proxyConfigured.isProxyUsed;
@@ -152,18 +153,12 @@ export async function forceDeleteDestination(request: FastifyRequest<OnlyId>) {
 		}
 		const applications = await prisma.application.findMany({ where: { destinationDockerId: id } });
 		for (const application of applications) {
-			await prisma.applicationSettings.deleteMany({
-				where: { application: { id: application.id } }
-			});
+			await prisma.applicationSettings.deleteMany({ where: { application: { id: application.id } } });
 			await prisma.buildLog.deleteMany({ where: { applicationId: application.id } });
 			await prisma.build.deleteMany({ where: { applicationId: application.id } });
 			await prisma.secret.deleteMany({ where: { applicationId: application.id } });
-			await prisma.applicationPersistentStorage.deleteMany({
-				where: { applicationId: application.id }
-			});
-			await prisma.applicationConnectedDatabase.deleteMany({
-				where: { applicationId: application.id }
-			});
+			await prisma.applicationPersistentStorage.deleteMany({ where: { applicationId: application.id } });
+			await prisma.applicationConnectedDatabase.deleteMany({ where: { applicationId: application.id } });
 			await prisma.previewApplication.deleteMany({ where: { applicationId: application.id } });
 		}
 		const databases = await prisma.database.findMany({ where: { destinationDockerId: id } });
@@ -280,9 +275,9 @@ export async function assignSSHKey(request: FastifyRequest) {
 	}
 }
 export async function verifyRemoteDockerEngineFn(id: string) {
-	const { remoteIpAddress, network, isProxyUsed } = await prisma.destinationDocker.findFirst({
-		where: { id }
-	});
+	const { remoteIpAddress, network, isProxyUsed } = await prisma.destinationDocker.findFirst(
+		{ where: { id } }
+	);
 	const daemonJson = `daemon-${id}.json`;
 	try {
 		await executeCommand({
@@ -353,7 +348,7 @@ export async function verifyRemoteDockerEngineFn(id: string) {
 		}
 		await prisma.destinationDocker.update({ where: { id }, data: { remoteVerified: true } });
 	} catch (error) {
-		console.log(error);
+		console.log(error)
 		throw new Error('Error while verifying remote docker engine');
 	}
 }

@@ -14,7 +14,7 @@
 					engine: '/var/run/docker.sock',
 					remoteEngine: false,
 					network: cuid(),
-					isCoolifyProxyUsed: true
+					isProxyUsed: true
 				};
 				break;
 			case 'remoteDocker':
@@ -25,7 +25,7 @@
 					remoteUser: 'root',
 					remotePort: 22,
 					network: cuid(),
-					isCoolifyProxyUsed: true
+					isProxyUsed: true
 				};
 				break;
 			default:

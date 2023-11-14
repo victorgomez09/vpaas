@@ -76,7 +76,7 @@ export async function refreshTags() {
 							tags = JSON.parse(tags).concat(JSON.parse(testTags));
 						}
 					}
-				} catch (error) {}
+				} catch (error) { }
 				await fs.writeFile('./tags.json', tags);
 			} else {
 				const tags = await got.get('https://get.coollabs.io/coolify/service-tags.json').text();
@@ -101,7 +101,7 @@ export async function refreshTemplates() {
 					if (await fs.stat('./testTemplate.yaml')) {
 						templates = templates + (await fs.readFile('./testTemplate.yaml', 'utf8'));
 					}
-				} catch (error) {}
+				} catch (error) { }
 				const response = await fs.readFile('./devTemplates.yaml', 'utf8');
 				await fs.writeFile('./templates.json', JSON.stringify(yaml.load(response)));
 			} else {
@@ -122,12 +122,12 @@ export async function checkUpdate(request: FastifyRequest) {
 	try {
 		const { default: got } = await import('got');
 		const isStaging =
-			request.hostname === 'staging.vpaas.io' || request.hostname === 'arm.vpaas.io';
+			request.hostname === 'staging.coolify.io' || request.hostname === 'arm.coolify.io';
 		const currentVersion = version;
 		const { coolify } = await got
 			.get('https://get.coollabs.io/versions.json', {
 				searchParams: {
-					appId: process.env['VPAAS_APP_ID'] || undefined,
+					appId: process.env['COOLIFY_APP_ID'] || undefined,
 					version: currentVersion
 				}
 			})
@@ -162,16 +162,13 @@ export async function update(request: FastifyRequest<Update>) {
 				await executeCommand({ command: `docker pull ${image}` });
 			}
 
+			await executeCommand({ shell: true, command: `ls .env || env | grep "^COOLIFY" | sort > .env` });
 			await executeCommand({
-				shell: true,
-				command: `ls .env || env | grep "^VPAAS" | sort > .env`
-			});
-			await executeCommand({
-				command: `sed -i '/VPAAS_AUTO_UPDATE=/cVPAAS_AUTO_UPDATE=${isAutoUpdateEnabled}' .env`
+				command: `sed -i '/COOLIFY_AUTO_UPDATE=/cCOOLIFY_AUTO_UPDATE=${isAutoUpdateEnabled}' .env`
 			});
 			await executeCommand({
 				shell: true,
-				command: `docker run --rm -tid --env-file .env -v /var/run/docker.sock:/var/run/docker.sock -v vpaas-db ${image} /bin/sh -c "env | grep "^VPAAS" | sort > .env && echo 'TAG=${latestVersion}' >> .env && docker stop -t 0 vpaas vpaas-fluentbit && docker rm vpaas vpaas-fluentbit && docker compose pull && docker compose up -d --force-recreate"`
+				command: `docker run --rm -tid --env-file .env -v /var/run/docker.sock:/var/run/docker.sock -v vpaas-db ${image} /bin/sh -c "env | grep "^COOLIFY" | sort > .env && echo 'TAG=${latestVersion}' >> .env && docker stop -t 0 vpaas vpaas-fluentbit && docker rm vpaas vpaas-fluentbit && docker compose pull && docker compose up -d --force-recreate"`
 			});
 			return {};
 		} else {
@@ -196,7 +193,7 @@ export async function resetQueue(request: FastifyRequest<any>) {
 		return errorHandler({ status, message });
 	}
 }
-export async function restartVpaas(request: FastifyRequest<any>) {
+export async function restartCoolify(request: FastifyRequest<any>) {
 	try {
 		const teamId = request.user.teamId;
 		if (teamId === '0') {
@@ -209,7 +206,7 @@ export async function restartVpaas(request: FastifyRequest<any>) {
 		}
 		throw {
 			status: 500,
-			message: 'You are not authorized to restart Vpaas.'
+			message: 'You are not authorized to restart Coolify.'
 		};
 	} catch ({ status, message }) {
 		return errorHandler({ status, message });

@@ -19,13 +19,13 @@ CREATE TABLE "new_DestinationDocker" (
     "remoteUser" TEXT,
     "remotePort" INTEGER,
     "remoteVerified" BOOLEAN NOT NULL DEFAULT false,
-    "isCoolifyProxyUsed" BOOLEAN DEFAULT false,
+    "isProxyUsed" BOOLEAN DEFAULT false,
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" DATETIME NOT NULL,
     "sshKeyId" TEXT,
     CONSTRAINT "DestinationDocker_sshKeyId_fkey" FOREIGN KEY ("sshKeyId") REFERENCES "SshKey" ("id") ON DELETE SET NULL ON UPDATE CASCADE
 );
-INSERT INTO "new_DestinationDocker" ("createdAt", "engine", "id", "isCoolifyProxyUsed", "name", "network", "remoteEngine", "remoteIpAddress", "remotePort", "remoteUser", "updatedAt") SELECT "createdAt", "engine", "id", "isCoolifyProxyUsed", "name", "network", "remoteEngine", "remoteIpAddress", "remotePort", "remoteUser", "updatedAt" FROM "DestinationDocker";
+INSERT INTO "new_DestinationDocker" ("createdAt", "engine", "id", "isProxyUsed", "name", "network", "remoteEngine", "remoteIpAddress", "remotePort", "remoteUser", "updatedAt") SELECT "createdAt", "engine", "id", "isProxyUsed", "name", "network", "remoteEngine", "remoteIpAddress", "remotePort", "remoteUser", "updatedAt" FROM "DestinationDocker";
 DROP TABLE "DestinationDocker";
 ALTER TABLE "new_DestinationDocker" RENAME TO "DestinationDocker";
 CREATE UNIQUE INDEX "DestinationDocker_network_key" ON "DestinationDocker"("network");

@@ -13,9 +13,9 @@ declare module '@fastify/jwt' {
 }
 
 export default fp<FastifyJWTOptions>(async (fastify, opts) => {
-	let secretKey = fastify.config.VPAAS_SECRET_KEY_BETTER;
+	let secretKey = fastify.config.COOLIFY_SECRET_KEY_BETTER;
 	if (!secretKey) {
-		secretKey = fastify.config.VPAAS_SECRET_KEY;
+		secretKey = fastify.config.COOLIFY_SECRET_KEY;
 	}
 	fastify.register(fastifyJwt, {
 		secret: secretKey

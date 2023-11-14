@@ -9,11 +9,11 @@ CREATE TABLE "new_DestinationDocker" (
     "remoteIpAddress" TEXT,
     "remoteUser" TEXT,
     "remotePort" INTEGER,
-    "isCoolifyProxyUsed" BOOLEAN DEFAULT false,
+    "isProxyUsed" BOOLEAN DEFAULT false,
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" DATETIME NOT NULL
 );
-INSERT INTO "new_DestinationDocker" ("createdAt", "engine", "id", "isCoolifyProxyUsed", "name", "network", "remoteEngine", "updatedAt") SELECT "createdAt", "engine", "id", "isCoolifyProxyUsed", "name", "network", "remoteEngine", "updatedAt" FROM "DestinationDocker";
+INSERT INTO "new_DestinationDocker" ("createdAt", "engine", "id", "isProxyUsed", "name", "network", "remoteEngine", "updatedAt") SELECT "createdAt", "engine", "id", "isProxyUsed", "name", "network", "remoteEngine", "updatedAt" FROM "DestinationDocker";
 DROP TABLE "DestinationDocker";
 ALTER TABLE "new_DestinationDocker" RENAME TO "DestinationDocker";
 CREATE UNIQUE INDEX "DestinationDocker_network_key" ON "DestinationDocker"("network");

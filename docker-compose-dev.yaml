@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
- coolify:
+ vpaas:
     build:
       context: .
       dockerfile: Dockerfile-dev
@@ -13,7 +13,7 @@ services:
       - COOLIFY_DATABASE_URL=file:../db/dev.db
       - GITPOD_WORKSPACE_URL=${GITPOD_WORKSPACE_URL}
       - CODESANDBOX_HOST=${CODESANDBOX_HOST}
-    container_name: coolify
+    container_name: vpaas
     ports:
       - target: 3000
         published: 3000
@@ -32,11 +32,11 @@ services:
       - '/var/run/docker.sock:/var/run/docker.sock'
       - /tmp:/tmp
     networks:
-      - coolify-infra
+      - vpaas-infra
  fluent-bit:
     image: ghcr.io/coollabsio/fluent-bit:1.0.0
     command: /fluent-bit/bin/fluent-bit -c /fluent-bit/etc/fluent-bit-dev.conf
-    container_name: coolify-fluentbit
+    container_name: vpaas-fluentbit
     volumes:
       - ./logs:/logs
     ports:
@@ -45,8 +45,8 @@ services:
         protocol: tcp
         mode: host
     networks:
-      - coolify-infra
+      - vpaas-infra
 networks:
-  coolify-infra:
+  vpaas-infra:
     attachable: true
-    name: coolify-infra
+    name: vpaas-infra

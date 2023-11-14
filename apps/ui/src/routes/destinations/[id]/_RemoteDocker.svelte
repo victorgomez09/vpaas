@@ -41,22 +41,22 @@
 		if (destination.remoteEngine && destination.remoteVerified) {
 			loading.proxy = true;
 			const { isRunning } = await get(`/destinations/${id}/status`);
-			if (isRunning === false && destination.isCoolifyProxyUsed === true) {
-				destination.isCoolifyProxyUsed = !destination.isCoolifyProxyUsed;
+			if (isRunning === false && destination.isProxyUsed === true) {
+				destination.isProxyUsed = !destination.isProxyUsed;
 				try {
 					await post(`/destinations/${id}/settings`, {
-						isCoolifyProxyUsed: destination.isCoolifyProxyUsed,
+						isProxyUsed: destination.isProxyUsed,
 						engine: destination.engine
 					});
 					await stopProxy();
 				} catch (error) {
 					return errorNotification(error);
 				}
-			} else if (isRunning === true && destination.isCoolifyProxyUsed === false) {
-				destination.isCoolifyProxyUsed = !destination.isCoolifyProxyUsed;
+			} else if (isRunning === true && destination.isProxyUsed === false) {
+				destination.isProxyUsed = !destination.isProxyUsed;
 				try {
 					await post(`/destinations/${id}/settings`, {
-						isCoolifyProxyUsed: destination.isCoolifyProxyUsed,
+						isProxyUsed: destination.isProxyUsed,
 						engine: destination.engine
 					});
 					await startProxy();
@@ -72,11 +72,11 @@
 		if (!destination.remoteVerified) return;
 		loading.proxy = true;
 		if (!cannotDisable) {
-			const isProxyActivated = destination.isCoolifyProxyUsed;
+			const isProxyActivated = destination.isProxyUsed;
 			if (isProxyActivated) {
 				const sure = confirm(
 					`Are you sure you want to ${
-						destination.isCoolifyProxyUsed ? 'disable' : 'enable'
+						destination.isProxyUsed ? 'disable' : 'enable'
 					} Coolify proxy? It will remove the proxy for all configured networks and all deployments! Nothing will be reachable if you do it!`
 				);
 				if (!sure) {
@@ -84,10 +84,10 @@
 					return;
 				}
 			}
-			let proxyUsed = !destination.isCoolifyProxyUsed;
+			let proxyUsed = !destination.isProxyUsed;
 			try {
 				await post(`/destinations/${id}/settings`, {
-					isCoolifyProxyUsed: proxyUsed,
+					isProxyUsed: proxyUsed,
 					engine: destination.engine
 				});
 				if (isProxyActivated) {
@@ -95,7 +95,7 @@
 				} else {
 					await startProxy();
 				}
-				destination.isCoolifyProxyUsed = proxyUsed;
+				destination.isProxyUsed = proxyUsed;
 			} catch (error) {
 				return errorNotification(error);
 			} finally {
@@ -266,7 +266,7 @@
 			id="changeProxySetting"
 			disabled={cannotDisable || !destination.remoteVerified}
 			loading={loading.proxy}
-			bind:setting={destination.isCoolifyProxyUsed}
+			bind:setting={destination.isProxyUsed}
 			on:click={changeProxySetting}
 			title={$t('destination.use_coolify_proxy')}
 			description={`Install & configure a proxy (based on Traefik) on the destination to allow you to access your applications and services without any manual configuration.${

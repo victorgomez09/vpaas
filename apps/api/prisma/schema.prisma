@@ -5,7 +5,7 @@ generator client {
 
 datasource db {
   provider = "sqlite"
-  url      = env("VPAAS_DATABASE_URL")
+  url      = env("COOLIFY_DATABASE_URL")
 }
 
 model Certificate {
@@ -277,25 +277,25 @@ model Build {
 }
 
 model DestinationDocker {
-  id              String        @id @default(cuid())
-  network         String        @unique
-  name            String
-  engine          String?
-  remoteEngine    Boolean       @default(false)
-  remoteIpAddress String?
-  remoteUser      String?
-  remotePort      Int?
-  remoteVerified  Boolean       @default(false)
-  isProxyUsed     Boolean?      @default(false) @map("isProxyUsed")
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
-  sshKeyId        String?
-  sshKey          SshKey?       @relation(fields: [sshKeyId], references: [id])
-  sshLocalPort    Int?
-  application     Application[]
-  database        Database[]
-  service         Service[]
-  teams           Team[]
+  id                 String        @id @default(cuid())
+  network            String        @unique
+  name               String
+  engine             String?
+  remoteEngine       Boolean       @default(false)
+  remoteIpAddress    String?
+  remoteUser         String?
+  remotePort         Int?
+  remoteVerified     Boolean       @default(false)
+  isProxyUsed Boolean?      @default(false)
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt
+  sshKeyId           String?
+  sshKey             SshKey?       @relation(fields: [sshKeyId], references: [id])
+  sshLocalPort       Int?
+  application        Application[]
+  database           Database[]
+  service            Service[]
+  teams              Team[]
 }
 
 model SshKey {
