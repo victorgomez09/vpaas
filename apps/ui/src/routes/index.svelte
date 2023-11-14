@@ -3,6 +3,8 @@
 
 	export const load: Load = async ({}) => {
 		try {
+			// document.documentElement.setAttribute.
+
 			const data = await get('/resources');
 			return {
 				props: {
@@ -626,7 +628,7 @@
 					id="search"
 					type="text"
 					placeholder="Search: You can search for names, domains, types, database types, version, servers etc..."
-					class="w-full input input-bordered input-primary"
+					class="w-full input input-bordered"
 					bind:value={$search}
 					on:input={() => doSearch()}
 				/>

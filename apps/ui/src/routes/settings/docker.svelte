@@ -28,7 +28,8 @@
 		name: '',
 		username: '',
 		password: '',
-		url: ''
+		url: '',
+		isSystemWide: false
 	};
 
 	async function handleSubmit() {
@@ -74,7 +75,8 @@
 					name: 'Docker Hub',
 					username: '',
 					password: '',
-					url: 'https://index.docker.io/v1/'
+					url: 'https://index.docker.io/v1/',
+					isSystemWide: false
 				};
 				await handleSubmit();
 				break;
@@ -83,7 +85,8 @@
 					name: 'Google Container Registry',
 					username: '',
 					password: '',
-					url: 'https://gcr.io'
+					url: 'https://gcr.io',
+					isSystemWide: false
 				};
 				await handleSubmit();
 				break;
@@ -92,7 +95,8 @@
 					name: 'GitHub Container Registry',
 					username: '',
 					password: '',
-					url: 'https://ghcr.io'
+					url: 'https://ghcr.io',
+					isSystemWide: false
 				};
 				await handleSubmit();
 				break;
@@ -176,8 +180,8 @@
 {#if isModalActive}
 	<input type="checkbox" id="my-modal" class="modal-toggle" />
 	<div class="modal modal-bottom sm:modal-middle">
-		<div class="modal-box rounded bg-coolgray-300">
-			<h3 class="font-bold text-lg">Add a Docker Registry to Coolify</h3>
+		<div class="modal-box rounded">
+			<h3 class="font-bold text-lg">Add a Docker Registry to Vpaas</h3>
 			<div>
 				<form on:submit|preventDefault={handleSubmit}>
 					<label for="name" class="label">

@@ -14,7 +14,7 @@
 <div class={`dropdown dropdown-end ${position}`}>
 	<!-- svelte-ignore a11y-label-has-associated-control -->
 	<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-	<label tabindex="0" class="btn btn-circle btn-ghost btn-xs text-sky-500">
+	<label tabindex="0" class="btn btn-circle btn-ghost btn-xs text-info">
 		<svg
 			xmlns="http://www.w3.org/2000/svg"
 			fill="none"
@@ -29,7 +29,7 @@
 		>
 	</label>
 	<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-	<div tabindex="0" class="card compact dropdown-content shadow bg-coolgray-400 rounded w-64">
+	<div tabindex="0" class="card compact dropdown-content shadow bg-base-200 rounded w-64">
 		<div class="card-body">
 			<!-- <h2 class="card-title">You needed more info?</h2>  -->
 			<p class="text-xs font-normal">{@html explanation}</p>

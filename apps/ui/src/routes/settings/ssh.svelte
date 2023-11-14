@@ -58,11 +58,12 @@
 </script>
 
 <div class="w-full">
-	<div class="flex border-b border-coolgray-500 mb-6">
+	<div class="flex mb-6">
 		<div class="title font-bold pb-3 pr-4">SSH Keys</div>
-		<label for="my-modal" class="btn btn-sm btn-primary" on:click={() => (isModalActive = true)}
-			>Add SSH Key</label
-		>
+		<!-- svelte-ignore a11y-click-events-have-key-events -->
+		<label for="my-modal" class="btn btn-sm btn-primary" on:click={() => (isModalActive = true)}>
+			Add SSH Key
+		</label>
 	</div>
 	{#if sshKeys.length === 0}
 		<div class="text-sm">No SSH keys found</div>
@@ -97,26 +98,28 @@
 {#if isModalActive}
 	<input type="checkbox" id="my-modal" class="modal-toggle" />
 	<div class="modal modal-bottom sm:modal-middle">
-		<div class="modal-box rounded bg-coolgray-300">
-			<h3 class="font-bold text-lg">Add a new SSH Key to Coolify</h3>
+		<div class="modal-box rounded">
+			<h3 class="font-bold text-lg">Add a new SSH Key to Vpaas</h3>
 			<p class="py-4">
 				SSH Keys can be used to authenticate & execute commands on remote servers.
 				<br /><br />You can generate a new public/private key using the following command:
 				<br />
 				<br />
-				<code class="bg-coolgray-100 p-2 rounded">ssh-keygen -t rsa -b 4096</code>
 			</p>
+			<div class="mockup-code">
+				<pre data-prefix="$"><code>ssh-keygen -t rsa -b 4096</code></pre>
+			</div>
 			<div class="modal-action">
 				<form on:submit|preventDefault={handleSubmit}>
 					<label for="name" class="">Name</label>
-					<input id="name" required bind:value={newSSHKey.name} class="w-full bg-coolgray-100" />
+					<input id="name" required bind:value={newSSHKey.name} class="w-full input input-bordered" />
 					<label for="privateKey" class="pt-4">Private Key</label>
 					<textarea
 						id="privateKey"
 						placeholder="-----BEGIN OPENSSH PRIVATE KEY-----"
 						required
 						bind:value={newSSHKey.privateKey}
-						class="w-full bg-coolgray-100"
+						class="w-full textarea textarea-bordered"
 						rows={15}
 					/>
 					<label for="my-modal">

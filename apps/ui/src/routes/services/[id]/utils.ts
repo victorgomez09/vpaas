@@ -23,6 +23,7 @@ export async function saveSecret({
 }: Props): Promise<void> {
 	if (!name) return errorNotification(`${t.get('forms.name')} ${t.get('forms.is_required')}`);
 	if (!value) return errorNotification(`${t.get('forms.value')} ${t.get('forms.is_required')}`);
+	// eslint-disable-next-line no-useless-catch
 	try {
 		await post(`/services/${serviceId}/secrets`, {
 			name,
@@ -45,6 +46,7 @@ export async function saveForm(formData: any, service: any) {
 	const settings = service.serviceSetting.map((setting: { name: string }) => setting.name);
 	const secrets = service.serviceSecret.map((secret: { name: string }) => secret.name);
 	const baseCoolifySetting = ['name', 'fqdn', 'exposePort', 'version'];
+	// eslint-disable-next-line prefer-const
 	for (let field of formData) {
 		const [key, value] = field;
 		if (secrets.includes(key) && value) {

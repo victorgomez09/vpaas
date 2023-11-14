@@ -1289,7 +1289,6 @@
 								/>
 							</label>
 							<input
-								for="destinationdns"
 								class="w-full"
 								disabled
 								readonly
@@ -1303,7 +1302,7 @@
 									explanation={'You can use these DNS names to access the application from this stack.'}
 								/>
 							</label>
-							<input for="stackdns" class="w-full" disabled readonly value={service.name} />
+							<input class="w-full" disabled readonly value={service.name} />
 						</div>
 						<div class="grid grid-cols-2 items-center px-8 pb-4">
 							<label for="port"

@@ -5,26 +5,40 @@ module.exports = {
 	important: true,
 	daisyui: {
 		themes: [
-			{
-				coollabs: {
-					"base-100": "#323232",
-					"base-200": "#242424",
-					"base-300": "#181818",
-					"primary": "#6B16ED",
-					"primary-content": "#fff",
-					"secondary": "#343232",
-					"accent": "#343232",
-					"neutral": "#272626",
-					"info": "#0284c7",
-					"success": "#16A34A",
-					"warning": "#FFFF00",
-					"error": "#DC2626",
-					"--rounded-btn": "0.3rem",
-					"--btn-text-case": "normal"
-				},
-			}
+		  "light",
+		  "dark",
+		  "cupcake",
+		  "bumblebee",
+		  "emerald",
+		  "corporate",
+		  "synthwave",
+		  "retro",
+		  "cyberpunk",
+		  "valentine",
+		  "halloween",
+		  "garden",
+		  "forest",
+		  "aqua",
+		  "lofi",
+		  "pastel",
+		  "fantasy",
+		  "wireframe",
+		  "black",
+		  "luxury",
+		  "dracula",
+		  "cmyk",
+		  "autumn",
+		  "business",
+		  "acid",
+		  "lemonade",
+		  "night",
+		  "coffee",
+		  "winter",
+		  "dim",
+		  "nord",
+		  "sunset",
 		],
-	},
+	  },
 	theme: {
 		extend: {
 			keyframes: {
@@ -64,5 +78,5 @@ module.exports = {
 		extend: {}
 	},
 	darkMode: 'class',
-	plugins: [require('tailwindcss-scrollbar'), require('daisyui'), require("@tailwindcss/typography")]
+	plugins: [require('daisyui'), require("@tailwindcss/typography")]
 };

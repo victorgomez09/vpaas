@@ -57,8 +57,9 @@
 </script>
 
 <div class="mx-auto w-full">
-	<div class="flex border-b border-coolgray-500 mb-6">
+	<div class="flex border-b mb-6">
 		<div class="title font-bold pb-3 pr-4">SSL Certificates <Beta /></div>
+		<!-- svelte-ignore a11y-click-events-have-key-events -->
 		<label for="my-modal" class="btn btn-sm btn-primary" on:click={() => (isModalActive = true)}
 			>Add SSL Certificate</label
 		>
@@ -94,11 +95,11 @@
 {#if isModalActive}
 	<input type="checkbox" id="my-modal" class="modal-toggle" />
 	<div class="modal modal-bottom sm:modal-middle ">
-		<div class="modal-box rounded bg-coolgray-300 max-w-2xl">
+		<div class="modal-box rounded max-w-2xl">
 			<h3 class="font-bold text-lg">Add a new SSL Certificate</h3>
 			<p class="py-4">
 				SSL Certificates are used to secure your domain and allow you to use HTTPS. <br /><br />Once
-				you uploaded your certificate, Coolify will automatically configure it for you in the
+				you uploaded your certificate, Vpaas will automatically configure it for you in the
 				background.
 			</p>
 			<div class="modal-action">
@@ -107,7 +108,7 @@
 						<label for="cert">Certificate</label>
 						<div class="flex-1" />
 						<input
-							class="w-full bg-coolgray-100"
+							class="w-full file-input file-input-bordered"
 							id="cert"
 							type="file"
 							required
@@ -116,7 +117,7 @@
 						/>
 						<label for="key" class="pt-10">Private Key</label>
 						<input
-							class="w-full bg-coolgray-100"
+							class="w-full file-input file-input-bordered"
 							id="key"
 							type="file"
 							required

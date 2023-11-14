@@ -118,18 +118,18 @@
 			</div>
 			<div class="grid gap-2 grid-cols-2 auto-rows-max">
 				<label for="name">Name</label>
-				<input class="w-full" name="name" id="name" required bind:value={source.name} />
+				<input class="w-full input input-bordered" name="name" id="name" required bind:value={source.name} />
 				<label for="htmlUrl">HTML URL</label>
-				<input class="w-full" name="htmlUrl" id="htmlUrl" required bind:value={source.htmlUrl} />
+				<input class="w-full input input-bordered" name="htmlUrl" id="htmlUrl" required bind:value={source.htmlUrl} />
 				<label for="apiUrl">API URL</label>
-				<input class="w-full" name="apiUrl" id="apiUrl" required bind:value={source.apiUrl} />
+				<input class="w-full input input-bordered" name="apiUrl" id="apiUrl" required bind:value={source.apiUrl} />
 				<label for="customPort"
 					>Custom SSH Port <Explainer
 						explanation={'If you use a self-hosted version of Git, you can provide custom port for all the Git related actions.'}
 					/></label
 				>
 				<input
-					class="w-full"
+					class="w-full input input-bordered"
 					name="customPort"
 					id="customPort"
 					disabled={!selfHosted || source.githubAppId}
@@ -144,7 +144,7 @@
 					/></label
 				>
 				<input
-					class="w-full"
+					class="w-full input input-bordered"
 					name="organization"
 					id="organization"
 					placeholder="eg: coollabsio"
@@ -185,7 +185,7 @@
 			<div class="grid gap-2 grid-cols-2 auto-rows-max mt-4">
 				<label for="name">{$t('forms.name')}</label>
 				<input
-					class="w-full"
+					class="w-full input input-bordered"
 					name="name"
 					id="name"
 					required
@@ -194,7 +194,7 @@
 				/>
 				<label for="htmlUrl">HTML URL</label>
 				<input
-					class="w-full"
+					class="w-full input input-bordered"
 					name="htmlUrl"
 					id="htmlUrl"
 					disabled={source.githubAppId}
@@ -218,7 +218,7 @@
 					/></label
 				>
 				<input
-					class="w-full"
+					class="w-full input input-bordered"
 					name="customPort"
 					id="customPort"
 					disabled={!selfHosted}
@@ -228,7 +228,7 @@
 				/>
 				<label for="organization" class="pt-2">Organization</label>
 				<input
-					class="w-full"
+					class="w-full input input-bordered"
 					readonly
 					disabled
 					name="organization"

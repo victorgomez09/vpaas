@@ -17,6 +17,8 @@
 </script>
 
 <script lang="ts">
+	import { onMount } from 'svelte';
+	import { themeChange } from "theme-change"
 	export let settings: any;
 	import Setting from '$lib/components/Setting.svelte';
 	import { del, get, post } from '$lib/api';
@@ -25,7 +27,10 @@
 	import { asyncSleep, errorNotification, getDomain } from '$lib/common';
 	import Explainer from '$lib/components/Explainer.svelte';
 	import { dev } from '$app/env';
+	import { themes } from '$lib/themes'
 
+	let selectedTheme = localStorage.getItem('theme');
+	let dropdownClasses = ""
 	let isAPIDebuggingEnabled = settings.isAPIDebuggingEnabled;
 	let isRegistrationEnabled = settings.isRegistrationEnabled;
 	let dualCerts = settings.dualCerts;
@@ -263,12 +268,16 @@
 			}
 		}
 	}
+
+  onMount(() => {
+    themeChange(false)
+  })
 </script>
 
 <div class="mx-auto w-full">
 	<form on:submit|preventDefault={handleSubmit}>
 		<div class="flex flex-row border-b border-coolgray-500 mb-6">
-			<div class="title font-bold pb-3 pr-4">Coolify Settings</div>
+			<div class="title font-bold pb-3 pr-4">General Settings</div>
 			<div class="flex flex-row space-x-2">
 				<button
 					class="btn btn-sm btn-primary"
@@ -300,11 +309,92 @@
 			<div class="grid grid-flow-row gap-2 px-4 pr-5">
 				<div class="grid grid-cols-2 items-center">
 					<div>
+						{$t('setting.change_theme')}
+					</div>
+
+					<div
+					title="Change Theme"
+					class={`dropdown hidden [@supports(color:oklch(0_0_0))]:block ${dropdownClasses}`}
+				>
+					<div tabIndex="0" class="btn btn-ghost text-base-content">
+						<svg
+							width="20"
+							height="20"
+							xmlns="http://www.w3.org/2000/svg"
+							fill="none"
+							viewBox="0 0 24 24"
+							class="h-5 w-5 stroke-current md:hidden"
+						>
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								stroke-width="2"
+								d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"
+							/>
+						</svg>
+						<span class="hidden font-normal md:inline">{selectedTheme}</span>
+						<svg
+							width="12px"
+							height="12px"
+							class="ml-2 hidden h-2 w-2 fill-current opacity-60 sm:inline-block"
+							xmlns="http://www.w3.org/2000/svg"
+							viewBox="0 0 2048 2048"
+						>
+							<path d="M1799 349l242 241-1017 1017L7 590l242-241 775 775 775-775z" />
+						</svg>
+					</div>
+					<div
+						class="dropdown-content bg-base-200 text-base-content rounded-box top-px h-[70vh] max-h-96 w-56 overflow-y-auto shadow mt-16 z-10"
+					>
+						<div class="grid grid-cols-1 gap-3 p-3" tabIndex="0">
+							{#each themes as theme}
+								<button
+									class="outline-base-content overflow-hidden rounded-lg text-left"
+									data-set-theme={theme}
+									data-act-class="[&_svg]:visible"
+									on:click={() => selectedTheme = theme}
+								>
+									<span
+										data-theme={theme}
+										class="bg-base-100 text-base-content block w-full cursor-pointer font-sans"
+									>
+										<span class="grid grid-cols-5 grid-rows-3">
+											<span class="col-span-5 row-span-3 row-start-1 flex items-center gap-2 px-4 py-3">
+												<svg
+													xmlns="http://www.w3.org/2000/svg"
+													width="16"
+													height="16"
+													viewBox="0 0 24 24"
+													fill="currentColor"
+													class="invisible h-3 w-3 shrink-0"
+												>
+													<path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z" />
+												</svg>
+												<span class="flex-grow text-sm">
+													{theme}
+												</span>
+												<span class="flex h-full flex-shrink-0 flex-wrap gap-1">
+													<span class="bg-primary w-2 rounded" />
+													<span class="bg-secondary w-2 rounded" />
+													<span class="bg-accent w-2 rounded" />
+													<span class="bg-neutral w-2 rounded" />
+												</span>
+											</span>
+										</span>
+									</span>
+								</button>
+							{/each}
+						</div>
+					</div>
+				</div>
+				</div>
+				<div class="grid grid-cols-2 items-center">
+					<div>
 						{$t('application.url_fqdn')}
 						<Explainer position="dropdown-bottom" explanation={$t('setting.ssl_explainer')} />
 					</div>
 					<input
-						class="w-full"
+						class="w-full input input-bordered"
 						bind:value={fqdn}
 						readonly={!$appSession.isAdmin || isFqdnSet}
 						disabled={!$appSession.isAdmin || isFqdnSet}
@@ -370,7 +460,7 @@
 						/>
 					</div>
 					<input
-						class="w-full"
+						class="w-full input input-bordered"
 						bind:value={proxyDefaultRedirect}
 						readonly={!$appSession.isAdmin}
 						disabled={!$appSession.isAdmin}
@@ -390,7 +480,7 @@
 						/>
 					</div>
 					<input
-						class="w-full"
+						class="w-full input input-bordered"
 						bind:value={rollbackVersion}
 						readonly={!$appSession.isAdmin}
 						disabled={!$appSession.isAdmin}
@@ -414,7 +504,7 @@
 					</div>
 					<input
 						type="number"
-						class="w-full"
+						class="w-full input input-bordered"
 						bind:value={numberOfDockerImagesKeptLocally}
 						readonly={!$appSession.isAdmin}
 						disabled={!$appSession.isAdmin}
@@ -432,7 +522,7 @@
 						/>
 					</div>
 					<input
-						class="w-full"
+						class="w-full input input-bordered"
 						required
 						bind:value={previewSeparator}
 						readonly={!$appSession.isAdmin}
@@ -450,7 +540,7 @@
 
 					<div class="flex flex-row items-center space-x-2">
 						<input
-							class="w-full px-2 "
+							class="w-full px-2 input input-bordered"
 							type="number"
 							bind:value={minPort}
 							min="1024"
@@ -458,7 +548,7 @@
 						/>
 						<p>-</p>
 						<input
-							class="w-full px-2 "
+							class="w-full px-2 input input-bordered"
 							type="number"
 							bind:value={maxPort}
 							min={minPort}
@@ -482,7 +572,7 @@
 						/>
 					</div>
 
-					<input class="w-full " placeholder="1.1.1.1,8.8.8.8" bind:value={DNSServers} />
+					<input class="w-full input input-bordered" placeholder="1.1.1.1,8.8.8.8" bind:value={DNSServers} />
 				</div>
 
 				<div class="grid grid-cols-2 items-center">

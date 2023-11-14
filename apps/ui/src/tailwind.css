@@ -21,17 +21,17 @@ button {
 	@apply text-sm !important;
 }
 html {
-	@apply h-full min-h-full overflow-y-scroll;
+	@apply h-full min-h-full;
 }
 body {
-	@apply min-h-screen overflow-x-hidden bg-coolblack text-sm text-white scrollbar-w-1 scrollbar-thumb-coollabs scrollbar-track-coolgray-200;
+	@apply min-h-screen text-sm text-base-content;
 }
 
-input, .input {
-	@apply h-12 w-96 rounded border border-transparent bg-coolgray-200 p-2 text-xs tracking-tight text-white placeholder-stone-600 outline-none transition duration-150 hover:bg-coolgray-500 focus:bg-coolgray-500 disabled:border disabled:border-dashed disabled:border-coolgray-200 disabled:bg-transparent disabled:bg-coolblack md:text-sm;
-}
+/* input, .input {
+	@apply h-12 w-96 rounded border border-transparent p-2 text-xs tracking-tight outline-none transition duration-150 disabled:border disabled:border-dashed disabled:bg-transparent md:text-sm;
+} */
 textarea {
-	@apply min-w-[14rem] rounded border border-transparent bg-coolgray-200 p-2 text-xs tracking-tight text-white placeholder-stone-600 outline-none transition duration-150 hover:bg-coolgray-500 focus:bg-coolgray-500 disabled:border disabled:border-dashed disabled:border-coolgray-200 disabled:bg-transparent md:text-sm;
+	@apply min-w-[14rem] rounded border border-transparent p-2 text-xs tracking-tight outline-none transition duration-150 disabled:border disabled:border-dashed disabled:bg-transparent md:text-sm;
 }
 
 #svelte .custom-select-wrapper .selectContainer.disabled input {
@@ -43,25 +43,25 @@ textarea {
 }
 
 #svelte .custom-select-wrapper .selectContainer {
-	@apply h-12 rounded bg-coolgray-200 p-2 px-0 text-xs tracking-tight outline-none transition duration-150 hover:bg-coolgray-500 focus:bg-coolgray-500 md:text-sm ;
+	@apply h-12 rounded p-2 px-0 text-xs tracking-tight outline-none transition duration-150 md:text-sm ;
 }
 
-#svelte .listContainer {
-	@apply bg-coolgray-400 text-white scrollbar-w-2 scrollbar-thumb-green-500 scrollbar-track-coolgray-200;
-}
+/* #svelte .listContainer {
+	@apply bg-coolgray-400 text-white;
+} */
 #svelte .selectedItem {
 	@apply pl-2;
 }
 
-#svelte .item.hover {
+/* #svelte .item.hover {
 	@apply bg-coollabs text-white !important;
 }
 #svelte .item.active {
 	@apply bg-coolgray-100 text-white;
-}
+} */
 
 select {
-	@apply h-12 w-96 rounded bg-coolgray-200 p-2 text-xs font-bold tracking-tight text-white placeholder-stone-600 outline-none transition duration-150 hover:bg-coolgray-500 focus:bg-coolgray-500 disabled:text-stone-600 md:text-sm;
+	@apply h-12 w-96 rounded p-2 text-xs font-bold tracking-tight outline-none transition duration-150 md:text-sm;
 }
 .custom-select-wrapper{
 	--background: rgb(32 32 32);
@@ -88,7 +88,7 @@ label {
 	@apply inline-block;
 }
 .btn {
-	@apply text-white text-base min-w-fit no-animation;
+	@apply text-base min-w-fit no-animation;
 }
 
 a {
@@ -109,7 +109,7 @@ a {
 	@apply text-sm leading-6 font-semibold text-sky-500 dark:text-sky-400;
 }
 .card{
-	@apply border bg-coolgray-100 border-coolgray-200 rounded p-2 space-y-2 sticky top-4 mb-2 items-center
+	@apply rounded p-2 space-y-2 sticky top-4 mb-2 items-center
 }
 .icon-holder{
 	overflow: hidden;
@@ -137,11 +137,11 @@ a {
 .menu-top .menu-bar > * {display: flex; flex-direction: row;}
 
 .nav-main {
-	@apply fixed top-0 left-0 min-h-screen w-16 min-w-[4rem] overflow-hidden border-r border-stone-800 bg-coolgray-200 scrollbar-w-1  scrollbar-thumb-coollabs scrollbar-track-coolgray-200 xl:overflow-visible;
+	@apply fixed top-0 left-0 min-h-screen w-16 min-w-[4rem] overflow-hidden border-r xl:overflow-visible;
 }
 
 .nav-side {
-	@apply absolute right-0 top-0 z-50 m-5 flex flex-wrap items-center justify-end space-x-2 bg-coolblack/40 text-white;
+	@apply absolute right-0 top-0 z-50 m-5 flex flex-wrap items-center justify-end space-x-2 text-white;
 }
 
 .add-icon {
@@ -149,7 +149,7 @@ a {
 }
 
 .icons {
-	@apply rounded p-2 transition duration-200 hover:bg-coolgray-500 disabled:bg-coolblack disabled:text-coolgray-500 !important;
+	@apply rounded p-2 transition duration-200 !important;
 }
 
 .arrow-right-applications {
@@ -190,7 +190,7 @@ a {
 }
 
 .box-selection {
-	@apply min-w-[16rem]  justify-center rounded border-transparent bg-coolgray-200 p-6 hover:border-transparent hover:bg-coolgray-400;
+	@apply min-w-[16rem]  justify-center rounded border-transparent p-6 hover:border-transparent;
 }
 
 .lds-heart {
@@ -218,12 +218,12 @@ a {
 }
 
 .sub-menu {
-	@apply w-48 text-base font-bold hover:bg-coolgray-500 rounded p-2 hover:text-white text-stone-200 cursor-pointer;
+	@apply w-48 text-base font-bold rounded p-2 hover:text-white text-stone-200 cursor-pointer;
 }
 
-.sub-menu-active {
-	@apply  bg-coolgray-500  text-white;
-}
+/* .sub-menu-active {
+	@apply  ;
+} */
 
 .table tbody td,
 .table tbody th,
@@ -242,6 +242,6 @@ a {
 	@apply block m-[2px] h-[3px] w-5 rounded
 }
 
-.bg-coollabs-gradient {
+/* .bg-coollabs-gradient {
 	@apply bg-gradient-to-r from-purple-500 via-pink-500 to-red-500;
-}
+} */

@@ -112,7 +112,8 @@
 			setLocation(service);
 			forceSave = false;
 			$isDeploymentEnabled = checkIfDeploymentEnabledServices(service);
-			customVersion = null;
+			// customVersion = null;
+			customVersion = "";
 			return addToast({
 				message: 'Configuration saved.',
 				type: 'success'
@@ -320,15 +321,14 @@
 					>{$t('application.url_fqdn')}
 					<Explainer explanation={$t('application.https_explainer')} />
 				</label>
+				<!-- add pattern to input -->
 				<CopyPasswordField
 					placeholder="eg: https://coollabs.io"
 					readonly={isDisabled}
 					disabled={isDisabled}
 					name="fqdn"
 					id="fqdn"
-					pattern="^https?://([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{'{'}2,{'}'}$"
 					bind:value={service.fqdn}
-					required
 				/>
 			</div>
 			{#each Object.keys(template) as oneService}

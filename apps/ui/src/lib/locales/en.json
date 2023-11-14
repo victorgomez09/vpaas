@@ -306,6 +306,7 @@
 		"logs": "Logs"
 	},
 	"setting": {
+		"change_theme": "Change theme",
 		"change_language": "Change Language",
 		"permission_denied": "You do not have permission to do this. \\nAsk an admin to modify your permissions.",
 		"domain_removed": "Domain removed",

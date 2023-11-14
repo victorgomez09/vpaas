@@ -30,6 +30,6 @@
 	}
 	.progress-sliver {
 		width: var(--width);
-		@apply h-full bg-coollabs;
+		@apply h-full bg-primary;
 	}
 </style>

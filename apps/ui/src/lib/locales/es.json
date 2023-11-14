@@ -303,6 +303,7 @@
     "logs":"Logs"
   },
   "setting":{
+    "change_theme": "Cambiar tema",
     "change_language":"Cambiar idioma",
     "permission_denied":"No tienes permiso para hacer esto. \\nAsk un administrador para modificar sus permisos.",
     "domain_removed":"El dominio eliminado",

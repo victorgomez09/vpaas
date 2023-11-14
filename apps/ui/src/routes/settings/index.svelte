@@ -4,5 +4,5 @@
 	if ($appSession.teamId !== '0') {
 		goto('/settings/ssh');
 	}
-	goto('/settings/coolify');
+	goto('/settings/general');
 </script>

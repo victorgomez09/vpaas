@@ -3,13 +3,14 @@
 	import { appSession } from '$lib/store';
 </script>
 
-<ul class="menu border bg-coolgray-100 border-coolgray-200 rounded p-2 space-y-2">
+<ul class="menu bg-base-200 rounded p-2 space-y-2">
 	<li class="menu-title">
 		<span>General</span>
 	</li>
 	{#if $appSession.teamId === '0'}
-		<li class="rounded" class:bg-coollabs={$page.url.pathname === `/settings/coolify`}>
-			<a href={`/settings/coolify`} class="no-underline w-full"
+		<li class="rounded">
+			<a href={`/settings/general`} class="no-underline w-full"
+				class:active={$page.url.pathname === `/settings/general`}
 				><svg
 					xmlns="http://www.w3.org/2000/svg"
 					class="w-6 h-6"
@@ -24,12 +25,13 @@
 					<path
 						d="M7 10h3v-3l-3.5 -3.5a6 6 0 0 1 8 8l6 6a2 2 0 0 1 -3 3l-6 -6a6 6 0 0 1 -8 -8l3.5 3.5"
 					/>
-				</svg>Coolify Settings</a
+				</svg>General Settings</a
 			>
 		</li>
 	{/if}
-	<li class="rounded" class:bg-coollabs={$page.url.pathname === `/settings/docker`}>
-		<a href={`/settings/docker`} class="no-underline w-full">
+	<li class="rounded">
+		<a href={`/settings/docker`} class="no-underline w-full"
+			class:active={$page.url.pathname === `/settings/docker`}>
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				class="w-6 h-6"
@@ -59,8 +61,9 @@
 	<li class="menu-title">
 		<span>Keys & Certificates</span>
 	</li>
-	<li class="rounded" class:bg-coollabs={$page.url.pathname === `/settings/ssh`}>
+	<li class="rounded">
 		<a href={`/settings/ssh`} class="no-underline w-full"
+			class:active={$page.url.pathname === `/settings/ssh`}
 			><svg
 				xmlns="http://www.w3.org/2000/svg"
 				class="w-6 h-6"
@@ -79,8 +82,9 @@
 			</svg>SSH Keys</a
 		>
 	</li>
-	<li class="rounded" class:bg-coollabs={$page.url.pathname === `/settings/certificates`}>
-		<a href={`/settings/certificates`} class="no-underline w-full">
+	<li class="rounded">
+		<a href={`/settings/certificates`} class="no-underline w-full"
+			class:active={$page.url.pathname === `/settings/certificates`}>
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				class="w-6 h-6"

@@ -64,7 +64,7 @@
 </script>
 
 <script lang="ts">
-	export let settings: any;
+	let settings: any;
 	export let baseSettings: any;
 	export let pendingInvitations: any = 0;
 
@@ -153,7 +153,7 @@
 	</div>
 {/if}
 
-<div class="drawer">
+<div class="drawer h-full">
 	<input id="main-drawer" type="checkbox" class="drawer-toggle" bind:this={sidedrawerToggler} />
 	<div class="drawer-content">
 		{#if $appSession.userId}
@@ -264,7 +264,7 @@
 						</a>
 						<a
 							id="settings"
-							href={$appSession.teamId === '0' ? '/settings/coolify' : '/settings/docker'}
+							href={$appSession.teamId === '0' ? '/settings/general' : '/settings/docker'}
 							class="icons hover:text-settings"
 							class:text-settings={$page.url.pathname.startsWith('/settings')}
 							class:bg-coolgray-500={$page.url.pathname.startsWith('/settings')}
@@ -349,37 +349,37 @@
 			</nav>
 			{#if $appSession.whiteLabeled}
 				<span class="fixed bottom-0 left-[50px] z-50 m-2 px-4 text-xs text-stone-700"
-					>Powered by <a href="https://coolify.io" target="_blank noreferrer">Coolify</a></span
+					>Powered by <a href="https://coolify.io" target="_blank noreferrer">Vpaas</a></span
 				>
 			{/if}
 		{/if}
 		<div
-			class="navbar lg:hidden space-x-2 flex flex-row justify-between bg-coollabs"
+			class="navbar bg-base-200 text-base-content shadow lg:hidden space-x-2 flex flex-row justify-between"
 			class:hidden={!$appSession.userId}
 		>
 			<div>
 				<label for="main-drawer" class="drawer-button btn btn-square btn-ghost flex-col">
-					<span class="burger bg-white" />
-					<span class="burger bg-white" />
-					<span class="burger bg-white" />
+					<span class="burger bg-base-content" />
+					<span class="burger bg-base-content" />
+					<span class="burger bg-base-content" />
 				</label>
-				<div class="prose flex flex-row justify-between space-x-1 w-full items-center pr-3">
+				<div class="prose flex flex-row justify-between space-x-1 w-full items-center pr-3 ml-2">
 					{#if !$appSession.whiteLabeled}
-						<h3 class="mb-0 text-white">Coolify</h3>
+						<h3 class="mb-0">Vpaas</h3>
 					{/if}
 				</div>
 			</div>
 			<!-- <LocalePicker /> -->
 		</div>
 		<main>
-			<div class={$appSession.userId ? 'lg:pl-16' : null}>
+			<div class={`base-100 px-6 ${$appSession.userId ? 'lg:pl-20' : null}`}>
 				<slot />
 			</div>
 		</main>
 	</div>
-	<div class="drawer-side">
+	<div class="drawer-side h-full z-10">
 		<label for="main-drawer" class="drawer-overlay w-full" />
-		<ul class="menu bg-coolgray-200 w-60 p-2 space-y-3 pt-4">
+		<ul class="menu bg-base-300 w-60 h-full p-2 space-y-3 pt-4">
 			<li>
 				<a
 					class="no-underline icons hover:text-white hover:bg-pink-500"
@@ -466,7 +466,7 @@
 			<li>
 				<a
 					class="no-underline icons hover:text-black hover:bg-settings"
-					href={$appSession.teamId === '0' ? '/settings/coolify' : '/settings/ssh'}
+					href={$appSession.teamId === '0' ? '/settings/general' : '/settings/ssh'}
 					class:bg-settings={$page.url.pathname.startsWith('/settings')}
 					class:text-black={$page.url.pathname.startsWith('/settings')}
 					on:click={closeDrawer}
