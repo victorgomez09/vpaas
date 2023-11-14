@@ -1,10 +1,31 @@
 {
-    "sqltools.connections": [
-        {
-            "previewLimit": 50,
-            "driver": "SQLite",
-            "name": "vpaas",
-            "database": "${workspaceFolder:vpaas}/backend/prisma/dev.db"
-        }
-    ]
+	"i18n-ally.localesPaths": [
+		"src/lib/locales"
+	],
+	"i18n-ally.keystyle": "nested",
+	"i18n-ally.extract.ignoredByFiles": {
+		"src\\routes\\__layout.svelte": [
+			"Coolify",
+			"coolLabs logo"
+		]
+	},
+	"i18n-ally.sourceLanguage": "en",
+	"i18n-ally.enabledFrameworks": [
+		"svelte"
+	],
+	"i18n-ally.enabledParsers": [
+		"js",
+		"ts",
+		"json"
+	],
+	"i18n-ally.extract.autoDetect": true,
+	"files.exclude": {
+		"**/.git": true,
+		"**/.svn": true,
+		"**/.hg": true,
+		"**/CVS": true,
+		"**/.DS_Store": true,
+		"**/Thumbs.db": true
+	},
+	"hide-files.files": []
 }
