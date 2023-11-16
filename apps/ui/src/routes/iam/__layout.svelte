@@ -1,7 +1,4 @@
 <script lang="ts">
-	import { page } from '$app/stores';
-	import { goto } from '$app/navigation';
-	import { appSession } from '$lib/store';
 	import Menu from './_Menu.svelte';
 </script>
 

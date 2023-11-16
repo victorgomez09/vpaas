@@ -3,17 +3,17 @@ import Cookies from 'js-cookie';
 import { dashify } from './common';
 
 export function getAPIUrl() {
-	if (GITPOD_WORKSPACE_URL) {
-		const { href } = new URL(GITPOD_WORKSPACE_URL);
-		const newURL = href.replace('https://', 'https://3001-').replace(/\/$/, '');
-		return newURL;
-	}
-	if (CODESANDBOX_HOST) {
-		return `https://${CODESANDBOX_HOST.replace(/\$PORT/, '3001')}`;
-	}
+	// if (GITPOD_WORKSPACE_URL) {
+	// 	const { href } = new URL(GITPOD_WORKSPACE_URL);
+	// 	const newURL = href.replace('https://', 'https://3001-').replace(/\/$/, '');
+	// 	return newURL;
+	// }
+	// if (CODESANDBOX_HOST) {
+	// 	return `https://${CODESANDBOX_HOST.replace(/\$PORT/, '3001')}`;
+	// }
 	return dev
-		// ? `http://${window.location.hostname}:3001`
-		? `https://ideal-zebra-54pwg47qjj6h44w7-3001.app.github.dev`
+		? `http://${window.location.hostname}:3001`
+		// ? `https://ideal-zebra-54pwg47qjj6h44w7-3001.app.github.dev`
 		: 'http://localhost:3000';
 }
 export function getWebhookUrl(type: string) {
@@ -27,15 +27,15 @@ export function getWebhookUrl(type: string) {
 			return `${newURL}/webhooks/gitlab/events`;
 		}
 	}
-	if (CODESANDBOX_HOST) {
-		const newURL = `https://${CODESANDBOX_HOST.replace(/\$PORT/, '3001')}`;
-		if (type === 'github') {
-			return `${newURL}/webhooks/github/events`;
-		}
-		if (type === 'gitlab') {
-			return `${newURL}/webhooks/gitlab/events`;
-		}
-	}
+	// if (CODESANDBOX_HOST) {
+	// 	const newURL = `https://${CODESANDBOX_HOST.replace(/\$PORT/, '3001')}`;
+	// 	if (type === 'github') {
+	// 		return `${newURL}/webhooks/github/events`;
+	// 	}
+	// 	if (type === 'gitlab') {
+	// 		return `${newURL}/webhooks/gitlab/events`;
+	// 	}
+	// }
 	return `https://webhook.site/0e5beb2c-4e9b-40e2-a89e-32295e570c21/events`;
 }
 async function send({

@@ -109,7 +109,9 @@
 							Authorization: `Bearer ${$appSession.tokens.gitlab}`
 					  };
 
-				const url = isPublicRepository ? `/projects/${projectId}/repository/tree` : `/v4/projects/${projectId}/repository/tree`;
+				const url = isPublicRepository
+					? `/projects/${projectId}/repository/tree`
+					: `/v4/projects/${projectId}/repository/tree`;
 				const files = await get(`${apiUrl}${url}`, {
 					...headers
 				});
@@ -335,6 +337,7 @@
 	});
 </script>
 
+<!-- HTML -->
 {#if scanning}
 	<div class="flex justify-center space-x-1 p-6 font-bold">
 		<div class="text-xl tracking-tight">
@@ -353,9 +356,9 @@
 		</div>
 	</div>
 	<div class="max-w-screen-2xl mx-auto px-10">
-		<div class="title pb-2">Coolify Base</div>
+		<div class="title pb-2">Vpaas Base</div>
 		<div class="flex flex-wrap justify-center">
-			{#each buildPacks.filter((bp) => bp.isCoolifyBuildPack === true && bp.type === 'base') as buildPack}
+			{#each buildPacks.filter((bp) => bp.isVpaasBuildPack === true && bp.type === 'base') as buildPack}
 				<div class="p-2">
 					<BuildPack
 						{packageManager}
@@ -371,9 +374,9 @@
 		</div>
 	</div>
 	<div class="max-w-screen-2xl mx-auto px-10">
-		<div class="title pb-2">Coolify Specific</div>
+		<div class="title pb-2">Vpaas Specific</div>
 		<div class="flex flex-wrap justify-center">
-			{#each buildPacks.filter((bp) => bp.isCoolifyBuildPack === true && bp.type === 'specific') as buildPack}
+			{#each buildPacks.filter((bp) => bp.isVpaasBuildPack === true && bp.type === 'specific') as buildPack}
 				<div class="p-2">
 					<BuildPack {packageManager} {buildPack} {scanning} bind:foundConfig />
 				</div>

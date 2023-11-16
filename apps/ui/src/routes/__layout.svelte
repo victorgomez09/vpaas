@@ -157,13 +157,19 @@
 	<input id="main-drawer" type="checkbox" class="drawer-toggle" bind:this={sidedrawerToggler} />
 	<div class="drawer-content">
 		{#if $appSession.userId}
-			<Tooltip triggeredBy="#dashboard" placement="right" color="bg-pink-500">Dashboard</Tooltip>
-			<Tooltip triggeredBy="#servers" placement="right" color="bg-sky-500">Servers</Tooltip>
-			<Tooltip triggeredBy="#iam" placement="right" color="bg-iam">IAM</Tooltip>
-			<Tooltip triggeredBy="#settings" placement="right" color="bg-settings text-black"
+			<Tooltip triggeredBy="#dashboard" placement="right" color="bg-base-200 text-secondary"
+				>Dashboard</Tooltip
+			>
+			<Tooltip triggeredBy="#servers" placement="right" color="bg-base-200 text-secondary"
+				>Servers</Tooltip
+			>
+			<Tooltip triggeredBy="#iam" placement="right" color="bg-base-200 text-secondary">IAM</Tooltip>
+			<Tooltip triggeredBy="#settings" placement="right" color="bg-base-200 text-secondary"
 				>Settings</Tooltip
 			>
-			<Tooltip triggeredBy="#logout" placement="right" color="bg-red-600">Logout</Tooltip>
+			<Tooltip triggeredBy="#logout" placement="right" color="bg-base-200 text-secondary"
+				>Logout</Tooltip
+			>
 			<nav class="nav-main hidden lg:block z-20">
 				<div class="flex h-screen w-full flex-col items-center transition-all duration-100">
 					{#if !$appSession.whiteLabeled}
@@ -179,10 +185,9 @@
 						<a
 							id="dashboard"
 							href="/"
-							class="icons hover:text-pink-500"
-							class:text-pink-500={$page.url.pathname === '/'}
-							class:bg-coolgray-500={$page.url.pathname === '/'}
-							class:bg-coolgray-200={!($page.url.pathname === '/')}
+							class="icons hover:text-secondary"
+							class:text-secondary={$page.url.pathname === '/'}
+							class:bg-base-300={$page.url.pathname === '/'}
 						>
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
@@ -205,10 +210,9 @@
 							<a
 								id="servers"
 								href="/servers"
-								class="icons hover:text-sky-500"
-								class:text-sky-500={$page.url.pathname === '/servers'}
-								class:bg-coolgray-500={$page.url.pathname === '/servers'}
-								class:bg-coolgray-200={!($page.url.pathname === '/servers')}
+								class="icons hover:text-secondary"
+								class:text-secondary={$page.url.pathname === '/servers'}
+								class:bg-base-300={$page.url.pathname === '/servers'}
 							>
 								<svg
 									xmlns="http://www.w3.org/2000/svg"
@@ -237,9 +241,9 @@
 						<a
 							id="iam"
 							href={$appSession.pendingInvitations.length > 0 ? '/iam/pending' : '/iam'}
-							class="icons hover:text-iam indicator"
-							class:text-iam={$page.url.pathname.startsWith('/iam')}
-							class:bg-coolgray-500={$page.url.pathname.startsWith('/iam')}
+							class="icons hover:text-secondary indicator"
+							class:text-secondary={$page.url.pathname.startsWith('/iam')}
+							class:bg-base-300={$page.url.pathname.startsWith('/iam')}
 						>
 							{#if $appSession.pendingInvitations.length > 0}
 								<span class="indicator-item rounded-full badge badge-primary mr-2"
@@ -265,9 +269,9 @@
 						<a
 							id="settings"
 							href={$appSession.teamId === '0' ? '/settings/general' : '/settings/docker'}
-							class="icons hover:text-settings"
-							class:text-settings={$page.url.pathname.startsWith('/settings')}
-							class:bg-coolgray-500={$page.url.pathname.startsWith('/settings')}
+							class="icons hover:text-secondary"
+							class:text-secondary={$page.url.pathname.startsWith('/settings')}
+							class:bg-base-300={$page.url.pathname.startsWith('/settings')}
 						>
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
@@ -291,7 +295,7 @@
 							href="https://docs.coollabs.io/coolify-v3/"
 							target="_blank"
 							rel="noreferrer external"
-							class="icons hover:text-info"
+							class="icons hover:text-secondary"
 						>
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
@@ -310,11 +314,7 @@
 						</a>
 
 						<!-- svelte-ignore a11y-click-events-have-key-events -->
-						<div
-							id="logout"
-							class="icons bg-coolgray-200 hover:text-error cursor-pointer"
-							on:click={logout}
-						>
+						<div id="logout" class="icons hover:text-secondary cursor-pointer" on:click={logout}>
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
 								class="ml-1 h-8 w-8"
@@ -372,19 +372,20 @@
 			<!-- <LocalePicker /> -->
 		</div>
 		<main>
-			<div class={`base-100 px-6 ${$appSession.userId ? 'lg:pl-20' : null}`}>
+			<div class={`bg-base-100 ${$appSession.userId ? 'lg:pl-20' : ''}`}>
 				<slot />
 			</div>
 		</main>
 	</div>
 	<div class="drawer-side h-full z-10">
 		<label for="main-drawer" class="drawer-overlay w-full" />
-		<ul class="menu bg-base-300 w-60 h-full p-2 space-y-3 pt-4">
+		<ul class="menu bg-base-100 w-60 h-full p-2 space-y-3 pt-4">
 			<li>
 				<a
-					class="no-underline icons hover:text-white hover:bg-pink-500"
+					class="no-underline icons hover:text-secondary hover:bg-base-300"
 					href="/"
-					class:bg-pink-500={$page.url.pathname === '/'}
+					class:bg-base-300={$page.url.pathname === '/'}
+					class:text-secondary={$page.url.pathname === '/'}
 					on:click={closeDrawer}
 				>
 					<svg
@@ -410,9 +411,10 @@
 			<li>
 				<a
 					id="servers"
-					class="no-underline icons hover:text-white hover:bg-sky-500"
+					class="no-underline icons hover:text-secondary hover:bg-base-300"
 					href="/servers"
-					class:bg-sky-500={$page.url.pathname.startsWith('/servers')}
+					class:bg-base-300={$page.url.pathname.startsWith('/servers')}
+					class:text-secondary={$page.url.pathname.startsWith('/servers')}
 					on:click={closeDrawer}
 				>
 					<svg
@@ -436,9 +438,9 @@
 			</li>
 			<li>
 				<a
-					class="no-underline icons hover:text-white hover:bg-iam"
+					class="no-underline icons hover:text-secondary hover:bg-base-300"
 					href="/iam"
-					class:bg-iam={$page.url.pathname.startsWith('/iam')}
+					class:bg-base-300={$page.url.pathname.startsWith('/iam')}
 					on:click={closeDrawer}
 					><svg
 						xmlns="http://www.w3.org/2000/svg"
@@ -465,10 +467,10 @@
 			</li>
 			<li>
 				<a
-					class="no-underline icons hover:text-black hover:bg-settings"
+					class="no-underline icons hover:text-secondary hover:bg-base-300"
 					href={$appSession.teamId === '0' ? '/settings/general' : '/settings/ssh'}
-					class:bg-settings={$page.url.pathname.startsWith('/settings')}
-					class:text-black={$page.url.pathname.startsWith('/settings')}
+					class:bg-base-300={$page.url.pathname.startsWith('/settings')}
+					class:text-secondary={$page.url.pathname.startsWith('/settings')}
 					on:click={closeDrawer}
 				>
 					<svg
@@ -492,7 +494,7 @@
 			</li>
 			<li>
 				<a
-					class="no-underline icons hover:text-white hover:bg-info"
+					class="no-underline icons hover:text-secondary hover:bg-base-300"
 					href="https://docs.coollabs.io/coolify-v3/"
 					target="_blank"
 					rel="noreferrer external"
@@ -520,7 +522,7 @@
 			</div>
 			<li>
 				<!-- svelte-ignore a11y-click-events-have-key-events -->
-				<div class="no-underline icons hover:bg-error" on:click={logout}>
+				<div class="no-underline icons hover:text-secondary" on:click={logout}>
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						class="ml-1 h-8 w-8"
@@ -542,7 +544,7 @@
 			</li>
 			<li class="w-full">
 				<a
-					class="text-xs hover:bg-coolgray-200 no-underline hover:text-white text-right"
+					class="text-xs hover:text-secondary hover:bg-base-300 no-underline text-right"
 					href={`https://github.com/coollabsio/coolify/releases/tag/v${$appSession.version}`}
 					target="_blank noreferrer">v{$appSession.version}</a
 				>

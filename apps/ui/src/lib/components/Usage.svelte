@@ -67,7 +67,7 @@
 	}
 </script>
 
-<div class="w-full relative p-5 ">
+<div class="w-full relative p-5">
 	<div class="w-full flex flex-col lg:flex-row space-y-4 lg:space-y-0 space-x-4">
 		<div class="flex flex-col">
 			<h1 class="font-bold text-lg lg:text-xl truncate">
@@ -90,13 +90,11 @@
 				on:click={manuallyCleanupStorage}
 				class:loading={loading.cleanup}
 				class:bg-coollabs={!loading.cleanup}
-				class="btn btn-sm">Cleanup Storage</button
+				class="btn btn-sm btn-primary">Cleanup Storage</button
 			>
 		{/if}
 		{#if loading.usage}
-			<button id="streaming" class=" btn btn-sm bg-transparent border-none loading"
-				>Getting data...</button
-			>
+			<span class="loading loading-spinner loading-md" />
 		{/if}
 	</div>
 	<div class="flex lg:flex-row flex-col gap-4">
@@ -107,21 +105,21 @@
 		<div class="stats stats-vertical min-w-[16rem] mb-5 rounded bg-transparent">
 			<div class="stat">
 				<div class="stat-title">Total Memory</div>
-				<div class="stat-value text-2xl text-white">
+				<div class="stat-value text-2xl text-base-content">
 					{(usage?.memory?.totalMemMb).toFixed(0)}<span class="text-sm">MB</span>
 				</div>
 			</div>
 
 			<div class="stat">
 				<div class="stat-title">Used Memory</div>
-				<div class="stat-value text-2xl text-white">
+				<div class="stat-value text-2xl text-base-content">
 					{(usage?.memory?.usedMemMb).toFixed(0)}<span class="text-sm">MB</span>
 				</div>
 			</div>
 
 			<div class="stat">
 				<div class="stat-title">Free Memory</div>
-				<div class="stat-value text-2xl text-white">
+				<div class="stat-value text-2xl text-base-content">
 					{(usage?.memory?.freeMemPercentage).toFixed(0)}<span class="text-sm">%</span>
 				</div>
 			</div>
@@ -130,41 +128,41 @@
 		<div class="stats stats-vertical min-w-[20rem] mb-5 bg-transparent rounded">
 			<div class="stat">
 				<div class="stat-title">Total CPU</div>
-				<div class="stat-value text-2xl text-white">
+				<div class="stat-value text-2xl text-base-content">
 					{usage?.cpu?.count}
 				</div>
 			</div>
 
 			<div class="stat">
 				<div class="stat-title">CPU Usage</div>
-				<div class="stat-value text-2xl text-white">
+				<div class="stat-value text-2xl text-base-content">
 					{usage?.cpu?.usage}<span class="text-sm">%</span>
 				</div>
 			</div>
 
 			<div class="stat">
 				<div class="stat-title">Load Average (5,10,30mins)</div>
-				<div class="stat-value text-2xl text-white">{usage?.cpu?.load}</div>
+				<div class="stat-value text-2xl text-base-content">{usage?.cpu?.load.join(', ')}</div>
 			</div>
 		</div>
 		<div class="stats stats-vertical min-w-[16rem] mb-5 bg-transparent rounded">
 			<div class="stat">
 				<div class="stat-title">Total Disk</div>
-				<div class="stat-value text-2xl text-white">
+				<div class="stat-value text-2xl text-base-content">
 					{usage?.disk?.totalGb}<span class="text-sm">GB</span>
 				</div>
 			</div>
 
 			<div class="stat">
 				<div class="stat-title">Used Disk</div>
-				<div class="stat-value text-2xl text-white">
+				<div class="stat-value text-2xl text-base-content">
 					{usage?.disk?.usedGb}<span class="text-sm">GB</span>
 				</div>
 			</div>
 
 			<div class="stat">
 				<div class="stat-title">Free Disk</div>
-				<div class="stat-value text-2xl text-white">
+				<div class="stat-value text-2xl text-base-content">
 					{usage?.disk?.freePercentage}<span class="text-sm">%</span>
 				</div>
 			</div>

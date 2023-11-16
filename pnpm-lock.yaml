@@ -225,6 +225,9 @@ importers:
       p-limit:
         specifier: 4.0.0
         version: 4.0.0
+      preline:
+        specifier: ^2.0.0
+        version: 2.0.0
       socket.io-client:
         specifier: 4.5.3
         version: 4.5.3
@@ -250,9 +253,15 @@ importers:
       '@sveltejs/kit':
         specifier: 1.0.0-next.405
         version: 1.0.0-next.405(svelte@3.53.1)(vite@3.2.4)
+      '@tailwindcss/forms':
+        specifier: ^0.5.7
+        version: 0.5.7(tailwindcss@3.3.5)
       '@types/js-cookie':
         specifier: 3.0.2
         version: 3.0.2
+      '@types/js-yaml':
+        specifier: ^4.0.9
+        version: 4.0.9
       '@typescript-eslint/eslint-plugin':
         specifier: 5.44.0
         version: 5.44.0(@typescript-eslint/parser@5.44.0)(eslint@8.28.0)(typescript@4.9.3)
@@ -824,7 +833,6 @@ packages:
 
   /@popperjs/core@2.11.6:
     resolution: {integrity: sha512-50/17A98tWUfQ176raKiOGXuYpLyyVMkxxG6oylzL3BPOlA6ADGdK7EYunSa4I064xerltq9TGXs8HmOk5E+vw==}
-    dev: true
 
   /@prisma/client@4.8.1(prisma@4.8.1):
     resolution: {integrity: sha512-d4xhZhETmeXK/yZ7K0KcVOzEfI5YKGGEr4F5SBV04/MU4ncN/HcE28sy3e4Yt8UFW0ZuImKFQJE+9rWt9WbGSQ==}
@@ -931,6 +939,15 @@ packages:
       defer-to-connect: 2.0.1
     dev: false
 
+  /@tailwindcss/forms@0.5.7(tailwindcss@3.3.5):
+    resolution: {integrity: sha512-QE7X69iQI+ZXwldE+rzasvbJiyV/ju1FGHH0Qn2W3FKbuYtqp8LKcy6iSw79fVUT5/Vvf+0XgLCeYVG+UV6hOw==}
+    peerDependencies:
+      tailwindcss: '>=3.0.0 || >= 3.0.0-alpha.1'
+    dependencies:
+      mini-svg-data-uri: 1.4.4
+      tailwindcss: 3.3.5
+    dev: true
+
   /@tailwindcss/typography@0.5.8(tailwindcss@3.3.5):
     resolution: {integrity: sha512-xGQEp8KXN8Sd8m6R4xYmwxghmswrd0cPnNI2Lc6fmrC3OojysTBJJGSIVwPV56q4t6THFUK3HJ0EaWwpglSxWw==}
     peerDependencies:
@@ -975,6 +992,10 @@ packages:
 
   /@types/js-cookie@3.0.2:
     resolution: {integrity: sha512-6+0ekgfusHftJNYpihfkMu8BWdeHs9EOJuGcSofErjstGPfPGEu9yTu4t460lTzzAMl2cM5zngQJqPMHbbnvYA==}
+    dev: true
+
+  /@types/js-yaml@4.0.9:
+    resolution: {integrity: sha512-k4MGaQl5TGo/iipqb2UDG2UwjXziSWkh0uysQelTlJpX1qGlpUZYm8PnO4DxG1qBomtJUdYJ6qR6xdIah10JLg==}
     dev: true
 
   /@types/json-schema@7.0.11:
@@ -5474,6 +5495,12 @@ packages:
       nanoid: 3.3.7
       picocolors: 1.0.0
       source-map-js: 1.0.2
+
+  /preline@2.0.0:
+    resolution: {integrity: sha512-zVStaGooj2iruZgklAOTBvkJK1MR8P7/zn14EwFk+icpbaRxQBKsFMB9Qrc+3+CcaJZS6sFYvdvUvTtu1MWQuQ==}
+    dependencies:
+      '@popperjs/core': 2.11.6
+    dev: false
 
   /prelude-ls@1.2.1:
     resolution: {integrity: sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==}

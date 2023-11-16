@@ -200,7 +200,7 @@ export const buildPacks = [
 		fancyName: 'Node.js',
 		hoverColor: 'hover:bg-green-700',
 		color: 'bg-green-700',
-		isCoolifyBuildPack: true,
+		isVpaasBuildPack: true
 	},
 	{
 		name: 'static',
@@ -208,7 +208,7 @@ export const buildPacks = [
 		fancyName: 'Static',
 		hoverColor: 'hover:bg-orange-700',
 		color: 'bg-orange-700',
-		isCoolifyBuildPack: true,
+		isVpaasBuildPack: true
 	},
 
 	{
@@ -217,7 +217,7 @@ export const buildPacks = [
 		fancyName: 'PHP',
 		hoverColor: 'hover:bg-indigo-700',
 		color: 'bg-indigo-700',
-		isCoolifyBuildPack: true,
+		isVpaasBuildPack: true
 	},
 	{
 		name: 'laravel',
@@ -226,7 +226,7 @@ export const buildPacks = [
 		fancyName: 'Laravel',
 		hoverColor: 'hover:bg-indigo-700',
 		color: 'bg-indigo-700',
-		isCoolifyBuildPack: true,
+		isVpaasBuildPack: true
 	},
 	{
 		name: 'docker',
@@ -234,7 +234,7 @@ export const buildPacks = [
 		fancyName: 'Docker',
 		hoverColor: 'hover:bg-sky-700',
 		color: 'bg-sky-700',
-		isCoolifyBuildPack: true,
+		isVpaasBuildPack: true
 	},
 	{
 		name: 'compose',
@@ -242,7 +242,7 @@ export const buildPacks = [
 		fancyName: 'Docker Compose',
 		hoverColor: 'hover:bg-sky-700',
 		color: 'bg-sky-700',
-		isCoolifyBuildPack: true,
+		isVpaasBuildPack: true
 	},
 	{
 		name: 'svelte',
@@ -251,7 +251,7 @@ export const buildPacks = [
 		fancyName: 'Svelte',
 		hoverColor: 'hover:bg-orange-700',
 		color: 'bg-orange-700',
-		isCoolifyBuildPack: true,
+		isVpaasBuildPack: true
 	},
 	{
 		name: 'vuejs',
@@ -260,7 +260,7 @@ export const buildPacks = [
 		fancyName: 'VueJS',
 		hoverColor: 'hover:bg-green-700',
 		color: 'bg-green-700',
-		isCoolifyBuildPack: true,
+		isVpaasBuildPack: true
 	},
 	{
 		name: 'nuxtjs',
@@ -269,7 +269,7 @@ export const buildPacks = [
 		fancyName: 'NuxtJS',
 		hoverColor: 'hover:bg-green-700',
 		color: 'bg-green-700',
-		isCoolifyBuildPack: true,
+		isVpaasBuildPack: true
 	},
 	{
 		name: 'gatsby',
@@ -278,7 +278,7 @@ export const buildPacks = [
 		fancyName: 'Gatsby',
 		hoverColor: 'hover:bg-blue-700',
 		color: 'bg-blue-700',
-		isCoolifyBuildPack: true,
+		isVpaasBuildPack: true
 	},
 	{
 		name: 'astro',
@@ -287,7 +287,7 @@ export const buildPacks = [
 		fancyName: 'Astro',
 		hoverColor: 'hover:bg-pink-700',
 		color: 'bg-pink-700',
-		isCoolifyBuildPack: true,
+		isVpaasBuildPack: true
 	},
 	{
 		name: 'eleventy',
@@ -296,7 +296,7 @@ export const buildPacks = [
 		fancyName: 'Eleventy',
 		hoverColor: 'hover:bg-red-700',
 		color: 'bg-red-700',
-		isCoolifyBuildPack: true,
+		isVpaasBuildPack: true
 	},
 	{
 		name: 'react',
@@ -305,7 +305,7 @@ export const buildPacks = [
 		fancyName: 'React',
 		hoverColor: 'hover:bg-blue-700',
 		color: 'bg-blue-700',
-		isCoolifyBuildPack: true,
+		isVpaasBuildPack: true
 	},
 	{
 		name: 'preact',
@@ -314,7 +314,7 @@ export const buildPacks = [
 		fancyName: 'Preact',
 		hoverColor: 'hover:bg-blue-700',
 		color: 'bg-blue-700',
-		isCoolifyBuildPack: true,
+		isVpaasBuildPack: true
 	},
 	{
 		name: 'nextjs',
@@ -323,7 +323,7 @@ export const buildPacks = [
 		fancyName: 'NextJS',
 		hoverColor: 'hover:bg-blue-700',
 		color: 'bg-blue-700',
-		isCoolifyBuildPack: true,
+		isVpaasBuildPack: true
 	},
 	{
 		name: 'nestjs',
@@ -332,7 +332,7 @@ export const buildPacks = [
 		fancyName: 'NestJS',
 		hoverColor: 'hover:bg-red-700',
 		color: 'bg-red-700',
-		isCoolifyBuildPack: true,
+		isVpaasBuildPack: true
 	},
 	{
 		name: 'rust',
@@ -340,7 +340,7 @@ export const buildPacks = [
 		fancyName: 'Rust',
 		hoverColor: 'hover:bg-pink-700',
 		color: 'bg-pink-700',
-		isCoolifyBuildPack: true,
+		isVpaasBuildPack: true
 	},
 	{
 		name: 'python',
@@ -348,7 +348,7 @@ export const buildPacks = [
 		fancyName: 'Python',
 		hoverColor: 'hover:bg-green-700',
 		color: 'bg-green-700',
-		isCoolifyBuildPack: true,
+		isVpaasBuildPack: true
 	},
 	{
 		name: 'deno',
@@ -356,7 +356,7 @@ export const buildPacks = [
 		fancyName: 'Deno',
 		hoverColor: 'hover:bg-green-700',
 		color: 'bg-green-700',
-		isCoolifyBuildPack: true,
+		isVpaasBuildPack: true
 	},
 	{
 		name: 'heroku',
@@ -364,7 +364,7 @@ export const buildPacks = [
 		fancyName: 'Heroku',
 		hoverColor: 'hover:bg-purple-700',
 		color: 'bg-purple-700',
-		isHerokuBuildPack: true,
+		isHerokuBuildPack: true
 	}
 ];
 export const scanningTemplates = {

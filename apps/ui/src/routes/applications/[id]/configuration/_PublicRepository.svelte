@@ -12,7 +12,7 @@
 	let publicRepositoryLink: string;
 	let projectId: number;
 	let repositoryName: string;
-	let branchName: string;
+	let branchName: string = '';
 	let ownerName: string;
 	let type: string;
 	let branchSelectOptions: any = [];
@@ -21,7 +21,7 @@
 	};
 	async function loadBranches() {
 		try {
-			if (!publicRepositoryLink) return
+			if (!publicRepositoryLink) return;
 			loading.branches = true;
 			publicRepositoryLink = publicRepositoryLink.trim();
 			const protocol = publicRepositoryLink.split(':')[0];
@@ -40,7 +40,7 @@
 					branchName = branch[1];
 				}
 				if (branch.length === 1) {
-					branchName = branch[0]
+					branchName = branch[0];
 				}
 			}
 			if (host === 'gitlab.com') {
@@ -50,7 +50,7 @@
 					branchName = branch[2];
 				}
 				if (branch.length === 1) {
-					branchName = branch[0]
+					branchName = branch[0];
 				}
 			}
 			const apiUrl = `${protocol}://${host}`;
@@ -107,7 +107,7 @@
 						type
 					);
 					branches = branches.concat(nextBranches);
-					branchCount = nextBranches.length;
+					branchCount = nextBranches?.length;
 				}
 			}
 			loading.branches = false;
@@ -139,8 +139,8 @@
 	}
 	async function saveRepository(event?: any) {
 		try {
-			if (event?.detail?.value) {
-				branchName = event.detail.value;
+			if (event?.target?.value) {
+				branchName = event.target.value;
 			}
 			await post(`/applications/${id}/configuration/source`, {
 				gitSourceId: null,
@@ -166,32 +166,36 @@
 <div class="mx-auto max-w-screen-2xl">
 	<form class="flex flex-col" on:submit|preventDefault={loadBranches}>
 		<div class="flex flex-col space-y-2 w-full">
-			<div class="flex flex-row space-x-2"><input
-				class="w-full"
-				placeholder="eg: https://github.com/coollabsio/nodejs-example/tree/main"
-				bind:value={publicRepositoryLink}
-			/>
-				<button class="btn btn-primary" disabled={loading.branches} type="submit" class:loading={loading.branches}>
+			<div class="flex flex-row space-x-2">
+				<input
+					class="w-full input input-bordered"
+					placeholder="eg: https://github.com/coollabsio/nodejs-example/tree/main"
+					bind:value={publicRepositoryLink}
+				/>
+				<button
+					class="btn btn-primary"
+					disabled={loading.branches}
+					type="submit"
+					class:loading={loading.branches}
+				>
 					Load Repository
 				</button>
 			</div>
-			
-			<div class="custom-select-wrapper">
-				<Select
-					placeholder={loading.branches
-						? $t('application.configuration.loading_branches')
-						: branchSelectOptions.length ===0
-						? 'Please type a repository link first.'
-						: $t('application.configuration.select_a_branch')}
-					isWaiting={loading.branches}
-					showIndicator={!!publicRepositoryLink && !loading.branches}
-					id="branches"
-					on:select={saveRepository}
-					items={branchSelectOptions}
-					isDisabled={loading.branches || !ownerName}
-					isClearable={false}
-				/>
-			</div>
+
+			<select
+				class="select select-bordered w-full"
+				disabled={branchSelectOptions.length === 0}
+				bind:value={branchName}
+				on:change={saveRepository}
+			>
+				{#if branchSelectOptions.length === 0}
+					<option disabled selected>'Please type a repository link first.'</option>
+				{/if}
+
+				{#each branchSelectOptions as branch}
+					<option value={branch.value}>{branch.label}</option>
+				{/each}
+			</select>
 		</div>
 	</form>
 </div>

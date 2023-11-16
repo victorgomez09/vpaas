@@ -230,7 +230,7 @@
 	});
 </script>
 
-<div class="mx-auto max-w-screen-2xl px-6 grid grid-cols-1 lg:grid-cols-2">
+<div class="mx-auto max-w-screen-2xl px-6 lg:px-0 grid grid-cols-1 lg:grid-cols-2">
 	<nav class="header flex flex-row order-2 lg:order-1 px-0 lg:px-4 items-start">
 		<div class="title lg:pb-10">
 			{#if $page.url.pathname === `/applications/${id}/configuration/source`}
@@ -265,9 +265,7 @@
 					<button
 						on:click={() => deleteApplication(application.name, true)}
 						disabled={!$appSession.isAdmin}
-						class:bg-red-600={$appSession.isAdmin}
-						class:hover:bg-red-500={$appSession.isAdmin}
-						class="btn btn-sm btn-error hover:bg-red-700 text-sm w-64"
+						class="btn btn-sm btn-error text-sm w-64"
 					>
 						Force Delete Application
 					</button>
@@ -275,9 +273,7 @@
 					<button
 						on:click={() => deleteApplication(application.name, false)}
 						disabled={!$appSession.isAdmin}
-						class:bg-red-600={$appSession.isAdmin}
-						class:hover:bg-red-500={$appSession.isAdmin}
-						class="btn btn-sm btn-error hover:bg-red-700 text-sm w-64"
+						class="btn btn-sm btn-error text-sm w-64"
 					>
 						Delete Application
 					</button>
@@ -295,7 +291,7 @@
 			>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
-					class="w-6 h-6 text-red-500"
+					class="w-6 h-6 text-error"
 					viewBox="0 0 24 24"
 					stroke-width="1.5"
 					stroke="currentcolor"
@@ -409,7 +405,7 @@
 				on:click={stopApplication}
 				type="submit"
 				disabled={!$isDeploymentEnabled || !$appSession.isAdmin}
-				class="btn btn-sm  gap-2"
+				class="btn btn-sm gap-2"
 			>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
@@ -435,7 +431,7 @@
 				{#if $status.application.overallStatus !== 'degraded'}
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
-						class="w-6 h-6 text-pink-500"
+						class="w-6 h-6 text-secondary"
 						viewBox="0 0 24 24"
 						stroke-width="1.5"
 						stroke="currentColor"
@@ -520,7 +516,7 @@
 	class:lg:grid-cols-4={!$page.url.pathname.startsWith(`/applications/${id}/configuration/`)}
 >
 	{#if !$page.url.pathname.startsWith(`/applications/${id}/configuration/`)}
-		<nav class="header flex flex-col lg:pt-0 ">
+		<nav class="header flex flex-col lg:pt-0">
 			<Menu {application} />
 		</nav>
 	{/if}

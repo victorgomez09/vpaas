@@ -1,1 +1,1 @@
-<span class="badge bg-coollabs-gradient rounded text-white font-normal"> BETA </span>
+<span class="badge bg-primary-content rounded text-base-content font-normal"> BETA </span>

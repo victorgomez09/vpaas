@@ -26,19 +26,19 @@
 
 <div class="w-full">
 	<div class="mx-auto w-full">
-		<div class="flex flex-row border-b border-coolgray-500 mb-6 space-x-2 items-center">
+		<div class="flex flex-row border-b border-base-200 mb-6 space-x-2 items-center">
 			<div class="title font-bold pb-3">Pending Invitations</div>
 		</div>
 	</div>
 </div>
 
-<div class="w-full  grid gap-2">
+<div class="w-full grid gap-2">
 	<div class="flex flex-col pb-2 space-y-4 lg:space-y-2">
 		{#each $appSession.pendingInvitations as invitation}
 			<div class="flex flex-col justify-center items-center">
 				<div class="text-xl pb-4 text-center">
-					Invited to <span class="font-bold text-pink-500">{invitation.teamName}</span> with
-					<span class="font-bold text-red-500">{invitation.permission}</span> permission.
+					Invited to <span class="font-bold text-secondary">{invitation.teamName}</span> with
+					<span class="font-bold text-error">{invitation.permission}</span> permission.
 				</div>
 				<div class=" flex space-x-2">
 					<button

@@ -165,16 +165,16 @@
 
 <div class="w-full">
 	<div class="mx-auto w-full">
-		<div class="flex flex-row border-b border-coolgray-500 mb-6 space-x-2 items-center  pb-3">
+		<div class="flex flex-row border-b border-neutral mb-6 space-x-2 items-center pb-3">
 			<div class="title font-bold">{team.name}</div>
 
-			<button class="btn btn-sm bg-primary" on:click={handleSubmit}>{$t('forms.save')}</button>
+			<button class="btn btn-sm btn-primary" on:click={handleSubmit}>{$t('forms.save')}</button>
 			<button
 				id="delete"
 				on:click={deleteTeam}
 				type="submit"
 				disabled={!$appSession.isAdmin}
-				class="btn btn-sm bg-error">Remove Team</button
+				class="btn btn-sm btn-error">Remove Team</button
 			>
 		</div>
 	</div>
@@ -192,7 +192,13 @@
 					<Explainer explanation={$t('team.root_team_explainer')} />
 				{/if}
 			</div>
-			<input id="name" name="name" placeholder="name" bind:value={team.name} class="input w-full" />
+			<input
+				id="name"
+				name="name"
+				placeholder="name"
+				bind:value={team.name}
+				class="input input-bordered w-full"
+			/>
 		</div>
 	</div>
 
@@ -200,9 +206,9 @@
 		<div class="title">{$t('team.members')}</div>
 	</div>
 	<div class="px-4">
-		<table class="w-full border-separate text-left">
+		<table class="table w-full">
 			<thead>
-				<tr class="h-8 border-b border-coolgray-400">
+				<tr class="h-8">
 					<th scope="col">{$t('forms.email')}</th>
 					<th scope="col">{$t('team.permission')}</th>
 					<th scope="col" class="text-center">{$t('forms.action')}</th>
@@ -250,8 +256,8 @@
 
 			{#each invitations as invitation}
 				<tr class="text-xs">
-					<td class="py-4 font-bold text-yellow-500">{invitation.email} </td>
-					<td class="py-4 font-bold text-yellow-500">{invitation.permission}</td>
+					<td class="py-4 font-bold text-warning">{invitation.email} </td>
+					<td class="py-4 font-bold text-warning">{invitation.permission}</td>
 					{#if isAdmin(team.permissions[0].permission)}
 						<td class="flex-col space-y-2 py-4 text-center">
 							<button class="btn btn-sm btn-error" on:click={() => revokeInvitation(invitation.id)}
@@ -270,7 +276,7 @@
 			<div class="flex space-x-1">
 				<div class="flex space-x-1">
 					<div class="title font-bold">{$t('team.invite_new_member')}</div>
-					<button class="btn btn-sm bg-primary" type="submit">{$t('team.send_invitation')}</button>
+					<button class="btn btn-sm btn-primary" type="submit">{$t('team.send_invitation')}</button>
 				</div>
 			</div>
 			<SimpleExplainer text={$t('team.invite_only_register_explainer')} />
@@ -279,23 +285,23 @@
 					<input
 						bind:value={invitation.email}
 						placeholder={$t('forms.email')}
-						class="input mr-2 w-full"
+						class="input input-bordered mr-2 w-full"
 						required
 					/>
 					<div class="flex-1" />
 					<button
 						on:click={() => (invitation.permission = 'read')}
-						class="px-2 rounded-none rounded-l border border-dashed border-transparent"
+						class="px-2 rounded-none rounded-l border"
 						type="button"
-						class:border-coolgray-300={invitation.permission !== 'read'}
-						class:bg-fuchsia-500={invitation.permission === 'read'}>{$t('team.read')}</button
+						class:border-base-300={invitation.permission !== 'read'}
+						class:bg-accent={invitation.permission === 'read'}>{$t('team.read')}</button
 					>
 					<button
 						on:click={() => (invitation.permission = 'admin')}
-						class="px-2 rounded-none rounded-r border border-dashed border-transparent"
+						class="px-2 rounded-none rounded-r border"
 						type="button"
-						class:border-coolgray-300={invitation.permission !== 'admin'}
-						class:bg-red-500={invitation.permission === 'admin'}>{$t('team.admin')}</button
+						class:border-base-300={invitation.permission !== 'admin'}
+						class:bg-error={invitation.permission === 'admin'}>{$t('team.admin')}</button
 					>
 				</div>
 			</div>

@@ -1,5 +1,5 @@
 <script context="module" lang="ts">
-	import { del, get } from '$lib/api';
+	import { get } from '$lib/api';
 	import type { Load } from '@sveltejs/kit';
 	export const load: Load = async ({ params, url }) => {
 		try {

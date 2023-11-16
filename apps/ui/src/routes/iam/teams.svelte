@@ -52,7 +52,7 @@
 
 <div class="w-full">
 	<div class="mx-auto w-full">
-		<div class="flex flex-row border-b border-coolgray-500 mb-6 space-x-2 items-center  pb-3">
+		<div class="flex flex-row border-b border-base-200 mb-6 space-x-2 items-center pb-3">
 			<div class="title font-bold">Teams</div>
 			<button on:click={newTeam} class="btn btn-sm btn-primary"> Add New Team </button>
 		</div>
@@ -60,16 +60,15 @@
 </div>
 <div class="grid grid-col gap-4 auto-cols-max grid-cols-1 md:grid-cols-2 lg:grid-cols-2 px-6">
 	{#each ownTeams as team}
-		<a href="/iam/teams/{team.id}" class="p-2 no-underline">
+		<a href="/iam/teams/{team.id}" class="text-base-content p-2 no-underline">
 			<div
-				class="flex flex-col w-full rounded p-5 bg-coolgray-200 hover:bg-coolgray-300 indicator duration-150 h-36"
+				class="flex flex-col w-full rounded p-5 bg-base-200 hover:bg-base-300 indicator duration-150 h-36"
 			>
 				<div>
 					<div class="truncate text-center text-xl font-bold">
 						{team.name}
 						{#if $appSession.teamId === team.id}
-							<button class="badge bg-applications text-white font-bold rounded">Active Team</button
-							>
+							<button class="badge bg-success font-bold rounded">Active Team</button>
 						{/if}
 					</div>
 					<div class="mt-1 text-center text-xs">
@@ -92,9 +91,9 @@
 <div class="grid grid-col gap-4 auto-cols-max grid-cols-1 md:grid-cols-2 lg:grid-cols-3 px-6">
 	{#if $appSession.teamId === '0' && allTeams.length > 0}
 		{#each allTeams as team}
-			<a href="/iam/teams/{team.id}" class="p-2 no-underline">
+			<a href="/iam/teams/{team.id}" class="text-base-content p-2 no-underline">
 				<div
-					class="flex flex-col w-full rounded p-5 bg-coolgray-200 hover:bg-coolgray-300 indicator duration-150 relative"
+					class="flex flex-col w-full rounded p-5 bg-base-200 hover:bg-base-300 indicator duration-150 relative"
 				>
 					<div class="truncate text-center text-xl font-bold">
 						{team.name}

@@ -38,7 +38,10 @@
 
 	<ul id="new" tabindex="0" class="dropdown-content menu p-2 shadow bg-base-200 rounded w-64">
 		<li>
-			<button on:click={newApplication} class="no-underline hover:bg-applications tracking-wide font-bold">
+			<button
+				on:click={newApplication}
+				class="no-underline hover:bg-base-300 hover:text-success tracking-wide font-bold"
+			>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					class="h-6 w-6"
@@ -59,7 +62,10 @@
 			>
 		</li>
 		<li>
-			<button on:click={newService} class="no-underline hover:bg-services tracking-wide font-bold">
+			<button
+				on:click={newService}
+				class="no-underline hover:bg-base-300 hover:text-error tracking-wide font-bold"
+			>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					class="h-6 w-6"
@@ -76,7 +82,10 @@
 			>
 		</li>
 		<li>
-			<button on:click={newDatabase} class="no-underline hover:bg-databases  tracking-wide font-bold">
+			<button
+				on:click={newDatabase}
+				class="no-underline hover:bg-base-300 hover:text-accent tracking-wide font-bold"
+			>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					class="h-6 w-6"
@@ -95,7 +104,10 @@
 			>
 		</li>
 		<li>
-			<a href="/sources/new" class="no-underline hover:bg-sources tracking-wide font-bold">
+			<a
+				href="/sources/new"
+				class="no-underline hover:bg-base-300 hover:text-warning tracking-wide font-bold"
+			>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					class="h-6 w-6"
@@ -117,7 +129,10 @@
 			>
 		</li>
 		<li>
-			<a href="/destinations/new" class="no-underline hover:bg-destinations tracking-wide font-bold">
+			<a
+				href="/destinations/new"
+				class="no-underline hover:bg-base-300 hover:text-info tracking-wide font-bold"
+			>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					class="h-6 w-6"

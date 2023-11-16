@@ -1,4 +1,3 @@
-//@ts-nocheck
 export { default as Rust } from './Rust.svelte';
 export { default as Nodejs } from './Nodejs.svelte';
 export { default as React } from './React.svelte';

@@ -266,7 +266,12 @@
 		<form class="flex flex-col" on:submit|preventDefault={handleDockerImage}>
 			<div class="flex flex-col space-y-2 w-full">
 				<div class="flex flex-row space-x-2">
-					<textarea required class="w-full" rows="10" bind:value={simpleDockerfile} />
+					<textarea
+						required
+						class="w-full textarea textarea-bordered"
+						rows="10"
+						bind:value={simpleDockerfile}
+					/>
 					<button class="btn btn-primary" type="submit">Deploy Dockerfile</button>
 				</div>
 			</div>

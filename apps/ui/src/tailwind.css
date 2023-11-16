@@ -27,53 +27,45 @@ body {
 	@apply min-h-screen text-sm text-base-content;
 }
 
-/* input, .input {
-	@apply h-12 w-96 rounded border border-transparent p-2 text-xs tracking-tight outline-none transition duration-150 disabled:border disabled:border-dashed disabled:bg-transparent md:text-sm;
-} */
-textarea {
-	@apply min-w-[14rem] rounded border border-transparent p-2 text-xs tracking-tight outline-none transition duration-150 disabled:border disabled:border-dashed disabled:bg-transparent md:text-sm;
-}
-
 #svelte .custom-select-wrapper .selectContainer.disabled input {
-	@apply placeholder:text-stone-600;
+	@apply placeholder:text-base-content;
 }
 
 #svelte .custom-select-wrapper .selectContainer input {
-	@apply text-white;
+	@apply text-base-content bg-base-200 ;
 }
 
 #svelte .custom-select-wrapper .selectContainer {
 	@apply h-12 rounded p-2 px-0 text-xs tracking-tight outline-none transition duration-150 md:text-sm ;
 }
 
-/* #svelte .listContainer {
-	@apply bg-coolgray-400 text-white;
-} */
 #svelte .selectedItem {
 	@apply pl-2;
 }
 
-/* #svelte .item.hover {
-	@apply bg-coollabs text-white !important;
+#svelte .custom-select-wrapper .listContainer {
+	@apply bg-base-200;
 }
-#svelte .item.active {
-	@apply bg-coolgray-100 text-white;
-} */
 
-select {
-	@apply h-12 w-96 rounded p-2 text-xs font-bold tracking-tight outline-none transition duration-150 md:text-sm;
+#svelte .custom-select-wrapper .item.hover {
+	@apply bg-base-300 text-secondary cursor-pointer;
 }
-.custom-select-wrapper{
-	--background: rgb(32 32 32);
-	--inputColor: white;
+
+#svelte .custom-select-wrapper .item.selected {
+	@apply bg-base-300 text-secondary cursor-pointer;
+}
+
+.custom-select-wrapper {
+	--background: @extends bg-base-300;
+	--inputColor: bg-base-300;
 	--multiItemPadding: 0;
 	--multiSelectPadding: 0 0.5rem 0 0.5rem;
 	--border: none;
 	--placeholderColor: rgb(87 83 78);
-	--listBackground: rgb(32 32 32);
-	--itemColor: white;
-	--itemHoverBG: rgb(107 22 237);
-	--multiItemBG: rgb(32 32 32);
+	/* --listBackground: @extends bg-base-300; */
+	--itemColor: @apply text-secondary;
+	/* --itemHoverBG: @apply bg-base-300; */
+	--multiItemBG: bg-base-200;
 	--multiClearHoverBG: transparent;
 	--multiClearHoverFill: rgb(239 68 68);
 	--multiItemActiveBG: transparent;
@@ -91,9 +83,9 @@ label {
 	@apply text-base min-w-fit no-animation;
 }
 
-a {
+/* a {
 	@apply underline hover:text-white;
-}
+} */
 
 .content {
 	@apply p-2 px-4;
@@ -225,19 +217,15 @@ a {
 	@apply  ;
 } */
 
-.table tbody td,
+/* .table tbody td,
 .table tbody th,
 .table thead th{
   background-color: transparent;
 }
 .table *{
   border: none;
-}
+} */
 
-
-.header {
-	@apply flex flex-row  z-10 w-full py-5 px-5;
-}
 .burger {
 	@apply block m-[2px] h-[3px] w-5 rounded
 }

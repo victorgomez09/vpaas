@@ -17,7 +17,7 @@
 	{id}
 	href={url}
 	target="_blank noreferrer"
-	class="flex no-underline inline-block cursor-pointer"
+	class="no-underline inline-block cursor-pointer"
 	class:icons={!text}
 >
 	<svg

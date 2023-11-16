@@ -49,7 +49,7 @@
 {#if $appSession.userId === '0' && $appSession.teamId === '0'}
 	<div class="w-full grid gap-2">
 		<input
-			class="input w-full mb-4"
+			class="input input-bordered w-full mb-4"
 			bind:value={search}
 			on:input={searchAccount}
 			placeholder="Search for account..."

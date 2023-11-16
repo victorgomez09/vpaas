@@ -2,7 +2,7 @@
 	export let type: string;
 	export let isAbsolute = false;
 	let githubRawIconUrl =
-		'https://raw.githubusercontent.com/coollabsio/coolify-community-templates/main/services/icons';
+		'https://raw.githubusercontent.com/victorgomez09/coolify-community-templates/main/services/icons';
 
 	let fallback = '/icons/default.png';
 
@@ -19,7 +19,7 @@
 			.toLowerCase();
 
 	function generateClass() {
-		return isAbsolute ? 'w-10 h-10 absolute -m-4 -mt-9 left-0' : 'w-10 h-10';
+		return isAbsolute ? 'w-10 h-10 absolute -m-4 -mt-40 left-0' : 'w-10 h-10';
 	}
 </script>
 

@@ -32,7 +32,9 @@
 			if (!dockerComposeConfiguration && dockerComposeFile && buildPack.name === 'compose') {
 				const parsed = JSON.parse(dockerComposeFile);
 				if (!parsed?.services) {
-					throw new Error('No services found in docker-compose file. <br>Choose a different buildpack.');
+					throw new Error(
+						'No services found in docker-compose file. <br>Choose a different buildpack.'
+					);
 				}
 				for (const [name, _] of Object.entries(parsed.services)) {
 					composeConfiguration[name] = {};
@@ -56,7 +58,7 @@
 <form on:submit|preventDefault={() => handleSubmit(buildPack.name)}>
 	<button
 		type="submit"
-		class="box-selection relative flex flex-col items-center text-xl font-bold {buildPack.hoverColor} {foundConfig?.name ===
+		class="bg-base-100 text-base-content shadow border border-1 border-base-200 box-selection relative flex flex-col items-center text-xl font-bold hover:bg-base-300 hover:shadow hover:scale-105 {foundConfig?.name ===
 			buildPack.name && buildPack.color}"
 	>
 		<div>{buildPack.fancyName}</div>
