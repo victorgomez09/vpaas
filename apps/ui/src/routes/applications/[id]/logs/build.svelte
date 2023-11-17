@@ -23,14 +23,14 @@
 	export let application: any;
 	export let buildCount: any;
 	import { page } from '$app/stores';
-	import { addToast, selectedBuildId } from '$lib/store';
-	import BuildLog from './_BuildLog.svelte';
 	import { get, post } from '$lib/api';
-	import { t } from '$lib/translations';
-	import { changeQueryParams, dateOptions, errorNotification, asyncSleep } from '$lib/common';
+	import { asyncSleep, changeQueryParams, dateOptions, errorNotification } from '$lib/common';
 	import Tooltip from '$lib/components/Tooltip.svelte';
 	import { day } from '$lib/dayjs';
+	import { addToast, selectedBuildId } from '$lib/store';
+	import { t } from '$lib/translations';
 	import { onDestroy, onMount } from 'svelte';
+	import BuildLog from './_BuildLog.svelte';
 	const { id } = $page.params;
 	let debug = application.settings.debug;
 	let loadBuildLogsInterval: any = null;
@@ -128,16 +128,16 @@
 	}
 </script>
 
-<div class="mx-auto w-full lg:px-0 px-1">
-	<div class="flex lg:flex-row flex-col border-b border-coolgray-500 mb-6 space-x-2">
+<div class="flex flex-1 flex-col m-2">
+	<div class="flex lg:flex-row flex-col border-b border-base-content mb-6 space-x-2">
 		<div class="flex flex-row">
 			<div class="title font-bold pb-3 pr-3">Build Logs</div>
-			<button class="btn btn-sm bg-error" on:click={resetQueue}>Reset Build Queue</button>
+			<button class="btn btn-sm text-warning" on:click={resetQueue}>Reset Build Queue</button>
 		</div>
 		<div class=" flex-1" />
 		<div class="form-control">
 			<label class="label cursor-pointer">
-				<span class="label-text text-white pr-4 font-bold">Enable Debug Logs</span>
+				<span class="label-text text-base-content pr-4 font-bold">Enable Debug Logs</span>
 				<input
 					type="checkbox"
 					checked={debug}
@@ -160,7 +160,7 @@
 			Select a build to see the logs.
 		{/if}
 	</div>
-	<div class="mb-4 min-w-[16rem] space-y-2 md:mb-0 ">
+	<div class="mb-4 min-w-[16rem] space-y-2 md:mb-0">
 		<div class="top-4 md:sticky">
 			<div class="flex space-x-2 pb-2">
 				<button
@@ -177,8 +177,8 @@
 					on:click={() => loadBuild(build.id)}
 					class:rounded-tr={index === 0}
 					class:rounded-br={index === builds.length - 1}
-					class="flex cursor-pointer items-center justify-center py-4 no-underline transition-all duration-150 hover:bg-coolgray-300 hover:shadow-xl"
-					class:bg-coolgray-200={$selectedBuildId === build.id}
+					class="flex cursor-pointer items-center justify-center py-4 no-underline transition-all duration-150 hover:bg-base-300 hover:shadow-xl"
+					class:bg-base-200={$selectedBuildId === build.id}
 				>
 					<div class="flex-col px-2 text-center">
 						<div class="text-sm font-bold truncate">

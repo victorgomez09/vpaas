@@ -12,9 +12,9 @@ export function getAPIUrl() {
 	// 	return `https://${CODESANDBOX_HOST.replace(/\$PORT/, '3001')}`;
 	// }
 	return dev
-		// ? `http://${window.location.hostname}:3001`
-		? `https://ideal-zebra-54pwg47qjj6h44w7-3001.app.github.dev`
-		: 'http://localhost:3000';
+		? `http://${window.location.hostname}:3001`
+		: // ? `https://ideal-zebra-54pwg47qjj6h44w7-3001.app.github.dev`
+		  'http://localhost:3000';
 }
 export function getWebhookUrl(type: string) {
 	if (GITPOD_WORKSPACE_URL) {
@@ -106,9 +106,9 @@ async function send({
 			responseData = await response.text();
 		} else if (contentType?.indexOf('application/octet-stream') !== -1) {
 			responseData = await response.blob();
-			const fileName = dashify(data.id + '-' + data.name)
+			const fileName = dashify(data.id + '-' + data.name);
 			const fileLink = document.createElement('a');
-			fileLink.href = URL.createObjectURL(new Blob([responseData]))
+			fileLink.href = URL.createObjectURL(new Blob([responseData]));
 			fileLink.download = fileName + '.gz';
 			fileLink.click();
 			fileLink.remove();

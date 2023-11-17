@@ -4,7 +4,7 @@
 	import { page } from '$app/stores';
 </script>
 
-<ul class="menu border bg-coolgray-100 border-coolgray-200 rounded p-2 space-y-2 sticky top-4">
+<ul class="menu bg-base-200 rounded shadow p-2 space-y-2 sticky top-4 m-2">
 	<li class="menu-title">
 		<span>General</span>
 	</li>
@@ -58,7 +58,7 @@
 					viewBox="0 0 24 24"
 					stroke-width="3"
 					stroke="currentColor"
-					class="w-3 h-3  text-white"
+					class="w-3 h-3 text-white"
 				>
 					<path
 						stroke-linecap="round"
@@ -70,9 +70,13 @@
 		</li>
 	{/if}
 
-	<li class="rounded" class:bg-coollabs={$page.url.pathname === `/applications/${$page.params.id}`}>
-		<a href={`/applications/${$page.params.id}`} class="no-underline w-full"
-			><svg
+	<li class="rounded">
+		<a
+			href={`/applications/${$page.params.id}`}
+			class="no-underline w-full"
+			class:active={$page.url.pathname === `/applications/${$page.params.id}`}
+		>
+			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				class="w-6 h-6"
 				viewBox="0 0 24 24"
@@ -89,12 +93,13 @@
 			</svg>Configuration</a
 		>
 	</li>
-	<li
-		class="rounded"
-		class:bg-coollabs={$page.url.pathname === `/applications/${$page.params.id}/secrets`}
-	>
-		<a href={`/applications/${$page.params.id}/secrets`} class="no-underline w-full"
-			><svg
+	<li class="rounded">
+		<a
+			href={`/applications/${$page.params.id}/secrets`}
+			class="no-underline w-full"
+			class:active={$page.url.pathname === `/applications/${$page.params.id}/secrets`}
+		>
+			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				class="w-6 h-6"
 				viewBox="0 0 24 24"
@@ -113,12 +118,13 @@
 			</svg>Secrets</a
 		>
 	</li>
-	<li
-		class="rounded"
-		class:bg-coollabs={$page.url.pathname === `/applications/${$page.params.id}/storages`}
-	>
-		<a href={`/applications/${$page.params.id}/storages`} class="no-underline w-full"
-			><svg
+	<li class="rounded">
+		<a
+			href={`/applications/${$page.params.id}/storages`}
+			class="no-underline w-full"
+			class:active={$page.url.pathname === `/applications/${$page.params.id}/storages`}
+		>
+			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				class="w-6 h-6"
 				viewBox="0 0 24 24"
@@ -136,12 +142,13 @@
 		>
 	</li>
 	{#if !application.simpleDockerfile}
-		<li
-			class="rounded"
-			class:bg-coollabs={$page.url.pathname === `/applications/${$page.params.id}/features`}
-		>
-			<a href={`/applications/${$page.params.id}/features`} class="no-underline w-full"
-				><svg
+		<li class="rounded">
+			<a
+				href={`/applications/${$page.params.id}/features`}
+				class="no-underline w-full"
+				class:active={$page.url.pathname === `/applications/${$page.params.id}/features`}
+			>
+				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					class="w-6 h-6"
 					viewBox="0 0 24 24"
@@ -161,17 +168,15 @@
 	<li class="menu-title">
 		<span>Logs</span>
 	</li>
-	<li
-		class:text-stone-600={$status.application.overallStatus === 'stopped'}
-		class="rounded"
-		class:bg-coollabs={$page.url.pathname === `/applications/${$page.params.id}/logs`}
-	>
+	<li class:text-stone-600={$status.application.overallStatus === 'stopped'} class="rounded">
 		<a
 			href={$status.application.overallStatus !== 'stopped'
 				? `/applications/${$page.params.id}/logs`
 				: ''}
 			class="no-underline w-full"
-			><svg
+			class:active={$page.url.pathname === `/applications/${$page.params.id}/logs`}
+		>
+			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				class="h-6 w-6"
 				viewBox="0 0 24 24"
@@ -190,12 +195,13 @@
 			</svg>Application</a
 		>
 	</li>
-	<li
-		class="rounded"
-		class:bg-coollabs={$page.url.pathname === `/applications/${$page.params.id}/logs/build`}
-	>
-		<a href={`/applications/${$page.params.id}/logs/build`} class="no-underline w-full"
-			><svg
+	<li class="rounded">
+		<a
+			href={`/applications/${$page.params.id}/logs/build`}
+			class="no-underline w-full"
+			class:active={$page.url.pathname === `/applications/${$page.params.id}/logs/build`}
+		>
+			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				class="h-6 w-6"
 				viewBox="0 0 24 24"
@@ -221,11 +227,12 @@
 		<span>Advanced</span>
 	</li>
 	{#if application.gitSourceId && $appSession.isAdmin}
-		<li
-			class="rounded"
-			class:bg-coollabs={$page.url.pathname === `/applications/${$page.params.id}/revert`}
-		>
-			<a href={`/applications/${$page.params.id}/revert`} class="no-underline w-full">
+		<li class="rounded">
+			<a
+				href={`/applications/${$page.params.id}/revert`}
+				class="no-underline w-full"
+				class:active={$page.url.pathname === `/applications/${$page.params.id}/revert`}
+			>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					class="w-6 h-6"
@@ -244,17 +251,15 @@
 			>
 		</li>
 	{/if}
-	<li
-		class="rounded"
-		class:text-stone-600={$status.application.overallStatus !== 'healthy'}
-		class:bg-coollabs={$page.url.pathname === `/applications/${$page.params.id}/usage`}
-	>
+	<li class="rounded" class:text-stone-600={$status.application.overallStatus !== 'healthy'}>
 		<a
 			href={$status.application.overallStatus === 'healthy'
 				? `/applications/${$page.params.id}/usage`
 				: ''}
 			class="no-underline w-full"
-			><svg
+			class:active={$page.url.pathname === `/applications/${$page.params.id}/usage`}
+		>
+			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				class="w-6 h-6"
 				viewBox="0 0 24 24"
@@ -270,12 +275,13 @@
 		>
 	</li>
 	{#if !application.settings.isBot && application.gitSourceId}
-		<li
-			class="rounded"
-			class:bg-coollabs={$page.url.pathname === `/applications/${$page.params.id}/previews`}
-		>
-			<a href={`/applications/${$page.params.id}/previews`} class="no-underline w-full"
-				><svg
+		<li class="rounded">
+			<a
+				href={`/applications/${$page.params.id}/previews`}
+				class="no-underline w-full"
+				class:active={$page.url.pathname === `/applications/${$page.params.id}/previews`}
+			>
+				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					class="w-6 h-6"
 					viewBox="0 0 24 24"
@@ -296,28 +302,29 @@
 		</li>
 	{/if}
 	{#if $appSession.isAdmin}
-	<li
-		class="rounded"
-		class:bg-coollabs={$page.url.pathname === `/applications/${$page.params.id}/danger`}
-	>
-		<a href={`/applications/${$page.params.id}/danger`} class="no-underline w-full"
-			><svg
-				xmlns="http://www.w3.org/2000/svg"
-				class="w-6 h-6"
-				viewBox="0 0 24 24"
-				stroke-width="1.5"
-				stroke="currentColor"
-				fill="none"
-				stroke-linecap="round"
-				stroke-linejoin="round"
+		<li class="rounded">
+			<a
+				href={`/applications/${$page.params.id}/danger`}
+				class="no-underline w-full"
+				class:active={$page.url.pathname === `/applications/${$page.params.id}/danger`}
 			>
-				<path stroke="none" d="M0 0h24v24H0z" fill="none" />
-				<path d="M12 9v2m0 4v.01" />
-				<path
-					d="M5 19h14a2 2 0 0 0 1.84 -2.75l-7.1 -12.25a2 2 0 0 0 -3.5 0l-7.1 12.25a2 2 0 0 0 1.75 2.75"
-				/>
-			</svg>Danger Zone</a
-		>
-	</li>
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					class="w-6 h-6"
+					viewBox="0 0 24 24"
+					stroke-width="1.5"
+					stroke="currentColor"
+					fill="none"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+				>
+					<path stroke="none" d="M0 0h24v24H0z" fill="none" />
+					<path d="M12 9v2m0 4v.01" />
+					<path
+						d="M5 19h14a2 2 0 0 0 1.84 -2.75l-7.1 -12.25a2 2 0 0 0 -3.5 0l-7.1 12.25a2 2 0 0 0 1.75 2.75"
+					/>
+				</svg>Danger Zone</a
+			>
+		</li>
 	{/if}
 </ul>

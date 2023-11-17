@@ -1,13 +1,13 @@
 <script lang="ts">
-	import { onDestroy, onMount } from 'svelte';
+	import { dev } from '$app/env';
 	import { page } from '$app/stores';
 	import { get, post } from '$lib/api';
-	import { t } from '$lib/translations';
 	import { errorNotification } from '$lib/common';
 	import Tooltip from '$lib/components/Tooltip.svelte';
 	import { day } from '$lib/dayjs';
 	import { selectedBuildId } from '$lib/store';
-	import { dev } from '$app/env';
+	import { t } from '$lib/translations';
+	import { onDestroy, onMount } from 'svelte';
 
 	let logs: any = [];
 	let currentStatus: any;
@@ -127,9 +127,9 @@
 <div class="flex justify-start top-0 pb-2 space-x-2">
 	<button
 		on:click={followBuild}
-		class="btn btn-sm bg-coollabs"
+		class="btn btn-sm btn-primary"
 		disabled={currentStatus !== 'running'}
-		class:bg-coolgray-300={followingLogs || currentStatus !== 'running'}
+		class:bg-base-300={followingLogs || currentStatus !== 'running'}
 		class:text-applications={followingLogs}
 	>
 		<svg
@@ -157,7 +157,7 @@
 		class:animation-spin={cancelInprogress}
 		class="btn btn-sm"
 		disabled={currentStatus !== 'running'}
-		class:bg-coolgray-300={cancelInprogress || currentStatus !== 'running'}
+		class:bg-base-300={cancelInprogress || currentStatus !== 'running'}
 	>
 		<svg
 			xmlns="http://www.w3.org/2000/svg"
@@ -182,7 +182,7 @@
 </div>
 {#if currentStatus === 'queued'}
 	<div
-		class="font-mono w-full bg-coolgray-200 p-5 overflow-x-auto overflox-y-auto max-h-[80vh] rounded mb-20 flex flex-col whitespace-nowrap scrollbar-thumb-coollabs scrollbar-track-coolgray-200 scrollbar-w-1"
+		class="font-mono w-full bg-base-200 p-5 overflow-x-auto overflox-y-auto max-h-[80vh] rounded mb-20 flex flex-col whitespace-nowrap scrollbar-thumb-coollabs scrollbar-track-coolgray-200 scrollbar-w-1"
 	>
 		{$t('application.build.queued_waiting_exec')}
 	</div>

@@ -91,11 +91,8 @@
 			required
 			placeholder="EXAMPLE_VARIABLE"
 			readonly={!isNewSecret}
-			class="w-full"
-			class:bg-coolblack={!isNewSecret}
-			class:border={!isNewSecret}
-			class:border-dashed={!isNewSecret}
-			class:border-coolgray-300={!isNewSecret}
+			disabled={!isNewSecret}
+			class="input input-bordered w-full"
 			class:cursor-not-allowed={!isNewSecret}
 		/>
 	</div>
@@ -127,8 +124,8 @@
 				disabled={!$appSession.isAdmin}
 				aria-pressed="false"
 				class="relative inline-flex h-6 w-11 flex-shrink-0 rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out"
-				class:bg-green-600={isBuildSecret}
-				class:bg-stone-700={!isBuildSecret}
+				class:bg-success={isBuildSecret}
+				class:bg-neutral={!isBuildSecret}
 			>
 				<span class="sr-only">{$t('application.secrets.use_isbuildsecret')}</span>
 				<span

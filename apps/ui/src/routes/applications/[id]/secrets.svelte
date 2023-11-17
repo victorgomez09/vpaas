@@ -90,8 +90,8 @@
 	}
 </script>
 
-<div class="mx-auto w-full">
-	<div class="flex flex-row border-b border-coolgray-500 mb-6 space-x-2">
+<div class="flex flex-1 flex-col m-2">
+	<div class="flex flex-row border-b border-base-content mb-6 space-x-2">
 		<div class="title font-bold pb-3">Secrets</div>
 	</div>
 	{#each secrets as secret, index}
@@ -112,7 +112,7 @@
 		</div>
 	{/if}
 	{#if !application.settings.isBot && !application.simpleDockerfile}
-		<div class="flex flex-row border-b border-coolgray-500 mb-6 space-x-2">
+		<div class="flex flex-row border-b border-base-content mb-6 space-x-2">
 			<div class="title font-bold pb-3 pt-8">
 				Preview Secrets <Explainer
 					explanation="These values overwrite application secrets in PR/MR deployments. <br>Useful for creating <span class='text-green-500 font-bold'>staging</span> environments."
@@ -139,17 +139,17 @@
 </div>
 {#if $appSession.isAdmin}
 	<form on:submit|preventDefault={getValues} class="mb-12 w-full">
-		<div class="flex flex-row border-b border-coolgray-500 mb-6 space-x-2 pt-10">
+		<div class="flex flex-row border-b border-base-content mb-6 space-x-2 pt-10">
 			<div class="flex flex-row space-x-2">
-				<div class="title font-bold pb-3 ">Paste <code>.env</code> file</div>
-				<button type="submit" class="btn btn-sm bg-primary">Add Secrets in Batch</button>
+				<div class="title font-bold pb-3">Paste <code>.env</code> file</div>
+				<button type="submit" class="btn btn-sm btn-primary">Add Secrets in Batch</button>
 			</div>
 		</div>
 
 		<textarea
 			placeholder={`PORT=1337\nPASSWORD=supersecret`}
 			bind:value={batchSecrets}
-			class="mb-2 min-h-[200px] w-full"
+			class="textarea textarea-bordered mb-2 min-h-[200px] w-full"
 		/>
 	</form>
 {/if}

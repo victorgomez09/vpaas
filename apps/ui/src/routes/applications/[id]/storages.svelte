@@ -32,7 +32,7 @@
 	let composeJson = JSON.parse(application?.dockerComposeFile || '{}');
 	let predefinedVolumes: any[] = [];
 	if (composeJson?.services) {
-		for (const [_, service] of Object.entries(composeJson.services)) {
+		for (const [_, service] of Object.entries<any>(composeJson.services)) {
 			if (service?.volumes) {
 				for (const [_, volumeName] of Object.entries(service.volumes)) {
 					if (typeof volumeName === 'string') {
@@ -44,7 +44,10 @@
 							volume.startsWith('~') ||
 							volume.startsWith('$PWD')
 						) {
-							volume = volume.replace(/^\./, `~`).replace(/^\.\./, '~').replace(/^\$PWD/, '~');
+							volume = volume
+								.replace(/^\./, `~`)
+								.replace(/^\.\./, '~')
+								.replace(/^\$PWD/, '~');
 						} else {
 							if (!target) {
 								target = volume;
@@ -56,7 +59,7 @@
 						predefinedVolumes.push({ id: volume, path: target, predefined: true });
 					}
 					if (typeof volumeName === 'object') {
-						let { source, target } = volumeName;
+						let { source, target } = volumeName as any;
 						if (
 							source.startsWith('.') ||
 							source.startsWith('..') ||
@@ -64,7 +67,10 @@
 							source.startsWith('~') ||
 							source.startsWith('$PWD')
 						) {
-							source = source.replace(/^\./, `~`).replace(/^\.\./, '~').replace(/^\$PWD/, '~');
+							source = source
+								.replace(/^\./, `~`)
+								.replace(/^\.\./, '~')
+								.replace(/^\$PWD/, '~');
 						} else {
 							if (!target) {
 								target = source;
@@ -86,9 +92,9 @@
 	}
 </script>
 
-<div class="w-full">
+<div class="flex flex-1 flex-col m-2">
 	<div class="mx-auto w-full">
-		<div class="flex flex-row border-b border-coolgray-500 mb-6 space-x-2">
+		<div class="flex flex-row border-b border-base-content mb-6 space-x-2">
 			<div class="title font-bold pb-3">Persistent Volumes</div>
 		</div>
 		{#if predefinedVolumes.length > 0}

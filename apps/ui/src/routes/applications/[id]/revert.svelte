@@ -24,9 +24,9 @@
 	export let runningImage: any;
 	import { page } from '$app/stores';
 	import { get, post } from '$lib/api';
-	import { status, addToast } from '$lib/store';
 	import { errorNotification } from '$lib/common';
 	import Explainer from '$lib/components/Explainer.svelte';
+	import { addToast, status } from '$lib/store';
 
 	const { id } = $page.params;
 	let remoteImage: any = null;
@@ -74,9 +74,9 @@
 	}
 </script>
 
-<div class="w-full">
+<div class="flex flex-1 flex-col m-2">
 	<div class="mx-auto w-full">
-		<div class="flex flex-row border-b border-coolgray-500 mb-6  space-x-2">
+		<div class="flex flex-row border-b border-base-content mb-6 space-x-2">
 			<div class="title font-bold pb-3">
 				Revert <Explainer
 					position="dropdown-bottom"
@@ -87,7 +87,7 @@
 		</div>
 		<div class="pb-4 text-xs">
 			If you do not want the next commit to overwrite the reverted application, temporary disable <span
-				class="text-yellow-400 font-bold">Automatic Deployment</span
+				class="text-warning font-bold">Automatic Deployment</span
 			>
 			feature <a href={`/applications/${id}/features`}>here</a>.
 		</div>
@@ -116,7 +116,7 @@
 											viewBox="0 0 24 24"
 											stroke-width="3"
 											stroke="currentColor"
-											class="w-3 h-3 text-white ml-2"
+											class="w-3 h-3 text-base-content ml-2"
 										>
 											<path
 												stroke-linecap="round"
@@ -155,6 +155,7 @@
 		</div>
 		<form on:submit|preventDefault={revertToRemote}>
 			<input
+				class="input input-bordered"
 				id="dockerImage"
 				name="dockerImage"
 				required

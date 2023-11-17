@@ -165,12 +165,12 @@
 	});
 </script>
 
-<div class="w-full">
+<div class="flex flex-1 flex-col m-2">
 	<div class="mx-auto w-full">
-		<div class="flex flex-row border-b border-coolgray-500 mb-6  space-x-2">
+		<div class="flex flex-row border-b border-base-content mb-6 space-x-2">
 			<div class="title font-bold pb-3">Preview Deployments</div>
 			<div class="text-center">
-				<button class="btn btn-sm bg-coollabs" on:click={loadPreviewsFromDocker}
+				<button class="btn btn-sm btn-primary" on:click={loadPreviewsFromDocker}
 					>Load Previews</button
 				>
 			</div>
@@ -186,9 +186,9 @@
 	<div class="grid grid-col gap-4 auto-cols-max grid-cols-1 md:grid-cols-2 lg:grid-cols-2 px-6">
 		{#each application.previewApplication as preview}
 			<div class="no-underline mb-5 w-full">
-				<div class="w-full rounded p-5 bg-coolgray-200 indicator">
+				<div class="w-full rounded p-5 bg-base-200 indicator">
 					{#await getStatus(preview)}
-						<span class="indicator-item badge bg-yellow-500 badge-sm" />
+						<span class="indicator-item badge bg-warning badge-sm" />
 					{:then}
 						{#if status[preview.id] === 'running'}
 							<span class="indicator-item badge bg-success badge-sm" />
@@ -202,7 +202,7 @@
 								PR #{preview.pullmergeRequestId}
 								{#if status[preview.id] === 'building'}
 									<span
-										class="badge badge-sm text-xs uppercase rounded bg-coolgray-300 text-green-500 border-none font-bold"
+										class="badge badge-sm text-xs uppercase rounded bg-base-300 text-success border-none font-bold"
 									>
 										BUILDING
 									</span>
@@ -329,5 +329,5 @@
 		{/each}
 	</div>
 {:else}
-	No previews found.
+	<div class="m-2">No previews found.</div>
 {/if}

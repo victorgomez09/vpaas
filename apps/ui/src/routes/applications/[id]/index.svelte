@@ -50,7 +50,6 @@
 	import cuid from 'cuid';
 	import yaml from 'js-yaml';
 	import { onMount } from 'svelte';
-	import Select from 'svelte-select';
 	import { saveForm } from './utils';
 
 	const { id } = $page.params;
@@ -320,19 +319,19 @@
 			loading.save = false;
 		}
 	}
-	async function selectWSGI(event: any) {
-		application.pythonWSGI = event.detail.value;
+	async function selectWSGI(wsgi: any) {
+		application.pythonWSGI = wsgi;
 	}
-	async function selectBaseImage(event: any) {
-		application.baseImage = event.detail.value;
+	async function selectBaseImage(base: any) {
+		application.baseImage = base;
 		await handleSubmit();
 	}
-	async function selectBaseBuildImage(event: any) {
-		application.baseBuildImage = event.detail.value;
+	async function selectBaseBuildImage(base: any) {
+		application.baseBuildImage = base;
 		await handleSubmit();
 	}
-	async function selectDeploymentType(event: any) {
-		application.deploymentType = event.detail.value;
+	async function selectDeploymentType(deployment: any) {
+		application.deploymentType = deployment;
 		await getBaseBuildImages();
 		await handleSubmit();
 	}
@@ -501,18 +500,19 @@
 	}
 </script>
 
-<div class="w-full">
-	<form id="saveForm" on:submit|preventDefault={() => handleSubmit()}>
+<div class="flex flex-1 m-2">
+	<form id="saveForm" class="w-full" on:submit|preventDefault={() => handleSubmit()}>
 		<div class="mx-auto w-full">
-			<div class="flex flex-row border-b border-coolgray-500 mb-6 space-x-2">
+			<div
+				class="flex flex-1 items-center justify-between border-b border-base-content mb-6 space-x-2"
+			>
 				<div class="title font-bold pb-3">General</div>
 				{#if $appSession.isAdmin}
 					<button
 						class="btn btn-sm btn-primary"
 						type="submit"
 						class:loading={loading.save}
-						class:bg-orange-600={forceSave}
-						class:hover:bg-orange-400={forceSave}
+						class:bg-warning={forceSave}
 						disabled={loading.save}>{$t('forms.save')}</button
 					>
 				{/if}
@@ -523,7 +523,7 @@
 					<input
 						name="name"
 						id="name"
-						class="w-full"
+						class="input input-bordered w-full"
 						bind:value={application.name}
 						disabled={!$appSession.isAdmin}
 						required
@@ -535,7 +535,7 @@
 						{#if isDisabled || application.settings?.isPublicRepository}
 							<input
 								disabled={isDisabled || application.settings?.isPublicRepository}
-								class="w-full"
+								class="input input-bordered w-full"
 								value={application.gitSource?.name}
 							/>
 						{:else}
@@ -545,7 +545,7 @@
 								><input
 									value={application.gitSource?.name}
 									id="gitSource"
-									class="cursor-pointer hover:bg-coolgray-500 w-full"
+									class="input input-bordered w-full"
 								/></a
 							>
 						{/if}
@@ -556,7 +556,7 @@
 							<input
 								id="commit"
 								name="commit"
-								class="w-full"
+								class="input input-bordered w-full"
 								disabled={isDisabled}
 								placeholder="default: latest commit"
 								bind:value={application.gitCommitHash}
@@ -572,7 +572,7 @@
 									viewBox="0 0 24 24"
 									stroke-width="3"
 									stroke="currentColor"
-									class="w-3 h-3 text-white ml-2"
+									class="w-3 h-3 ml-2"
 								>
 									<path
 										stroke-linecap="round"
@@ -587,7 +587,7 @@
 						<label for="repository">{$t('application.git_repository')}</label>
 						{#if isDisabled || application.settings?.isPublicRepository}
 							<input
-								class="w-full"
+								class="input input-bordered w-full"
 								disabled={isDisabled || application.settings?.isPublicRepository}
 								value="{application.repository}/{application.branch}"
 							/>
@@ -595,12 +595,13 @@
 							<a
 								href={`/applications/${id}/configuration/repository?from=/applications/${id}&to=/applications/${id}/configuration/buildpack`}
 								class="no-underline"
-								><input
+							>
+								<input
 									value="{application.repository}/{application.branch}"
 									id="repository"
-									class="cursor-pointer hover:bg-coolgray-500 w-full"
-								/></a
-							>
+									class="input input-bordered w-full cursor-pointer"
+								/>
+							</a>
 						{/if}
 					</div>
 				{/if}
@@ -608,7 +609,7 @@
 					<label for="registry">Docker Registry</label>
 					{#if isDisabled}
 						<input
-							class="capitalize w-full"
+							class="input input-bordered capitalize w-full cursor-pointer"
 							disabled={isDisabled}
 							value={application.dockerRegistry?.name || 'DockerHub (unauthenticated)'}
 						/>
@@ -620,7 +621,7 @@
 							<input
 								value={application.dockerRegistry?.name || 'DockerHub (unauthenticated)'}
 								id="registry"
-								class="cursor-pointer hover:bg-coolgray-500 capitalize w-full"
+								class="input input-bordered capitalize w-full cursor-pointer"
 							/></a
 						>
 					{/if}
@@ -637,7 +638,7 @@
 							id="dockerRegistryImageName"
 							readonly={isDisabled}
 							disabled={isDisabled}
-							class="w-full"
+							class="input input-bordered w-full cursor-pointer"
 							placeholder="e.g. coollabsio/myimage (tag will be commit sha) or coollabsio/myimage:tag"
 							bind:value={application.dockerRegistryImageName}
 						/>
@@ -648,7 +649,7 @@
 						<label for="buildPack">{$t('application.build_pack')} </label>
 						{#if isDisabled}
 							<input
-								class="capitalize w-full"
+								class="input input-bordered capitalize w-full cursor-pointer"
 								disabled={isDisabled}
 								value={application.buildPack}
 							/>
@@ -660,7 +661,7 @@
 								<input
 									value={application.buildPack}
 									id="buildPack"
-									class="cursor-pointer hover:bg-coolgray-500 capitalize w-full"
+									class="input input-bordered capitalize w-full cursor-pointer"
 								/></a
 							>
 						{/if}
@@ -673,7 +674,7 @@
 							value={application.destinationDocker?.name}
 							id="destination"
 							disabled
-							class="bg-transparent w-full"
+							class="input input-bordered w-full"
 						/>
 					</div>
 				</div>
@@ -701,14 +702,13 @@
 						<div>
 							<input
 								bind:this={fqdnEl}
-								class="w-full"
+								class="input input-bordered w-full"
 								required={!application.settings?.isBot}
 								readonly={isDisabled}
 								disabled={isDisabled}
 								name="fqdn"
 								id="fqdn"
-								class:border={!application.settings?.isBot && !application.fqdn}
-								class:border-red-500={!application.settings?.isBot && !application.fqdn}
+								class:input-error={!application.settings?.isBot && !application.fqdn}
 								bind:value={application.fqdn}
 								pattern="^https?://([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{'{'}2,{'}'}$"
 								placeholder="eg: https://coollabs.io"
@@ -717,13 +717,13 @@
 								<div class="flex-col space-y-2 pt-4 text-center">
 									{#if isNonWWWDomainOK}
 										<button
-											class="btn btn-sm bg-green-600 hover:bg-green-500"
+											class="btn btn-sm btn-success"
 											on:click|preventDefault={() => isDNSValid(getDomain(nonWWWDomain), false)}
 											>DNS settings for {nonWWWDomain} is OK, click to recheck.</button
 										>
 									{:else}
 										<button
-											class="btn btn-sm bg-red-600 hover:bg-red-500"
+											class="btn btn-sm btn-error"
 											on:click|preventDefault={() => isDNSValid(getDomain(nonWWWDomain), false)}
 											>DNS settings for {nonWWWDomain} is invalid, click to recheck.</button
 										>
@@ -731,14 +731,14 @@
 									{#if dualCerts}
 										{#if isWWWDomainOK}
 											<button
-												class="btn btn-sm bg-green-600 hover:bg-green-500"
+												class="btn btn-sm btn-success"
 												on:click|preventDefault={() =>
 													isDNSValid(getDomain(`www.${nonWWWDomain}`), true)}
 												>DNS settings for www.{nonWWWDomain} is OK, click to recheck.</button
 											>
 										{:else}
 											<button
-												class="btn btn-sm bg-red-600 hover:bg-red-500"
+												class="btn btn-sm btn-error"
 												on:click|preventDefault={() =>
 													isDNSValid(getDomain(`www.${nonWWWDomain}`), true)}
 												>DNS settings for www.{nonWWWDomain} is invalid, click to recheck.</button
@@ -800,7 +800,7 @@
 							<label for="basicAuthUser">{$t('application.basic_auth_user')}</label>
 							<input
 								bind:this={fqdnEl}
-								class="w-full"
+								class="input input-bordered w-full"
 								required={!application.settings?.basicAuth}
 								name="basicAuthUser"
 								id="basicAuthUser"
@@ -853,7 +853,7 @@
 							/></label
 						>
 						<input
-							class="w-full"
+							class="input input-bordered w-full"
 							disabled={isDisabled}
 							readonly={!$appSession.isAdmin}
 							name="port"
@@ -878,17 +878,49 @@
 										: 'Image that will be used during the build process.'}
 								/>
 							</label>
-							<div class="custom-select-wrapper">
-								<Select
-									{isDisabled}
-									containerClasses={isDisabled && containerClass()}
-									id="baseBuildImages"
-									showIndicator={!isDisabled}
-									items={application.baseBuildImages}
-									on:select={selectBaseBuildImage}
-									value={application.baseBuildImage}
-									isClearable={false}
-								/>
+							<div class="dropdown w-full">
+								<!-- svelte-ignore a11y-label-has-associated-control -->
+								<label tabIndex={0} class="btn justify-between w-full">
+									<span>
+										{application.baseBuildImage}
+									</span>
+									<span>
+										<svg
+											stroke-width="3"
+											stroke="currentColor"
+											class="w-3 h-3 text-base-content ml-2"
+											aria-hidden="true"
+											xmlns="http://www.w3.org/2000/svg"
+											fill="none"
+											viewBox="0 0 14 8"
+										>
+											<path
+												stroke="currentColor"
+												stroke-linecap="round"
+												stroke-linejoin="round"
+												stroke-width="2"
+												d="m1 1 5.326 5.7a.909.909 0 0 0 1.348 0L13 1"
+											/>
+										</svg>
+									</span>
+								</label>
+								<ul
+									tabIndex={0}
+									class="dropdown-content bg-base-200 text-base-content rounded-box top-px h-[50vh] max-h-96 w-36 overflow-y-auto shadow mt-16 z-10"
+								>
+									{#each application.baseBuildImages as baseBuildImage}
+										<li>
+											<button
+												class="w-full text-left p-4 hover:bg-base-300 hover:text-secondary hover:cursor-pointer"
+												class:bg-base-300={baseBuildImage.value === application.baseBuildImage}
+												class:text-secondary={baseBuildImage.value === application.baseBuildImage}
+												on:click={() => selectBaseBuildImage(baseBuildImage.value)}
+											>
+												{baseBuildImage.label}
+											</button>
+										</li>
+									{/each}
+								</ul>
 							</div>
 						</div>
 					{/if}
@@ -898,17 +930,49 @@
 								>{$t('application.base_image')}
 								<Explainer explanation={'Image that will be used for the deployment.'} /></label
 							>
-							<div class="custom-select-wrapper">
-								<Select
-									{isDisabled}
-									containerClasses={isDisabled && containerClass()}
-									id="baseImages"
-									showIndicator={!isDisabled}
-									items={application.baseImages}
-									on:select={selectBaseImage}
-									value={application.baseImage}
-									isClearable={false}
-								/>
+							<div class="dropdown w-full">
+								<!-- svelte-ignore a11y-label-has-associated-control -->
+								<label tabIndex={0} class="btn justify-between w-full">
+									<span>
+										{application.baseImage}
+									</span>
+									<span>
+										<svg
+											stroke-width="3"
+											stroke="currentColor"
+											class="w-3 h-3 text-base-content ml-2"
+											aria-hidden="true"
+											xmlns="http://www.w3.org/2000/svg"
+											fill="none"
+											viewBox="0 0 14 8"
+										>
+											<path
+												stroke="currentColor"
+												stroke-linecap="round"
+												stroke-linejoin="round"
+												stroke-width="2"
+												d="m1 1 5.326 5.7a.909.909 0 0 0 1.348 0L13 1"
+											/>
+										</svg>
+									</span>
+								</label>
+								<ul
+									tabIndex={0}
+									class="dropdown-content bg-base-200 text-base-content rounded-box top-px h-[50vh] max-h-96 w-full overflow-y-auto shadow mt-16 z-10"
+								>
+									{#each application.baseImages as baseImage}
+										<li>
+											<button
+												class="w-full text-left p-4 hover:bg-base-300 hover:text-secondary hover:cursor-pointer"
+												class:bg-base-300={baseImage.value === application.baseImage}
+												class:text-secondary={baseImage.value === application.baseImage}
+												on:click={() => selectBaseImage(baseImage.value)}
+											>
+												{baseImage.label}
+											</button>
+										</li>
+									{/each}
+								</ul>
 							</div>
 						</div>
 					{/if}
@@ -917,20 +981,52 @@
 							<label for="deploymentType"
 								>Deployment Type
 								<Explainer
-									explanation={"Defines how to deploy your application. <br><br><span class='text-green-500 font-bold'>Static</span> is for static websites, <span class='text-green-500 font-bold'>node</span> is for server-side applications."}
+									explanation={"Defines how to deploy your application. <br><br><span class='text-success font-bold'>Static</span> is for static websites, <span class='text-success font-bold'>node</span> is for server-side applications."}
 								/></label
 							>
-							<div class="custom-select-wrapper">
-								<Select
-									{isDisabled}
-									containerClasses={isDisabled && containerClass()}
-									id="deploymentTypes"
-									showIndicator={!isDisabled}
-									items={['static', 'node']}
-									on:select={selectDeploymentType}
-									value={application.deploymentType}
-									isClearable={false}
-								/>
+							<div class="dropdown w-full">
+								<!-- svelte-ignore a11y-label-has-associated-control -->
+								<label tabIndex={0} class="btn justify-between w-full">
+									<span>
+										{application.baseImage}
+									</span>
+									<span>
+										<svg
+											stroke-width="3"
+											stroke="currentColor"
+											class="w-3 h-3 text-base-content ml-2"
+											aria-hidden="true"
+											xmlns="http://www.w3.org/2000/svg"
+											fill="none"
+											viewBox="0 0 14 8"
+										>
+											<path
+												stroke="currentColor"
+												stroke-linecap="round"
+												stroke-linejoin="round"
+												stroke-width="2"
+												d="m1 1 5.326 5.7a.909.909 0 0 0 1.348 0L13 1"
+											/>
+										</svg>
+									</span>
+								</label>
+								<ul
+									tabIndex={0}
+									class="dropdown-content bg-base-200 text-base-content rounded-box top-px h-[50vh] max-h-96 w-full overflow-y-auto shadow mt-16 z-10"
+								>
+									{#each ['static', 'node'] as deploymentType}
+										<li>
+											<button
+												class="w-full text-left p-4 hover:bg-base-300 hover:text-secondary hover:cursor-pointer"
+												class:bg-base-300={deploymentType === application}
+												class:text-secondary={deploymentType === application}
+												on:click={() => selectDeploymentType(deploymentType)}
+											>
+												{deploymentType}
+											</button>
+										</li>
+									{/each}
+								</ul>
 							</div>
 						</div>
 					{/if}
@@ -964,10 +1060,11 @@
 											name="baseDatabaseBranch"
 											required
 											id="baseDatabaseBranch"
+											class="input input-bordered w-full"
 											bind:value={baseDatabaseBranch}
 										/>
 									</div>
-									<div class="text-center bg-green-600 rounded">
+									<div class="text-center bg-success rounded">
 										Connected to {application.connectedDatabase?.databaseId}
 									</div>
 								{/if}
@@ -978,13 +1075,49 @@
 					{#if application.buildPack === 'python'}
 						<div class="grid grid-cols-2 items-center">
 							<label for="pythonModule">WSGI / ASGI</label>
-							<div class="custom-select-wrapper">
-								<Select
-									id="wsgi"
-									items={wsgis}
-									on:select={selectWSGI}
-									value={application.pythonWSGI}
-								/>
+							<div class="dropdown w-full">
+								<!-- svelte-ignore a11y-label-has-associated-control -->
+								<label tabIndex={0} class="btn justify-between w-full">
+									<span>
+										{application.pythonWSGI}
+									</span>
+									<span>
+										<svg
+											stroke-width="3"
+											stroke="currentColor"
+											class="w-3 h-3 text-base-content ml-2"
+											aria-hidden="true"
+											xmlns="http://www.w3.org/2000/svg"
+											fill="none"
+											viewBox="0 0 14 8"
+										>
+											<path
+												stroke="currentColor"
+												stroke-linecap="round"
+												stroke-linejoin="round"
+												stroke-width="2"
+												d="m1 1 5.326 5.7a.909.909 0 0 0 1.348 0L13 1"
+											/>
+										</svg>
+									</span>
+								</label>
+								<ul
+									tabIndex={0}
+									class="dropdown-content bg-base-200 text-base-content rounded-box top-px h-[50vh] max-h-96 w-full overflow-y-auto shadow mt-16 z-10"
+								>
+									{#each wsgis as wsgi}
+										<li>
+											<button
+												class="w-full text-left p-4 hover:bg-base-300 hover:text-secondary hover:cursor-pointer"
+												class:bg-base-300={wsgi.value === application.pythonWSGI}
+												class:text-secondary={wsgi.value === application.pythonWSGI}
+												on:click={() => selectWSGI(wsgi.value)}
+											>
+												{wsgi.label}
+											</button>
+										</li>
+									{/each}
+								</ul>
 							</div>
 						</div>
 
@@ -996,7 +1129,7 @@
 								name="pythonModule"
 								id="pythonModule"
 								required
-								class="w-full"
+								class="input input-bordered w-full"
 								bind:value={application.pythonModule}
 								placeholder={application.pythonWSGI?.toLowerCase() !== 'none' ? 'main' : 'main.py'}
 							/>
@@ -1010,7 +1143,7 @@
 									name="pythonVariable"
 									id="pythonVariable"
 									required
-									class="w-full"
+									class="input input-bordered w-full"
 									bind:value={application.pythonVariable}
 									placeholder="default: app"
 								/>
@@ -1025,7 +1158,7 @@
 									name="pythonVariable"
 									id="pythonVariable"
 									required
-									class="w-full"
+									class="input input-bordered w-full"
 									bind:value={application.pythonVariable}
 									placeholder="default: app"
 								/>
@@ -1041,7 +1174,7 @@
 								/></label
 							>
 							<input
-								class="w-full"
+								class="input input-bordered w-full"
 								disabled={isDisabled}
 								readonly={!$appSession.isAdmin}
 								name="port"
@@ -1058,7 +1191,7 @@
 							/></label
 						>
 						<input
-							class="w-full"
+							class="input input-bordered w-full"
 							disabled={isDisabled}
 							readonly={!$appSession.isAdmin}
 							name="exposePort"
@@ -1071,7 +1204,7 @@
 						<div class="grid grid-cols-2 items-center">
 							<label for="installCommand">{$t('application.install_command')}</label>
 							<input
-								class="w-full"
+								class="input input-bordered w-full"
 								disabled={isDisabled}
 								readonly={!$appSession.isAdmin}
 								name="installCommand"
@@ -1083,7 +1216,7 @@
 						<div class="grid grid-cols-2 items-center">
 							<label for="buildCommand">{$t('application.build_command')}</label>
 							<input
-								class="w-full"
+								class="input input-bordered w-full"
 								disabled={isDisabled}
 								readonly={!$appSession.isAdmin}
 								name="buildCommand"
@@ -1095,7 +1228,7 @@
 						<div class="grid grid-cols-2 items-center pb-8">
 							<label for="startCommand">{$t('application.start_command')}</label>
 							<input
-								class="w-full"
+								class="input input-bordered w-full"
 								disabled={isDisabled}
 								readonly={!$appSession.isAdmin}
 								name="startCommand"
@@ -1109,7 +1242,7 @@
 						<div class="grid grid-cols-2 items-center">
 							<label for="denoMainFile">Main File</label>
 							<input
-								class="w-full"
+								class="input input-bordered w-full"
 								disabled={isDisabled}
 								readonly={!$appSession.isAdmin}
 								name="denoMainFile"
@@ -1121,11 +1254,11 @@
 						<div class="grid grid-cols-2 items-center">
 							<label for="denoOptions"
 								>Arguments <Explainer
-									explanation={"List of arguments to pass to <span class='text-settings font-bold'>deno run</span> command. Could include permissions, configurations files, etc."}
+									explanation={"List of arguments to pass to <span class='text-warning font-bold'>deno run</span> command. Could include permissions, configurations files, etc."}
 								/></label
 							>
 							<input
-								class="w-full"
+								class="input input-bordered w-full"
 								disabled={isDisabled}
 								readonly={!$appSession.isAdmin}
 								name="denoOptions"
@@ -1141,12 +1274,12 @@
 								<label for="baseDirectory"
 									>{$t('forms.base_directory')}
 									<Explainer
-										explanation={"Directory to use as the base for all commands.<br>Could be useful with <span class='text-settings font-bold'>monorepos</span>."}
+										explanation={"Directory to use as the base for all commands.<br>Could be useful with <span class='text-warning font-bold'>monorepos</span>."}
 									/></label
 								>
 							</div>
 							<input
-								class="w-full"
+								class="input input-bordered w-full"
 								disabled={isDisabled}
 								readonly={!$appSession.isAdmin}
 								name="baseDirectory"
@@ -1160,12 +1293,12 @@
 						<div class="grid grid-cols-2 items-center pb-4">
 							<label for="dockerFileLocation" class=""
 								>Dockerfile Location <Explainer
-									explanation={"Should be absolute path, like <span class='text-settings font-bold'>/data/Dockerfile</span> or <span class='text-settings font-bold'>/Dockerfile.</span>"}
+									explanation={"Should be absolute path, like <span class='text-warning font-bold'>/data/Dockerfile</span> or <span class='text-warning font-bold'>/Dockerfile.</span>"}
 								/></label
 							>
 							<div class="form-control w-full">
 								<input
-									class="w-full input"
+									class="input input-bordered w-full"
 									disabled={isDisabled}
 									readonly={!$appSession.isAdmin}
 									name="dockerFileLocation"
@@ -1193,13 +1326,13 @@
 								<label for="publishDirectory"
 									>{$t('forms.publish_directory')}
 									<Explainer
-										explanation={"Directory containing all the assets for deployment. <br> For example: <span class='text-settings font-bold'>dist</span>,<span class='text-settings font-bold'>_site</span> or <span class='text-settings font-bold'>public</span>."}
+										explanation={"Directory containing all the assets for deployment. <br> For example: <span class='text-warning font-bold'>dist</span>,<span class='text-warning font-bold'>_site</span> or <span class='text-settings font-bold'>public</span>."}
 									/></label
 								>
 							</div>
 
 							<input
-								class="w-full"
+								class="input input-bordered w-full"
 								disabled={isDisabled}
 								readonly={!$appSession.isAdmin}
 								name="publishDirectory"
@@ -1233,7 +1366,7 @@
 						</label>
 						<div>
 							<input
-								class="w-full"
+								class="input input-bordered w-full"
 								disabled={isDisabled}
 								readonly={!$appSession.isAdmin}
 								name="dockerComposeFileLocation"
@@ -1244,13 +1377,11 @@
 						</div>
 					</div>
 					{#each dockerComposeServices as service}
-						<div
-							class="grid items-center bg-coolgray-100 rounded border border-coolgray-300 p-2 px-4"
-						>
+						<div class="grid items-center bg-base-200 rounded p-2 px-4">
 							<div class="text-xl font-bold uppercase">
 								{service.name}
 								<span
-									class="badge rounded text-white"
+									class="badge rounded text-base-content"
 									class:text-red-500={statues[service.name] === 'Exited' ||
 										statues[service.name] === 'Stopped'}
 									class:text-yellow-400={statues[service.name] === 'Restarting'}
@@ -1265,12 +1396,12 @@
 							<label for="fqdn"
 								>{$t('application.url_fqdn')}
 								<Explainer
-									explanation={"If you specify <span class='text-settings font-bold'>https</span>, the application will be accessible only over https.<br>SSL certificate will be generated automatically.<br><br>If you specify <span class='text-settings font-bold'>www</span>, the application will be redirected (302) from non-www and vice versa.<br><br>To modify the domain, you must first stop the application.<br><br><span class='text-settings font-bold'>You must set your DNS to point to the server IP in advance.</span>"}
+									explanation={"If you specify <span class='text-warning font-bold'>https</span>, the application will be accessible only over https.<br>SSL certificate will be generated automatically.<br><br>If you specify <span class='text-settings font-bold'>www</span>, the application will be redirected (302) from non-www and vice versa.<br><br>To modify the domain, you must first stop the application.<br><br><span class='text-settings font-bold'>You must set your DNS to point to the server IP in advance.</span>"}
 								/>
 							</label>
 							<div>
 								<input
-									class="w-full"
+									class="input input-bordered w-full"
 									disabled={isDisabled}
 									readonly={!$appSession.isAdmin}
 									name="fqdn"
@@ -1289,7 +1420,7 @@
 								/>
 							</label>
 							<input
-								class="w-full"
+								class="input input-bordered w-full"
 								disabled
 								readonly
 								value={`${application.id}-${service.name}`}
@@ -1302,7 +1433,7 @@
 									explanation={'You can use these DNS names to access the application from this stack.'}
 								/>
 							</label>
-							<input class="w-full" disabled readonly value={service.name} />
+							<input class="input input-bordered w-full" disabled readonly value={service.name} />
 						</div>
 						<div class="grid grid-cols-2 items-center px-8 pb-4">
 							<label for="port"
@@ -1312,7 +1443,7 @@
 								/></label
 							>
 							<input
-								class="w-full"
+								class="input input-bordered w-full"
 								disabled={isDisabled}
 								readonly={!$appSession.isAdmin}
 								name="port"

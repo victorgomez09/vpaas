@@ -45,7 +45,7 @@
 			value={name}
 			required
 			placeholder="EXAMPLE_VARIABLE"
-			class=" w-full"
+			class="input input-bordered w-full"
 		/>
 	</div>
 	<div class="flex flex-col">
@@ -73,7 +73,7 @@
 		<div class="flex justify-center h-full items-center pt-0 lg:pt-0 pl-4 lg:pl-0">
 			<button
 				aria-pressed="false"
-				class="opacity-50 cursor-pointer cursor-not-allowedrelative inline-flex h-6 w-11 flex-shrink-0 rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out "
+				class="opacity-50 cursor-pointer cursor-not-allowedrelative inline-flex h-6 w-11 flex-shrink-0 rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out"
 				class:bg-green-600={isBuildSecret}
 				class:bg-stone-700={!isBuildSecret}
 			>
@@ -121,13 +121,13 @@
 		{/if}
 
 		{#if $appSession.isAdmin}
-		<div class="flex justify-center h-full items-center pt-3">
-			<div class="flex flex-row justify-center space-x-2">
-				<div class="flex items-center justify-center">
-					<button class="btn btn-sm btn-primary" on:click={updatePreviewSecret}>Update</button>
+			<div class="flex justify-center h-full items-center pt-3">
+				<div class="flex flex-row justify-center space-x-2">
+					<div class="flex items-center justify-center">
+						<button class="btn btn-sm btn-primary" on:click={updatePreviewSecret}>Update</button>
+					</div>
 				</div>
 			</div>
-		</div>
 		{/if}
 	</div>
 </div>

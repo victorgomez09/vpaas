@@ -51,7 +51,7 @@
 	let isDBBranching = application.settings.isDBBranching;
 
 	async function changeSettings(name: any) {
-		if (!$appSession.isAdmin) return
+		if (!$appSession.isAdmin) return;
 		if (name === 'previews') {
 			previews = !previews;
 		}
@@ -108,9 +108,9 @@
 	}
 </script>
 
-<div class="w-full">
+<div class="flex flex-1 flex-col m-2">
 	<div class="mx-auto w-full">
-		<div class="flex flex-row border-b border-coolgray-500 mb-6  space-x-2">
+		<div class="flex flex-row border-b border-base-content mb-6 space-x-2">
 			<div class="title font-bold pb-3">Features</div>
 		</div>
 		<div class="px-4 lg:pb-10 pb-6">

@@ -4,27 +4,29 @@
 		id: null,
 		path: null
 	};
-	import { del, post } from '$lib/api';
-	import { page } from '$app/stores';
-	import { createEventDispatcher } from 'svelte';
+	// export let value: string;
+
 	import { browser } from '$app/env';
-	import { t } from '$lib/translations';
+	import { page } from '$app/stores';
+	import { del, post } from '$lib/api';
 	import { errorNotification } from '$lib/common';
-	import { addToast } from '$lib/store';
 	import CopyVolumeField from '$lib/components/CopyVolumeField.svelte';
 	import SimpleExplainer from '$lib/components/SimpleExplainer.svelte';
+	import { addToast } from '$lib/store';
+	import { t } from '$lib/translations';
+	import { createEventDispatcher } from 'svelte';
 	const { id } = $page.params;
 	let isHttps = browser && window.location.protocol === 'https:';
-	export let value: string;
-	function copyToClipboard() {
-		if (isHttps && navigator.clipboard) {
-			navigator.clipboard.writeText(value);
-			addToast({
-				message: 'Copied to clipboard.',
-				type: 'success'
-			});
-		}
-	}
+
+	// function copyToClipboard() {
+	// 	if (isHttps && navigator.clipboard) {
+	// 		navigator.clipboard.writeText(value);
+	// 		addToast({
+	// 			message: 'Copied to clipboard.',
+	// 			type: 'success'
+	// 		});
+	// 	}
+	// }
 	const dispatch = createEventDispatcher();
 	async function saveStorage(newStorage = false) {
 		try {
@@ -76,8 +78,8 @@
 <div class="w-full lg:px-0 px-4">
 	{#if storage.predefined}
 		<div class="flex flex-col lg:flex-row gap-4 pb-2">
-			<input disabled readonly class="w-full" value={storage.id} />
-			<input disabled readonly class="w-full" bind:value={storage.path} />
+			<input disabled readonly class="input input-bordered w-full" value={storage.id} />
+			<input disabled readonly class="input input-bordered w-full" bind:value={storage.path} />
 		</div>
 	{:else}
 		<div class="flex gap-4 pb-2" class:pt-8={isNew}>
@@ -96,6 +98,7 @@
 			{#if isNew}
 				<div class="w-full">
 					<input
+						class="input input-bordered w-full"
 						disabled={!isNew}
 						readonly={!isNew}
 						bind:value={storage.hostPath}
@@ -103,16 +106,16 @@
 					/>
 
 					<SimpleExplainer
-						text="You can mount <span class='text-yellow-400 font-bold'>host paths</span> from the operating system.<br>Leave it empty to define a volume based volume."
+						text="You can mount <span class='text-warning font-bold'>host paths</span> from the operating system.<br>Leave it empty to define a volume based volume."
 					/>
 				</div>
 			{:else if storage.hostPath}
-				<input disabled readonly value={storage.hostPath} />
+				<input class="input input-bordered" disabled readonly value={storage.hostPath} />
 			{/if}
 			<input
 				disabled={!isNew}
 				readonly={!isNew}
-				class="w-full"
+				class="input input-bordered w-full"
 				bind:value={storage.path}
 				required
 				placeholder="Mount point inside the container, example: /data"
