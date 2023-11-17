@@ -53,8 +53,6 @@
 		on:click={() => deleteService()}
 		type="submit"
 		disabled={!$appSession.isAdmin}
-		class:bg-red-600={$appSession.isAdmin}
-		class:hover:bg-red-500={$appSession.isAdmin}
 		class="btn btn-lg btn-error text-sm"
 	>
 		Delete Service

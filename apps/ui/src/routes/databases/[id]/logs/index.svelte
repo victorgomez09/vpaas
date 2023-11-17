@@ -100,8 +100,6 @@
 			<!-- {#if loadLogsInterval}
 				<LoadingLogs />
 			{/if} -->
-			<div class="flex justify-end sticky top-0 p-1 mx-1">
-			</div>
 			<div class="flex flex-1">
 				<div class="card bg-base-300">
 					<div

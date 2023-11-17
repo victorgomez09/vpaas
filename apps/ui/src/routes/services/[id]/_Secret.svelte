@@ -49,7 +49,7 @@
 	}
 </script>
 
-<td>
+<td class="p-1">
 	<input
 		style="min-width: 350px !important;"
 		id={isNewSecret ? 'secretName' : 'secretNameNew'}
@@ -57,11 +57,7 @@
 		required
 		placeholder="EXAMPLE_VARIABLE"
 		readonly={!isNewSecret || readonly}
-		class="w-full"
-		class:bg-coolblack={!isNewSecret}
-		class:border={!isNewSecret}
-		class:border-dashed={!isNewSecret}
-		class:border-coolgray-300={!isNewSecret}
+		class="input input-bordered w-full"
 	/>
 </td>
 <td>

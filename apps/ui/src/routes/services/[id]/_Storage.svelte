@@ -84,7 +84,7 @@
 					id={storage.containerId}
 					disabled
 					readonly
-					class="w-full"
+					class="input input-bordered w-full"
 					value={`${
 						services.find((s) => s.id === storage.containerId)?.name || storage.containerId
 					}`}
@@ -95,21 +95,21 @@
 					id={storage.volumeName}
 					disabled
 					readonly
-					class="w-full"
+					class="input input-bordered w-full"
 					value={`${storage.volumeName}:${storage.path}`}
 				/>
 			</div>
 		</div>
 	{:else if isNew}
 		<form id="saveVolumesForm" on:submit|preventDefault={saveStorage}>
-			<div class="grid grid-col-1 lg:grid-cols-2 lg:space-x-4 pt-8">
+			<div class="grid grid-col-1 lg:grid-cols-2 pt-2 gap-2">
 				<div class="flex flex-row">
 					<div class="flex flex-col w-full">
 						<label for="name" class="pb-2 uppercase font-bold">Container</label>
 						<select
 							form="saveVolumesForm"
 							name="containerId"
-							class="w-full lg:w-64"
+							class="select select-bordered w-full lg:w-64"
 							disabled={storage.predefined}
 							bind:value={storage.containerId}
 						>
@@ -136,7 +136,7 @@
 							name="path"
 							disabled={storage.predefined}
 							readonly={storage.predefined}
-							class="w-full lg:w-64"
+							class="input input-bordered w-full lg:w-64"
 							bind:value={storage.path}
 							required
 							placeholder="eg: /sqlite.db"
@@ -144,7 +144,7 @@
 					</div>
 				</div>
 				<div class="pt-8">
-					<button type="submit" class="btn btn-sm btn-primary w-full lg:w-64"
+					<button type="submit" class="btn btn-sm btn-primary"
 						>{$t('forms.add')}</button
 					>
 				</div>
@@ -155,10 +155,10 @@
 			<input
 				disabled
 				readonly
-				class="w-full"
+				class="input input-bordered w-full"
 				value={`${services.find((s) => s.id === storage.containerId)?.name || storage.containerId}`}
 			/>
-			<input disabled readonly class="w-full" value={`${storage.volumeName}:${storage.path}`} />
+			<input disabled readonly class="input input-bordered w-full" value={`${storage.volumeName}:${storage.path}`} />
 			<button
 				class="btn btn-sm btn-error"
 				on:click|stopPropagation|preventDefault={() => removeStorage(storage)}

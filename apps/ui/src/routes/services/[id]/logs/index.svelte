@@ -2,6 +2,7 @@
 	import { page } from '$app/stores';
 	import { get } from '$lib/api';
 	import { errorNotification } from '$lib/common';
+	import Tooltip from '$lib/components/Tooltip.svelte';
 	import { onDestroy, onMount } from 'svelte';
 
 	let service: any = {};
@@ -95,7 +96,7 @@
 </script>
 
 <div class="mx-auto w-full">
-	<div class="flex flex-row border-b border-coolgray-500 mb-6 space-x-2">
+	<div class="flex flex-row border-b border-content-base mb-6 space-x-2">
 		<div class="title font-bold pb-3">Service Logs</div>
 	</div>
 </div>
@@ -105,12 +106,11 @@
 		{#each Object.keys(template) as service}
 			<button
 				on:click={() => selectService(service, true)}
-				class:bg-primary={selectedService === service}
-				class:bg-coolgray-200={selectedService !== service}
-				class="w-full rounded p-5 hover:bg-primary font-bold"
+				class:bg-base-300={selectedService === service}
+				class="w-full rounded p-5 bg-base-200 shadow hover:bg-base-300 hover:text-secondary hover:scale-105 font-bold"
 			>
 				{#if template[service].name}
-					{template[service].name || ''} <br /><span class="text-xs">({service})</span>
+					{template[service].name || ''} <br /><span class="block text-xs truncate max-w-[2em]">({service})</span>
 				{:else}
 					<span>{service}</span>
 				{/if}
@@ -130,41 +130,56 @@
 		{:else}
 			<div class="relative w-full">
 				<div class="flex justify-start sticky space-x-2 pb-2">
-					<button on:click={followBuild} class="btn btn-sm " class:bg-coollabs={followingLogs}>
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							class="w-6 h-6 mr-2"
-							viewBox="0 0 24 24"
-							stroke-width="1.5"
-							stroke="currentColor"
-							fill="none"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-						>
-							<path stroke="none" d="M0 0h24v24H0z" fill="none" />
-							<circle cx="12" cy="12" r="9" />
-							<line x1="8" y1="12" x2="12" y2="16" />
-							<line x1="12" y1="8" x2="12" y2="16" />
-							<line x1="16" y1="12" x2="12" y2="16" />
-						</svg>
-						{followingLogs ? 'Following Logs...' : 'Follow Logs'}
-					</button>
 					{#if loadLogsInterval}
 						<button id="streaming" class="btn btn-sm bg-transparent border-none loading"
 							>Streaming logs</button
 						>
 					{/if}
 				</div>
-				<div
+				<!-- <div
 					bind:this={logsEl}
 					on:scroll={detect}
-					class="font-mono w-full bg-coolgray-100 border border-coolgray-200 p-5 overflow-x-auto overflox-y-auto max-h-[80vh] rounded mb-20 flex flex-col scrollbar-thumb-coollabs scrollbar-track-coolgray-200 scrollbar-w-1"
-				>
-					{#each logs as log}
-						<p>{log + '\n'}</p>
-					{/each}
+					class="font-mono w-full bg-base-200 border border-base-content p-5 overflow-x-auto overflox-y-auto max-h-[80vh] rounded mb-20 flex flex-col scrollbar-thumb-coollabs scrollbar-track-coolgray-200 scrollbar-w-1"
+				> -->
+				<div class="flex flex-1">
+					<div class="card bg-base-300">
+						<div
+							bind:this={logsEl}
+							on:scroll={detect}
+							class="card-body relative max-h-[61vh] max-w-[60vw] p-2 font-mono text-[10px] overflow-x-auto overflox-y-auto"
+						>
+							<button
+								id="follow"
+								on:click={followBuild}
+								class="bg-transparent btn btn-sm btn-link fixed right-10"
+								class:text-success={followingLogs}
+							>
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									class="w-6 h-6"
+									viewBox="0 0 24 24"
+									stroke-width="1.5"
+									stroke="currentColor"
+									fill="none"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+								>
+									<path stroke="none" d="M0 0h24v24H0z" fill="none" />
+									<circle cx="12" cy="12" r="9" />
+									<line x1="8" y1="12" x2="12" y2="16" />
+									<line x1="12" y1="8" x2="12" y2="16" />
+									<line x1="16" y1="12" x2="12" y2="16" />
+								</svg>
+							</button>
+							<Tooltip triggeredBy="#follow">Follow Logs</Tooltip>
+							{#each logs as log}
+								<p class="whitespace-nowrap">{log + '\n'}</p>
+							{/each}
+						</div>
+					</div>
 				</div>
 			</div>
+			<!-- </div> -->
 		{/if}
 	</div>
 {/if}

@@ -113,7 +113,7 @@
 			forceSave = false;
 			$isDeploymentEnabled = checkIfDeploymentEnabledServices(service);
 			// customVersion = null;
-			customVersion = "";
+			customVersion = '';
 			return addToast({
 				message: 'Configuration saved.',
 				type: 'success'
@@ -196,8 +196,8 @@
 			loading.cleanup = false;
 		}
 	}
-	async function selectTag(event: any) {
-		service.version = event.detail.value;
+	async function selectTag(tag: string) {
+		service.version = tag;
 	}
 	async function setCustomVersion() {
 		service.version = customVersion;
@@ -212,7 +212,7 @@
 <div class="w-full">
 	<form id="saveForm" on:submit|preventDefault={handleSubmit}>
 		<div class="mx-auto w-full">
-			<div class="flex flex-row border-b border-coolgray-500 mb-6 space-x-2">
+			<div class="flex flex-row justify-between border-b border-base-300 mb-6 space-x-2">
 				<div class="title font-bold pb-3">General</div>
 				{#if $appSession.isAdmin}
 					<button
@@ -270,7 +270,7 @@
 				<input
 					name="name"
 					id="name"
-					class="w-full"
+					class="input input-bordered w-full"
 					disabled={!$appSession.isAdmin}
 					bind:value={service.name}
 					required
@@ -279,9 +279,30 @@
 			<div class="grid grid-cols-2 items-center">
 				<label for="version">Version / Tag</label>
 				<div class="flex gap-2">
-				{#if tags.tags?.length > 0}
-					<div class="custom-select-wrapper w-full">
-						<Select
+					{#if tags.tags?.length > 0}
+						<div class="custom-select-wrapper w-full">
+							<div class="dropdown w-full">
+								<!-- svelte-ignore a11y-label-has-associated-control -->
+								<label tabIndex={0} class="btn m-1 w-full">{service.version}</label>
+								<ul
+									tabIndex={0}
+									class="dropdown-content bg-base-200 text-base-content rounded-box top-px h-[50vh] max-h-96 w-36 overflow-y-auto shadow mt-16 z-10"
+								>
+									{#each tags.tags as tag}
+										<li>
+											<button
+												class="w-full text-left p-4 hover:bg-base-300 hover:text-secondary hover:cursor-pointer"
+												class:bg-base-300={tag === service.version}
+												class:text-secondary={tag === service.version}
+												on:click={() => selectTag(tag)}
+											>
+												{tag}
+											</button>
+										</li>
+									{/each}
+								</ul>
+							</div>
+							<!-- <Select
 							form="saveForm"
 							containerClasses={isDisabled && containerClass()}
 							{isDisabled}
@@ -291,13 +312,22 @@
 							on:select={selectTag}
 							value={service.version}
 							isClearable={false}
-						/>
-					</div>
+						/> -->
+						</div>
 					{:else}
-					<input class="w-full border-red-500" disabled placeholder="Error getting tags..." />
+						<input
+							class="w-full input input-bordered input-error"
+							disabled
+							placeholder="Error getting tags..."
+						/>
 					{/if}
-					<input class="w-full" placeholder="Custom version" on:change={setCustomVersion} bind:value={customVersion} />
-					</div>
+					<input
+						class="input input-bordered w-full"
+						placeholder="Custom version"
+						on:change={setCustomVersion}
+						bind:value={customVersion}
+					/>
+				</div>
 			</div>
 
 			<div class="grid grid-cols-2 items-center">
@@ -309,7 +339,7 @@
 								value={service.destinationDocker.name}
 								id="destination"
 								disabled
-								class="bg-transparent w-full"
+								class="input input-bordered w-full"
 							/>
 						</div>
 					{/if}
@@ -401,7 +431,7 @@
 						/></label
 					>
 					<input
-						class="w-full"
+						class="input input-bordered w-full"
 						readonly={isDisabled}
 						disabled={isDisabled}
 						name="exposePort"

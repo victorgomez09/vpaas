@@ -6,15 +6,18 @@
 	import ServiceLinks from './_ServiceLinks.svelte';
 </script>
 
-<ul class="menu border bg-coolgray-100 border-coolgray-200 rounded p-2 space-y-2 sticky top-4">
+<ul class="menu rounded-box border bg-base-200 border-base-300 p-2 space-y-2 sticky top-4">
 	<li class="menu-title">
 		<span>General</span>
 	</li>
 	<li class="rounded">
 		<ServiceLinks {template} {service} linkToDocs={true} />
 	</li>
-	<li class="rounded" class:bg-coollabs={$page.url.pathname === `/services/${$page.params.id}`}>
-		<a href={`/services/${$page.params.id}`} class="no-underline w-full"
+	<li class="rounded">
+		<a
+			href={`/services/${$page.params.id}`}
+			class="no-underline w-full"
+			class:active={$page.url.pathname === `/services/${$page.params.id}`}
 			><svg
 				xmlns="http://www.w3.org/2000/svg"
 				class="w-6 h-6"
@@ -32,11 +35,11 @@
 			</svg>Configurations</a
 		>
 	</li>
-	<li
-		class="rounded"
-		class:bg-coollabs={$page.url.pathname === `/services/${$page.params.id}/secrets`}
-	>
-		<a href={`/services/${$page.params.id}/secrets`} class="no-underline w-full"
+	<li class="rounded">
+		<a
+			href={`/services/${$page.params.id}/secrets`}
+			class="no-underline w-full"
+			class:active={$page.url.pathname === `/services/${$page.params.id}/secrets`}
 			><svg
 				xmlns="http://www.w3.org/2000/svg"
 				class="w-6 h-6"
@@ -56,11 +59,11 @@
 			</svg>Secrets</a
 		>
 	</li>
-	<li
-		class="rounded"
-		class:bg-coollabs={$page.url.pathname === `/services/${$page.params.id}/storages`}
-	>
-		<a href={`/services/${$page.params.id}/storages`} class="no-underline w-full"
+	<li class="rounded">
+		<a
+			href={`/services/${$page.params.id}/storages`}
+			class="no-underline w-full"
+			class:active={$page.url.pathname === `/services/${$page.params.id}/storages`}
 			><svg
 				xmlns="http://www.w3.org/2000/svg"
 				class="w-6 h-6"
@@ -81,13 +84,11 @@
 	<li class="menu-title">
 		<span>Logs</span>
 	</li>
-	<li
-		class="rounded"
-		class:bg-coollabs={$page.url.pathname === `/services/${$page.params.id}/logs`}
-	>
+	<li class="rounded">
 		<a
 			href={`/services/${$page.params.id}/logs`}
 			class="no-underline w-full"
+			class:active={$page.url.pathname === `/services/${$page.params.id}/logs`}
 			><svg
 				xmlns="http://www.w3.org/2000/svg"
 				class="h-6 w-6"
@@ -108,31 +109,31 @@
 		>
 	</li>
 	{#if $appSession.isAdmin}
-	<li class="menu-title">
-		<span>Advanced</span>
-	</li>
-	<li
-		class="rounded"
-		class:bg-coollabs={$page.url.pathname === `/services/${$page.params.id}/danger`}
-	>
-		<a href={`/services/${$page.params.id}/danger`} class="no-underline w-full"
-			><svg
-				xmlns="http://www.w3.org/2000/svg"
-				class="w-6 h-6"
-				viewBox="0 0 24 24"
-				stroke-width="1.5"
-				stroke="currentColor"
-				fill="none"
-				stroke-linecap="round"
-				stroke-linejoin="round"
+		<li class="menu-title">
+			<span>Advanced</span>
+		</li>
+		<li class="rounded">
+			<a
+				href={`/services/${$page.params.id}/danger`}
+				class="no-underline w-full"
+				class:active={$page.url.pathname === `/services/${$page.params.id}/danger`}
+				><svg
+					xmlns="http://www.w3.org/2000/svg"
+					class="w-6 h-6"
+					viewBox="0 0 24 24"
+					stroke-width="1.5"
+					stroke="currentColor"
+					fill="none"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+				>
+					<path stroke="none" d="M0 0h24v24H0z" fill="none" />
+					<path d="M12 9v2m0 4v.01" />
+					<path
+						d="M5 19h14a2 2 0 0 0 1.84 -2.75l-7.1 -12.25a2 2 0 0 0 -3.5 0l-7.1 12.25a2 2 0 0 0 1.75 2.75"
+					/>
+				</svg>Danger Zone</a
 			>
-				<path stroke="none" d="M0 0h24v24H0z" fill="none" />
-				<path d="M12 9v2m0 4v.01" />
-				<path
-					d="M5 19h14a2 2 0 0 0 1.84 -2.75l-7.1 -12.25a2 2 0 0 0 -3.5 0l-7.1 12.25a2 2 0 0 0 1.75 2.75"
-				/>
-			</svg>Danger Zone</a
-		>
-	</li>
+		</li>
 	{/if}
 </ul>

@@ -67,7 +67,7 @@
 </script>
 
 <div class="mx-auto w-full">
-	<div class="flex flex-row border-b border-coolgray-500 mb-6 space-x-2">
+	<div class="flex flex-row border-b border-base-300 mb-6 space-x-2">
 		<div class="title font-bold pb-3">Secrets</div>
 	</div>
 	<div class="overflow-x-auto">
@@ -100,8 +100,8 @@
 	</div>
 	{#if $appSession.isAdmin}
 		<form on:submit|preventDefault={getValues} class="mb-12 w-full">
-			<div class="flex flex-row border-b border-coolgray-500 mb-6 space-x-2 pt-10">
-				<div class="flex flex-row space-x-2">
+			<div class="flex flex-row border-b border-base-300 mb-6 space-x-2 pt-10">
+				<div class="flex flex-1 flex-row items-center justify-between space-x-2">
 					<div class="title font-bold pb-3 ">Paste <code>.env</code> file</div>
 					<button type="submit" class="btn btn-sm bg-primary">Add Secrets in Batch</button>
 				</div>
@@ -110,7 +110,7 @@
 			<textarea
 				placeholder={`PORT=1337\nPASSWORD=supersecret`}
 				bind:value={batchSecrets}
-				class="mb-2 min-h-[200px] w-full"
+				class="textarea textarea-bordered mb-2 min-h-[200px] w-full"
 			/>
 		</form>
 	{/if}
