@@ -477,7 +477,7 @@
 			<NewResource />
 		{/if}
 	</nav>
-	<div class="container lg:mx-auto lg:p-0 px-8 pt-5">
+	<div class="container lg:mx-auto lg:p-0 px-8 pt-5 mt-8">
 		{#if applications.length !== 0 || destinations.length !== 0 || databases.length !== 0 || services.length !== 0 || gitSources.length !== 0 || destinations.length !== 0}
 			<div class="space-x-2 lg:flex lg:justify-center text-center mb-4">
 				<button
@@ -1022,7 +1022,7 @@
 													</div>
 												{/if}
 											</div>
-											<div class="flex justify-end items-end space-x-2 h-10">
+											<div class="flex justify-end items-end h-10 mt-4">
 												{#if service?.fqdn}
 													<a
 														href={service?.fqdn}

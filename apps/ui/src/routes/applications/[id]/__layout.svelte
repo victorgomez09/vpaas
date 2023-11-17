@@ -230,8 +230,8 @@
 	});
 </script>
 
-<div class="mx-auto max-w-screen-2xl px-6 lg:px-0 grid grid-cols-1 lg:grid-cols-2">
-	<nav class="header flex flex-row order-2 lg:order-1 px-0 lg:px-4 items-start">
+<div class="p-4 flex flex-1 flex-col">
+	<nav class="flex flex-row order-2 lg:order-1 items-start">
 		<div class="title lg:pb-10">
 			{#if $page.url.pathname === `/applications/${id}/configuration/source`}
 				Select a Source
