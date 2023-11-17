@@ -91,45 +91,51 @@
 	}
 </script>
 
-<div class="flex flex-row justify-center space-x-2 px-10 pt-6">
+<div class="flex flex-1 flex-row justify-center space-x-2 mt-4">
 	{#if logs.length === 0}
 		<div class="text-xl font-bold tracking-tighter">{$t('application.build.waiting_logs')}</div>
 	{:else}
-		<div class="relative w-full">
-			<div class="text-right " />
-			{#if loadLogsInterval}
+		<div class="relative">
+			<div class="text-right" />
+			<!-- {#if loadLogsInterval}
 				<LoadingLogs />
-			{/if}
+			{/if} -->
 			<div class="flex justify-end sticky top-0 p-1 mx-1">
-				<button
-					id="follow"
-					on:click={followBuild}
-					class="bg-transparent btn btn-sm btn-link"
-					class:text-green-500={followingLogs}
-				>
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						class="w-6 h-6"
-						viewBox="0 0 24 24"
-						stroke-width="1.5"
-						stroke="currentColor"
-						fill="none"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-					>
-						<path stroke="none" d="M0 0h24v24H0z" fill="none" />
-						<circle cx="12" cy="12" r="9" />
-						<line x1="8" y1="12" x2="12" y2="16" />
-						<line x1="12" y1="8" x2="12" y2="16" />
-						<line x1="16" y1="12" x2="12" y2="16" />
-					</svg>
-				</button>
-				<Tooltip triggeredBy="#follow">Follow Logs</Tooltip>
 			</div>
-			<div class="font-mono w-full rounder bg-coolgray-200 p-5 overflow-x-auto overflox-y-auto max-h-[80vh] rounded-md mb-20 flex flex-col whitespace-nowrap -mt-12 scrollbar-thumb-coollabs scrollbar-track-coolgray-200 scrollbar-w-1 lg:text-base text-[10px]">
-				{#each logs as log}
-					<p>{log + '\n'}</p>
-				{/each}
+			<div class="flex flex-1">
+				<div class="card bg-base-300">
+					<div
+					class="card-body relative max-h-[61vh] max-w-[95vw] p-2 font-mono text-[10px] overflow-x-auto overflox-y-auto"
+					>
+						<button
+							id="follow"
+							on:click={followBuild}
+							class="bg-transparent btn btn-sm btn-link fixed right-10"
+							class:text-success={followingLogs}
+						>
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								class="w-6 h-6"
+								viewBox="0 0 24 24"
+								stroke-width="1.5"
+								stroke="currentColor"
+								fill="none"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+							>
+								<path stroke="none" d="M0 0h24v24H0z" fill="none" />
+								<circle cx="12" cy="12" r="9" />
+								<line x1="8" y1="12" x2="12" y2="16" />
+								<line x1="12" y1="8" x2="12" y2="16" />
+								<line x1="16" y1="12" x2="12" y2="16" />
+							</svg>
+						</button>
+						<Tooltip triggeredBy="#follow">Follow Logs</Tooltip>
+						{#each logs as log}
+							<p class="whitespace-nowrap">{log + '\n'}</p>
+						{/each}
+					</div>
+				</div>
 			</div>
 		</div>
 	{/if}

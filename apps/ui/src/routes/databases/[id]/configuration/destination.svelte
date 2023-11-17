@@ -53,14 +53,14 @@
 	});
 </script>
 
-<div class="flex justify-center">
+<div class="flex justify-center mt-4">
 	{#if !destinations || destinations.length === 0}
 		<div class="flex-col">
 			<div class="pb-2 text-center font-bold">
 				{$t('application.configuration.no_configurable_destination')}
 			</div>
 			<div class="flex justify-center">
-				<a href="/destinations/new" class="add-icon bg-sky-600 hover:bg-sky-500">
+				<a href="/destinations/new" class="add-icon bg-info">
 					<svg
 						class="w-6"
 						xmlns="http://www.w3.org/2000/svg"
@@ -82,9 +82,12 @@
 			{#each destinations as destination}
 				<div class="p-2">
 					<form on:submit|preventDefault={() => handleSubmit(destination.id)}>
-						<button type="submit" class="box-selection hover:bg-sky-700 font-bold">
+						<button type="submit" class="box-selection shadow bg-base-200 hover:bg-base-300 hover:text-secondary hover:scale-105 font-bold">
 							<div class="font-bold text-xl text-center truncate">{destination.name}</div>
-							<div class="text-center truncate">{destination.network}</div>
+							<div class="text-center truncate font-light italic">
+								<span class="font-semibold">Network: </span>
+								{destination.network}
+							</div>
 						</button>
 					</form>
 				</div>

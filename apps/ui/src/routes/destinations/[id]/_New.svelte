@@ -38,7 +38,7 @@
 	<div class="mr-4 text-2xl tracking-tight">{$t('destination.new.add_new_destination')}</div>
 </div>
 <div class="flex-col space-y-2 pb-10 text-center">
-	<div class="text-xl font-bold text-white">{$t('destination.new.predefined_destinations')}</div>
+	<div class="text-xl font-bold text-base-content">{$t('destination.new.predefined_destinations')}</div>
 	<div class="flex justify-center space-x-2">
 		<button class="btn btn-sm" on:click={() => setPredefined('localDocker')}
 			>{$t('sources.local_docker')}</button

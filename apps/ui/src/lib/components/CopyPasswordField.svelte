@@ -15,7 +15,7 @@
 	export let placeholder = '';
 	export let inputStyle = '';
 
-	let disabledClass = 'input input-primary bg-coolback disabled:bg-coolblack w-full';
+	let disabledClass = 'input input-bordered w-full';
 	let isHttps = browser && window.location.protocol === 'https:';
 
 	function copyToClipboard() {
@@ -41,7 +41,6 @@
 				class:border={required && !value}
 				class:border-red-500={required && !value}
 				{placeholder}
-				type="text"
 				{id}
 				{pattern}
 				{required}
@@ -52,7 +51,7 @@
 		{:else}
 			<input
 				style={inputStyle}
-				class={disabledClass}
+				class={`input input-bordered ${disabledClass}`}
 				type="text"
 				class:pr-10={true}
 				class:pr-20={value && isHttps}

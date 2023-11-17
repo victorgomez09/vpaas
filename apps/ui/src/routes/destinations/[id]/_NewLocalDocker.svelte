@@ -20,7 +20,8 @@
 			const { id } = await post(`/destinations/new`, {
 				...payload
 			});
-			return await goto(from || `/destinations/${id}`);
+			// return await goto(from || `/destinations/${id}`);
+			return await goto(`/destinations/${id}`);
 		} catch (error) {
 			return errorNotification(error);
 		} finally {
@@ -35,38 +36,29 @@
 			class="flex items-start lg:items-center space-x-0 lg:space-x-4 pb-5 flex-col lg:flex-row space-y-4 lg:space-y-0"
 		>
 			<div class="title font-bold">{$t('forms.configuration')}</div>
-			<button
-				type="submit"
-				class="btn btn-sm bg-destinations w-full lg:w-fit"
-				class:loading
-				disabled={loading}
-				>{loading
-					? payload.isProxyUsed
-						? $t('destination.new.saving_and_configuring_proxy')
-						: $t('forms.saving')
-					: $t('forms.save')}</button
-			>
 		</div>
 		<div class="mt-2 grid grid-cols-2 items-center lg:pl-10">
-			<label for="name" class="text-base font-bold text-stone-100">{$t('forms.name')}</label>
-			<input required name="name" placeholder={$t('forms.name')} bind:value={payload.name} />
+			<label for="name" class="text-base font-bold text-base-content">{$t('forms.name')}</label>
+			<input required name="name" placeholder={$t('forms.name')} class="input input-bordered" bind:value={payload.name} />
 		</div>
 
 		<div class="grid grid-cols-2 items-center lg:pl-10">
-			<label for="engine" class="text-base font-bold text-stone-100">{$t('forms.engine')}</label>
+			<label for="engine" class="text-base font-bold text-base-content">{$t('forms.engine')}</label>
 			<input
 				required
 				name="engine"
 				placeholder="{$t('forms.eg')}: /var/run/docker.sock"
+				class="input input-bordered"
 				bind:value={payload.engine}
 			/>
 		</div>
 		<div class="grid grid-cols-2 items-center lg:pl-10">
-			<label for="network" class="text-base font-bold text-stone-100">{$t('forms.network')}</label>
+			<label for="network" class="text-base font-bold text-base-content">{$t('forms.network')}</label>
 			<input
 				required
 				name="network"
 				placeholder="{$t('forms.default')}: coolify"
+				class="input input-bordered"
 				bind:value={payload.network}
 			/>
 		</div>
@@ -81,5 +73,20 @@
 				/>
 			</div>
 		{/if}
+
+		<button
+				type="submit"
+				class="btn btn-sm btn-info w-full lg:w-fit"
+				disabled={loading}
+				>
+				{#if loading}
+					<span class="loading loading-spinner"></span>
+				{/if}
+				{loading
+					? payload.isProxyUsed
+						? $t('destination.new.saving_and_configuring_proxy')
+						: $t('forms.saving')
+					: $t('forms.save')}
+			</button>
 	</form>
 </div>

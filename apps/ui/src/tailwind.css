@@ -21,10 +21,12 @@ button {
 	@apply text-sm !important;
 }
 html {
-	@apply h-full min-h-full;
+	height: 100%;
+	width: 100%;
 }
 body {
-	@apply min-h-screen text-sm text-base-content;
+	height: 100%;
+	width: 100%;
 }
 
 #svelte .custom-select-wrapper .selectContainer.disabled input {

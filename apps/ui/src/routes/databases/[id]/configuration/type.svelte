@@ -47,12 +47,12 @@
 	}
 </script>
 
-<div class="flex flex-wrap justify-center">
+<div class="flex flex-wrap justify-center mt-4">
 	{#each types as type}
-		<div class="p-2">
+		<div class="m-4">
 			<form on:submit|preventDefault={() => handleSubmit(type.name)}>
-				<button type="submit" class="box-selection relative text-xl font-bold hover:bg-purple-700">
-          <DatabaseIcons type={type.name} isAbsolute={true} />
+				<button type="submit" class="box-selection relative text-xl shadow font-bold bg-base-200 hover:bg-base-300 hover:text-secondary hover:scale-105">
+					<DatabaseIcons type={type.name} isAbsolute={true} />
 					{type.fancyName}
 				</button>
 			</form>

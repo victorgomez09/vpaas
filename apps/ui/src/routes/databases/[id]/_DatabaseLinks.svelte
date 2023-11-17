@@ -11,7 +11,7 @@
 	import Redis from '$lib/components/svg/databases/Redis.svelte';
 </script>
 
-<span class="relative">
+<span class="relative ml-2 hidden sm:block">
 	{#if database.type === 'clickhouse'}
 		<Clickhouse />
 	{:else if database.type === 'couchdb'}

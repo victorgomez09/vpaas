@@ -11,7 +11,6 @@
 	import { page } from '$app/stores';
 	import { get } from '$lib/api';
 	import { onDestroy, onMount } from 'svelte';
-	import DatabaseLinks from './_DatabaseLinks.svelte';
 	import Databases from './_Databases/_Databases.svelte';
 	import { status } from '$lib/store';
 	export let database: any;
@@ -48,21 +47,23 @@
 	});
 </script>
 
-<div class="mx-auto max-w-6xl p-5">
-	<div class="text-center">
-		<div class="stat w-64">
-			<div class="stat-title">Used Memory / Memory Limit</div>
-			<div class="stat-value text-xl">{usage?.MemUsage}</div>
-		</div>
-
-		<div class="stat w-64">
-			<div class="stat-title">Used CPU</div>
-			<div class="stat-value text-xl">{usage?.CPUPerc}</div>
-		</div>
-
-		<div class="stat w-64">
-			<div class="stat-title">Network IO</div>
-			<div class="stat-value text-xl">{usage?.NetIO}</div>
+<div class="flex flex-1 mt-4">
+	<div class="text-center w-full">
+		<div class="stats bg-base-200 w-full">
+			<div class="stat w-64">
+				<div class="stat-title">Used Memory / Memory Limit</div>
+				<div class="stat-value text-xl">{usage?.MemUsage}</div>
+			</div>
+			
+			<div class="stat w-64">
+				<div class="stat-title">Used CPU</div>
+				<div class="stat-value text-xl">{usage?.CPUPerc}</div>
+			</div>
+			
+			<div class="stat w-64">
+				<div class="stat-title">Network IO</div>
+				<div class="stat-value text-xl">{usage?.NetIO}</div>
+			</div>
 		</div>
 	</div>
 </div>

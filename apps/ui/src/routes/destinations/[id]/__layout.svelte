@@ -106,40 +106,40 @@
 	}
 </script>
 
-{#if $page.params.id !== 'new'}
-	<nav class="header lg:flex-row flex-col-reverse gap-2">
-		<div class="flex flex-row space-x-2 font-bold pt-10 lg:pt-0">
-			<div class="flex flex-col items-center justify-center title">
+<div class="flex flex-1 flex-col p-4">
+	{#if $page.params.id !== 'new'}
+		<nav class="flex flex-1 items-center justify-between gap-2">
+			<div class="flex flex-col items-center justify-center font-bold text-xl">
 				{#if $page.url.pathname === `/destinations/${$page.params.id}`}
 					Configurations
 				{:else if $page.url.pathname.startsWith(`/destinations/${$page.params.id}/configuration/sshkey`)}
 					Select a SSH Key
 				{/if}
 			</div>
-		</div>
-		<div class="lg:block hidden flex-1" />
-		<div class="flex flex-row flex-wrap space-x-3 justify-center lg:justify-start lg:py-0">
-			<button
-				id="delete"
-				on:click={() => deleteDestination(destination)}
-				type="submit"
-				disabled={!$appSession.isAdmin && isDestinationDeletable}
-				class:hover:text-red-500={$appSession.isAdmin && isDestinationDeletable}
-				class="icons bg-transparent text-sm"
-				class:text-stone-600={!isDestinationDeletable}><DeleteIcon /></button
-			>
-			<Tooltip triggeredBy="#delete">{deletable()}</Tooltip>
-		</div>
-		<div class="flex flex-row flex-wrap justify-center lg:justify-start lg:py-0 items-center">
-			<button
-				id="forceDelete"
-				on:click={() => forceDeleteDestination(destination)}
-				type="submit"
-				disabled={!$appSession.isAdmin && isDestinationDeletable}
-				class="icons bg-transparent text-sm text-red-500"><DeleteIcon /></button
-			>
-			<Tooltip triggeredBy="#forceDelete">Force Delete</Tooltip>
-		</div>
-	</nav>
-{/if}
-<slot />
+
+			<div class="lg:block hidden flex-1" />
+			<div class="flex items-start">
+				<button
+					id="delete"
+					on:click={() => deleteDestination(destination)}
+					type="submit"
+					disabled={!$appSession.isAdmin && isDestinationDeletable}
+					class:hover:text-red-500={$appSession.isAdmin && isDestinationDeletable}
+					class="icons bg-transparent text-sm"
+					class:text-stone-600={!isDestinationDeletable}><DeleteIcon /></button
+				>
+				<Tooltip triggeredBy="#delete">{deletable()}</Tooltip>
+
+				<button
+					id="forceDelete"
+					on:click={() => forceDeleteDestination(destination)}
+					type="submit"
+					disabled={!$appSession.isAdmin && isDestinationDeletable}
+					class="icons bg-transparent text-sm text-error"><DeleteIcon /></button
+				>
+				<Tooltip triggeredBy="#forceDelete">Force Delete</Tooltip>
+			</div>
+		</nav>
+	{/if}
+	<slot />
+</div>

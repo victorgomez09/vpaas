@@ -153,35 +153,37 @@
 
 <div class="mx-auto max-w-6xl p-4">
 	<form on:submit|preventDefault={handleSubmit} class="py-4">
-		<div class="flex space-x-1 pb-5 items-center">
+		<div class="flex pb-5 items-center justify-between px-2">
 			<h1 class="title">{$t('general')}</h1>
-			{#if $appSession.isAdmin}
-				<button
-					type="submit"
-					class="btn btn-sm"
-					class:loading={loading.main}
-					class:bg-databases={!loading.main}
-					disabled={loading.main}>{$t('forms.save')}</button
-				>
-				{#if database.type !== 'redis' && database.type !== 'edgedb'}
-					{#if $status.database.isRunning}
-						<button
-							class="btn btn-sm"
-							on:click={backupDatabase}
-							class:loading={loading.backup}
-							class:bg-databases={!loading.backup}
-							disabled={loading.backup}>Backup Database</button
-						>
-					{:else}
-						<button disabled class="btn btn-sm">Backup Database (start the database)</button>
+			<div class="flex items-center gap-2">
+				{#if $appSession.isAdmin}
+					<button
+						type="submit"
+						class="btn btn-sm"
+						class:loading={loading.main}
+						class:bg-databases={!loading.main}
+						disabled={loading.main}>{$t('forms.save')}</button
+					>
+					{#if database.type !== 'redis' && database.type !== 'edgedb'}
+						{#if $status.database.isRunning}
+							<button
+								class="btn btn-sm"
+								on:click={backupDatabase}
+								class:loading={loading.backup}
+								class:bg-databases={!loading.backup}
+								disabled={loading.backup}>Backup Database</button
+							>
+						{:else}
+							<button disabled class="btn btn-sm">Backup Database (start the database)</button>
+						{/if}
 					{/if}
 				{/if}
-			{/if}
+			</div>
 		</div>
 		<div class="grid gap-2 grid-cols-2 auto-rows-max lg:px-10 px-2">
 			<label for="name">{$t('forms.name')}</label>
 			<input
-				class="w-full"
+				class="input input-bordered w-full"
 				readonly={!$appSession.isAdmin}
 				name="name"
 				id="name"
@@ -196,7 +198,7 @@
 						id="destination"
 						disabled
 						readonly
-						class="bg-transparent w-full"
+						class="input input-bordered w-full"
 					/>
 				</div>
 			{/if}
@@ -208,7 +210,7 @@
 				class="no-underline"
 			>
 				<input
-					class="w-full"
+					class="input input-bordered w-full"
 					value={database.version}
 					readonly
 					disabled={$status.database.isRunning || $status.database.initialLoading}

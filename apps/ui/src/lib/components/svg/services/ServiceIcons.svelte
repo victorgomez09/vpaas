@@ -19,7 +19,7 @@
 			.toLowerCase();
 
 	function generateClass() {
-		return isAbsolute ? 'w-10 h-10 absolute -m-4 -mt-40 left-0' : 'w-10 h-10';
+		return isAbsolute ? 'w-10 h-10 absolute -m-4 -mt-10 left-0' : 'w-10 h-10';
 	}
 </script>
 

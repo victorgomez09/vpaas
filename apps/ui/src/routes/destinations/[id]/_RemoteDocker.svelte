@@ -165,42 +165,11 @@
 </script>
 
 <form on:submit|preventDefault={handleSubmit} class="grid grid-flow-row gap-2 py-4">
-	<div class="flex space-x-1 pb-5">
-		{#if $appSession.isAdmin}
-			<button
-				type="submit"
-				class="btn btn-sm"
-				class:loading={loading.save}
-				class:bg-destinations={!loading.save}
-				disabled={loading.save}
-				>{$t('forms.save')}
-			</button>
-			<button
-				disabled={loading.verify}
-				class="btn btn-sm"
-				class:loading={loading.verify}
-				on:click|preventDefault|stopPropagation={verifyRemoteDocker}
-				>{!destination.remoteVerified
-					? 'Verify Remote Docker Engine'
-					: 'Check Remote Docker Engine'}</button
-			>
-			{#if destination.remoteVerified}
-				<button
-					class="btn btn-sm"
-					class:loading={loading.restart}
-					class:bg-error={!loading.restart}
-					disabled={loading.restart}
-					on:click|preventDefault={forceRestartProxy}
-					>{$t('destination.force_restart_proxy')}</button
-				>
-			{/if}
-		{/if}
-	</div>
 	<div class="grid grid-cols-2 items-center px-10 ">
 		<label for="name">{$t('forms.name')}</label>
 		<input
 			name="name"
-			class="w-full"
+			class="input input-bordered w-full"
 			placeholder={$t('forms.name')}
 			disabled={!$appSession.isAdmin}
 			readonly={!$appSession.isAdmin}
@@ -257,7 +226,7 @@
 				value={destination.sshKey.name}
 				readonly
 				id="sshKey"
-				class="cursor-pointer w-full"
+				class="input input-bordered cursor-pointer w-full"
 			/></a
 		>
 	</div>
@@ -271,9 +240,48 @@
 			title={$t('destination.use_coolify_proxy')}
 			description={`Install & configure a proxy (based on Traefik) on the destination to allow you to access your applications and services without any manual configuration.${
 				cannotDisable
-					? '<span class="font-bold text-white">You cannot disable this proxy as FQDN is configured for Coolify.</span>'
+					? '<span class="font-bold text-base-content">You cannot disable this proxy as FQDN is configured for Coolify.</span>'
 					: ''
 			}`}
 		/>
+	</div>
+
+	<div class="flex flex-col gap-2 mt-4">
+		{#if $appSession.isAdmin}
+			<button
+				type="submit"
+				class="btn btn-sm btn-info"
+				disabled={loading.save}
+			>
+				{#if loading.save}
+					<span class="loading loading-spinner"></span>
+				{/if}
+				{$t('forms.save')}
+			</button>
+			<button
+				disabled={loading.verify}
+				class="btn btn-sm"
+				on:click|preventDefault|stopPropagation={verifyRemoteDocker}
+			>
+				{#if loading.verify}
+					<span class="loading loading-spinner"></span>
+				{/if}
+				{!destination.remoteVerified
+					? 'Verify Remote Docker Engine'
+					: 'Check Remote Docker Engine'}
+				</button>
+			{#if destination.remoteVerified}
+				<button
+					class="btn btn-sm btn-warning"
+					disabled={loading.restart}
+					on:click|preventDefault={forceRestartProxy}
+				>
+					{#if loading.restart}
+						<span class="loading loading-spinner"></span>
+					{/if}
+					{$t('destination.force_restart_proxy')}
+				</button>
+			{/if}
+		{/if}
 	</div>
 </form>

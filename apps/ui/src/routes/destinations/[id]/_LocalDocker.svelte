@@ -142,27 +142,10 @@
 </script>
 
 <form on:submit|preventDefault={handleSubmit} class="py-4">
-	<div class="flex space-x-2">
-		<button
-			type="submit"
-			class="btn btn-sm"
-			class:bg-destinations={!loading.save}
-			class:loading={loading.save}
-			disabled={loading.save}
-			>{$t('forms.save')}
-		</button>
-		<button
-			class="btn btn-sm"
-			class:loading={loading.restart}
-			class:bg-error={!loading.restart}
-			disabled={loading.restart}
-			on:click|preventDefault={forceRestartProxy}>{$t('destination.force_restart_proxy')}</button
-		>
-	</div>
 	<div class="grid gap-2 grid-cols-2 auto-rows-max mt-10 items-center">
 		<label for="name">{$t('forms.name')}</label>
 		<input
-			class="w-full"
+			class="input input-bordered w-full"
 			name="name"
 			placeholder={$t('forms.name')}
 			disabled={!$appSession.isAdmin}
@@ -202,5 +185,27 @@
 				}`}
 			/>
 		{/if}
+	</div>
+
+	<div class="flex flex-col gap-2 mt-4">
+		<button
+			type="submit"
+			class="btn btn-sm btn-info w-full"
+			disabled={loading.save}
+		>
+			{#if loading.save}
+				<span class="loading loading-spinner"></span>
+			{/if}
+			{$t('forms.save')}
+		</button>
+		<button
+			class="btn btn-sm btn-warning w-full"
+			disabled={loading.restart}
+			on:click|preventDefault={forceRestartProxy}>
+				{#if loading.restart}
+					<span class="loading loading-spinner"></span>
+				{/if}
+				{$t('destination.force_restart_proxy')}
+			</button>
 	</div>
 </form>
